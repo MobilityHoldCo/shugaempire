@@ -80,7 +80,8 @@ if (file_exists($csvFile)) {
                     'city'      => $row[4] ?? 'Lagos',
                     'role'      => $row[5] ?? 'Driver',
                     'notes'     => $row[6] ?? '',
-                    'status'    => $row[7] ?? 'New',
+                    'status'    => 'New',
+                    'ip'        => $row[7] ?? '',
                 ];
             }
         }
