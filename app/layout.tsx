@@ -6,7 +6,7 @@ import CursorFollower from '@/components/CursorFollower';
 import ScrollProgress from '@/components/ScrollProgress';
 import SmoothScroll from '@/components/SmoothScroll';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mobilityco.ng';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shugaempire.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
