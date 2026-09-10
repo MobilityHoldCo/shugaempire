@@ -80,14 +80,36 @@ export default function ShugaCarsPage() {
             <p className="eyebrow"><span className="eyebrow-line" />How the Programme Works</p>
             <RevealText as="h2" className="heading-lg">Hire today. Own tomorrow.</RevealText>
           </div>
-          <div className="steps-grid">
+          <div className={`${styles.driverStepsGrid} skew-on-scroll`}>
             {steps.map(s => (
-              <div key={s.num} className="step-item">
+              <div key={s.num} className={`step-item ${styles.stepCard}`}>
                 <span className="step-num">{s.num}</span>
                 <div className="step-title">{s.title}</div>
                 <p className="step-desc">{s.desc}</p>
               </div>
             ))}
+
+            {/* Cinematic EV Delivery Banner filling the remaining slots of row 2 */}
+            <div className={styles.driverRewardBanner}>
+              <Image
+                src="/shuga-ownership-ev.jpg"
+                alt="Shuga Luxury Electric Vehicle Delivery"
+                fill
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.driverRewardImage}
+              />
+              <div className={styles.driverRewardOverlay} />
+              <div className={styles.driverRewardContent}>
+                <p className={styles.driverRewardEyebrow}>The Destination &bull; 100% Ownership</p>
+                <h3 className={styles.driverRewardTitle}>Your Hard Work Turns Into A Debt-Free Electric Asset</h3>
+                <p className={styles.driverRewardDesc}>
+                  Complete the agreed lease-to-own period with steady daily payments, zero petrol expense, and solar charging credits.
+                </p>
+                <Link href="/contact" className={styles.driverRewardBtn} data-cursor>
+                  Apply for a Vehicle &rarr;
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

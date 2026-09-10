@@ -623,19 +623,14 @@
 
       <form id="login-form">
         <label class="input-label" for="login-email">Email Address</label>
-        <input type="email" id="login-email" class="input-field" placeholder="admin@shugaempire.com" value="admin@shugaempire.com" required>
+        <input type="email" id="login-email" class="input-field" placeholder="admin@shugaempire.com" autocomplete="username" required>
 
         <label class="input-label" for="login-password">Password</label>
-        <input type="password" id="login-password" class="input-field" placeholder="Enter Password" value="password" required>
+        <input type="password" id="login-password" class="input-field" placeholder="Enter password" autocomplete="current-password" required>
 
         <div id="error-alert" class="error-msg">Invalid email or password.</div>
 
         <button type="submit" class="btn-solid">Sign In to Dashboard &rarr;</button>
-
-        <p class="preset-hint">
-          Preset Login: <strong>admin@shugaempire.com</strong><br>
-          Password: <strong>password</strong>
-        </p>
       </form>
     </div>
   </div>
@@ -818,13 +813,58 @@
   </div>
 
   <script>
-    // Configurable Credentials in localStorage with defaults
+    // Configurable Credentials with Cross-Subdomain and Server-Side Synchronization
     const DEFAULT_EMAIL = 'admin@shugaempire.com';
     const DEFAULT_PASSWORD = 'password';
 
+    function getCookie(name) {
+      const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      return match ? decodeURIComponent(match[2]) : null;
+    }
+
+    function setSharedCookie(name, value) {
+      document.cookie = `${name}=${encodeURIComponent(value)}; path=/; max-age=31536000; SameSite=Lax`;
+      try {
+        if (window.location.hostname.includes('shugaempire.com')) {
+          document.cookie = `${name}=${encodeURIComponent(value)}; domain=.shugaempire.com; path=/; max-age=31536000; SameSite=Lax`;
+        }
+      } catch (e) {}
+    }
+
+    let activePassword = getCookie('shuga_admin_password') || localStorage.getItem('shuga_admin_password') || DEFAULT_PASSWORD;
+    let activeEmail = localStorage.getItem('shuga_admin_email') || DEFAULT_EMAIL;
+
+    // Immediately fetch latest server-stored credentials on page load
+    async function syncAdminCreds() {
+      try {
+        const endpoints = [
+          'https://shugaempire.com/api/admin_waitlist.php?action=get_credentials&key=ShugaAdmin2026!',
+          'https://admin.shugaempire.com/api/admin_waitlist.php?action=get_credentials&key=ShugaAdmin2026!',
+          '/api/admin_waitlist.php?action=get_credentials&key=ShugaAdmin2026!'
+        ];
+        for (const ep of endpoints) {
+          try {
+            const res = await fetch(ep, { cache: 'no-store' });
+            if (res.ok) {
+              const json = await res.json();
+              if (json && json.success && json.password) {
+                activePassword = json.password;
+                activeEmail = json.email || activeEmail;
+                localStorage.setItem('shuga_admin_password', activePassword);
+                localStorage.setItem('shuga_admin_email', activeEmail);
+                setSharedCookie('shuga_admin_password', activePassword);
+                break;
+              }
+            }
+          } catch (err) {}
+        }
+      } catch (e) {}
+    }
+    syncAdminCreds();
+
     function getAdminCredentials() {
-      const email = localStorage.getItem('shuga_admin_email') || DEFAULT_EMAIL;
-      const password = localStorage.getItem('shuga_admin_password') || DEFAULT_PASSWORD;
+      const email = localStorage.getItem('shuga_admin_email') || activeEmail;
+      const password = getCookie('shuga_admin_password') || localStorage.getItem('shuga_admin_password') || activePassword;
       return { email, password };
     }
 
@@ -849,19 +889,56 @@
     }
 
     // Handle Login Submit
-    document.getElementById('login-form').addEventListener('submit', (e) => {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const enteredEmail = document.getElementById('login-email').value.trim();
       const enteredPwd = document.getElementById('login-password').value;
       const { email, password } = getAdminCredentials();
 
+      // 1. Direct match with current active/saved credentials
       if (enteredEmail.toLowerCase() === email.toLowerCase() && enteredPwd === password) {
         sessionStorage.setItem('shuga_subdomain_admin', 'true');
         document.getElementById('error-alert').style.display = 'none';
         showDashboard();
-      } else {
-        document.getElementById('error-alert').style.display = 'block';
+        return;
       }
+
+      // 2. Server check if password was updated from another browser or subdomain
+      try {
+        const checkEndpoints = [
+          'https://shugaempire.com/api/admin_waitlist.php?action=verify_login',
+          'https://admin.shugaempire.com/api/admin_waitlist.php?action=verify_login',
+          '/api/admin_waitlist.php?action=verify_login'
+        ];
+        let verified = false;
+        for (const ep of checkEndpoints) {
+          try {
+            const formData = new FormData();
+            formData.append('email', enteredEmail);
+            formData.append('password', enteredPwd);
+            const res = await fetch(ep, { method: 'POST', body: formData });
+            if (res.ok) {
+              const j = await res.json();
+              if (j && j.success) {
+                verified = true;
+                break;
+              }
+            }
+          } catch (err) {}
+        }
+        if (verified) {
+          localStorage.setItem('shuga_admin_password', enteredPwd);
+          localStorage.setItem('shuga_admin_email', enteredEmail);
+          setSharedCookie('shuga_admin_password', enteredPwd);
+          activePassword = enteredPwd;
+          sessionStorage.setItem('shuga_subdomain_admin', 'true');
+          document.getElementById('error-alert').style.display = 'none';
+          showDashboard();
+          return;
+        }
+      } catch (e) {}
+
+      document.getElementById('error-alert').style.display = 'block';
     });
 
     // Handle Logout
@@ -886,14 +963,14 @@
       modal.style.display = 'none';
     });
 
-    document.getElementById('change-pwd-form').addEventListener('submit', (e) => {
+    document.getElementById('change-pwd-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const currentEntered = document.getElementById('current-pwd').value;
       const newPwd = document.getElementById('new-pwd').value;
       const confirmPwd = document.getElementById('confirm-pwd').value;
       const { password } = getAdminCredentials();
 
-      if (currentEntered !== password) {
+      if (currentEntered !== password && currentEntered !== activePassword) {
         modalMsg.className = 'modal-msg error';
         modalMsg.textContent = 'Current password is incorrect.';
         modalMsg.style.display = 'block';
@@ -914,7 +991,35 @@
         return;
       }
 
+      // 1. Instantly update active state & persistent local storage & shared cookie
+      activePassword = newPwd;
       localStorage.setItem('shuga_admin_password', newPwd);
+      setSharedCookie('shuga_admin_password', newPwd);
+
+      // 2. Persist to server file storage
+      try {
+        const formData = new FormData();
+        formData.append('action', 'change_password');
+        formData.append('key', 'ShugaAdmin2026!');
+        formData.append('current_password', currentEntered);
+        formData.append('new_password', newPwd);
+
+        const endpoints = [
+          'https://shugaempire.com/api/admin_waitlist.php',
+          'https://admin.shugaempire.com/api/admin_waitlist.php',
+          '/api/admin_waitlist.php'
+        ];
+        for (const ep of endpoints) {
+          try {
+            fetch(ep, {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ShugaAdmin2026!' },
+              body: formData
+            });
+          } catch (e) {}
+        }
+      } catch (err) {}
+
       modalMsg.className = 'modal-msg success';
       modalMsg.textContent = '✓ Password updated successfully! Use your new password next time you log in.';
       modalMsg.style.display = 'block';

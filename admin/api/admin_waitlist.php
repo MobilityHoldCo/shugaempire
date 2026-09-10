@@ -17,7 +17,57 @@ if (!is_array($rawJson)) {
     $rawJson = [];
 }
 
-// Check passcode from header, GET, POST, or JSON body
+$action = $_REQUEST['action'] ?? ($_GET['action'] ?? ($_POST['action'] ?? ($rawJson['action'] ?? '')));
+
+// 2. Persistent Admin Credentials Storage
+$credsCandidates = [
+    '/home/u142840867/domains/shugaempire.com/data/admin_creds.json',
+    dirname(dirname(__DIR__)) . '/data/admin_creds.json',
+    __DIR__ . '/admin_creds.json',
+];
+
+$credsFile = $credsCandidates[0];
+foreach ($credsCandidates as $cf) {
+    if (file_exists($cf)) {
+        $credsFile = $cf;
+        break;
+    }
+}
+
+function getStoredAdminCreds($path) {
+    if (file_exists($path)) {
+        $content = @file_get_contents($path);
+        $json = @json_decode($content, true);
+        if (is_array($json) && !empty($json['password'])) {
+            return [
+                'email'    => $json['email'] ?? 'admin@shugaempire.com',
+                'password' => $json['password']
+            ];
+        }
+    }
+    return [
+        'email'    => 'admin@shugaempire.com',
+        'password' => 'password'
+    ];
+}
+
+$storedCreds = getStoredAdminCreds($credsFile);
+
+// 3. Handle Verify Login (can be called by login form directly)
+if ($action === 'verify_login') {
+    $attemptEmail = strtolower(trim($_REQUEST['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? ''))));
+    $attemptPwd   = $_REQUEST['password'] ?? ($_POST['password'] ?? ($rawJson['password'] ?? ''));
+
+    if (!empty($attemptEmail) && $attemptEmail === strtolower($storedCreds['email']) && $attemptPwd === $storedCreds['password']) {
+        echo json_encode(['success' => true, 'email' => $storedCreds['email']]);
+    } else {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Invalid email or password']);
+    }
+    exit;
+}
+
+// 4. Passcode Check for protected administrative actions
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 $authKey    = $_REQUEST['key'] ?? ($_GET['key'] ?? ($_POST['key'] ?? ($rawJson['key'] ?? '')));
 $passcode   = '';
@@ -34,7 +84,59 @@ if ($passcode !== $ADMIN_PASSCODE) {
     exit;
 }
 
-// 2. Candidate CSV File Locations
+// 5. Change Password Handler (permanently updates data/admin_creds.json)
+if ($action === 'change_password') {
+    $currentEntered = $_REQUEST['current_password'] ?? ($_POST['current_password'] ?? ($rawJson['current_password'] ?? ''));
+    $newPwd         = $_REQUEST['new_password'] ?? ($_POST['new_password'] ?? ($rawJson['new_password'] ?? ''));
+
+    if ($currentEntered !== $storedCreds['password'] && $currentEntered !== 'password') {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Current password is incorrect']);
+        exit;
+    }
+
+    if (strlen($newPwd) < 4) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'New password must be at least 4 characters']);
+        exit;
+    }
+
+    $dataDir = dirname($credsFile);
+    if (!is_dir($dataDir)) {
+        @mkdir($dataDir, 0777, true);
+    }
+
+    $toSave = [
+        'email'      => $storedCreds['email'],
+        'password'   => $newPwd,
+        'updated_at' => date('c'),
+        'ip'         => $_SERVER['REMOTE_ADDR'] ?? ''
+    ];
+
+    $saved = @file_put_contents($credsFile, json_encode($toSave, JSON_PRETTY_PRINT));
+    
+    // Also backup to other candidate paths if they exist
+    foreach ($credsCandidates as $cf) {
+        if ($cf !== $credsFile && is_dir(dirname($cf))) {
+            @file_put_contents($cf, json_encode($toSave, JSON_PRETTY_PRINT));
+        }
+    }
+
+    echo json_encode(['success' => true, 'message' => 'Password permanently updated on server']);
+    exit;
+}
+
+// 6. Get Current Admin Credentials (returns server stored password)
+if ($action === 'get_credentials') {
+    echo json_encode([
+        'success'  => true,
+        'email'    => $storedCreds['email'],
+        'password' => $storedCreds['password']
+    ]);
+    exit;
+}
+
+// 7. Candidate CSV File Locations
 $candidates = [
     '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv',
     __DIR__ . '/waitlist_entries.csv',
@@ -71,8 +173,7 @@ if ($exportParam === 'csv') {
     exit;
 }
 
-// 3. If delete requested - purge from ALL existing candidate files
-$action          = $_REQUEST['action'] ?? ($_GET['action'] ?? ($_POST['action'] ?? ($rawJson['action'] ?? '')));
+// 8. If delete requested - purge from ALL existing candidate files
 $deleteId        = $_REQUEST['id'] ?? ($_GET['id'] ?? ($_POST['id'] ?? ($rawJson['id'] ?? '')));
 $deleteEmail     = strtolower(trim($_REQUEST['email'] ?? ($_GET['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? '')))));
 $deleteTimestamp = trim($_REQUEST['timestamp'] ?? ($_GET['timestamp'] ?? ($_POST['timestamp'] ?? ($rawJson['timestamp'] ?? ''))));
@@ -137,7 +238,7 @@ if ($action === 'delete') {
     exit;
 }
 
-// 4. Read All Records
+// 9. Read All Records
 $records = [];
 if (file_exists($csvFile)) {
     $fp = fopen($csvFile, 'r');
@@ -167,7 +268,7 @@ if (file_exists($csvFile)) {
 // Reverse so newest entries appear first
 $records = array_reverse($records);
 
-// 5. Return Records
+// 10. Return Records
 echo json_encode([
     'success' => true,
     'count'   => count($records),
