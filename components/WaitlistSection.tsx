@@ -24,7 +24,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
     e.preventDefault();
     if (!fullName.trim() || !email.trim()) {
       setStatus('error');
-      setErrorMessage('Please enter your full name and email.');
+      setErrorMessage('Full name and email are required.');
       return;
     }
 
@@ -41,7 +41,6 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
     };
 
     try {
-      // 1. Try native backend endpoint
       const res = await fetch('/api/waitlist.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -53,12 +52,10 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
         setQueuePosition(data.position || 1428);
         setStatus('success');
       } else {
-        // Fallback for dev / static demo: save locally
         saveLocalSubmission(payload);
         setStatus('success');
       }
     } catch {
-      // Network/offline fallback — gracefully succeed and record locally
       saveLocalSubmission(payload);
       setStatus('success');
     }
@@ -71,7 +68,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
       localStorage.setItem('shuga_waitlist', JSON.stringify(existing));
       setQueuePosition(1420 + existing.length);
     } catch {
-      // ignore storage errors
+      // ignore
     }
   };
 
@@ -84,7 +81,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
   };
 
   const shareText = encodeURIComponent(
-    `I just joined the early-access waitlist for Shuga Empire — Nigeria's revolutionary electric mobility ecosystem! Check it out: https://shugaempire.com`
+    `Join the early-access waitlist for Shuga Empire — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
   );
 
   return (
@@ -96,7 +93,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
         <div className={styles.header}>
           <div className={styles.liveBadge}>
             <span className={styles.pulseDot} />
-            <span className={styles.badgeText}>Early Access Waitlist • Pre-Launch</span>
+            <span className={styles.badgeText}>Early Access Waitlist &bull; Pre-Launch</span>
           </div>
 
           <h2 className={styles.title}>
@@ -116,14 +113,16 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
           <div className={styles.perksCol}>
             <div>
               <h3 className={styles.perksHeading}>
-                <span>⚡</span> Pioneer Perks &amp; Benefits
+                Pioneer Privileges
               </h3>
 
               <ul className={styles.perksList}>
                 <li className={styles.perkItem}>
                   <div className={styles.perkIcon}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="12" y1="8" x2="12" y2="12" />
+                      <line x1="12" y1="16" x2="12.01" y2="16" />
                     </svg>
                   </div>
                   <div>
@@ -152,8 +151,8 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     </svg>
                   </div>
                   <div>
-                    <h4 className={styles.perkTitle}>Exclusive Solar Charging Rates</h4>
-                    <p className={styles.perkDesc}>Discounted energy credits at all Shuga solar hubs across Lagos and Abuja.</p>
+                    <h4 className={styles.perkTitle}>Exclusive Solar Hub Rates</h4>
+                    <p className={styles.perkDesc}>Discounted energy credits at all Shuga solar corridors across Lagos and Abuja.</p>
                   </div>
                 </li>
               </ul>
@@ -170,13 +169,13 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
             {status === 'success' ? (
               <div className={styles.successCard}>
                 <div className={styles.successIcon}>
-                  <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
-                <h3 className={styles.successTitle}>You&apos;re On The List!</h3>
+                <h3 className={styles.successTitle}>Confirmed</h3>
                 <p className={styles.successMsg}>
-                  Welcome, <strong>{fullName}</strong>. You are currently pioneer <strong>#{queuePosition}</strong> in line for <strong>{role}</strong> access in <strong>{city}</strong>.
+                  Welcome, <strong>{fullName}</strong>. You are registered as pioneer <strong>#{queuePosition}</strong> for <strong>{role}</strong> access in <strong>{city}</strong>.
                 </p>
 
                 <div className={styles.shareBox}>
@@ -186,14 +185,18 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     rel="noopener noreferrer"
                     className={styles.shareBtn}
                   >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="18" cy="5" r="3" />
+                      <circle cx="6" cy="12" r="3" />
+                      <circle cx="18" cy="19" r="3" />
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
                     </svg>
-                    Share On WhatsApp
+                    Share Waitlist Link
                   </a>
 
                   <button onClick={resetForm} className={styles.resetBtn}>
-                    Register another person →
+                    Register Another Person &rarr;
                   </button>
                 </div>
               </div>
@@ -206,9 +209,13 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     className={`${styles.roleBtn} ${role === 'Driver' ? styles.roleBtnActive : ''}`}
                     onClick={() => setRole('Driver')}
                   >
-                    <span className={styles.roleEmoji}>🚗</span>
+                    <div className={styles.roleIconWrapper}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M5 17h14M5 17a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1.5L8 4h8l1.5 3H19a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2M5 17a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm14 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" />
+                      </svg>
+                    </div>
                     <span className={styles.roleLabel}>Driver</span>
-                    <span className={styles.roleSub}>Hire-Purchase EV</span>
+                    <span className={styles.roleSub}>Hire-Purchase</span>
                   </button>
 
                   <button
@@ -216,7 +223,11 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     className={`${styles.roleBtn} ${role === 'Rider' ? styles.roleBtnActive : ''}`}
                     onClick={() => setRole('Rider')}
                   >
-                    <span className={styles.roleEmoji}>⚡</span>
+                    <div className={styles.roleIconWrapper}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <path d="M12 2a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm-7 19v-2a7 7 0 0 1 14 0v2H5z" />
+                      </svg>
+                    </div>
                     <span className={styles.roleLabel}>Rider</span>
                     <span className={styles.roleSub}>Shuga Ride</span>
                   </button>
@@ -226,7 +237,12 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     className={`${styles.roleBtn} ${role === 'Investor' ? styles.roleBtnActive : ''}`}
                     onClick={() => setRole('Investor')}
                   >
-                    <span className={styles.roleEmoji}>💼</span>
+                    <div className={styles.roleIconWrapper}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+                        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+                      </svg>
+                    </div>
                     <span className={styles.roleLabel}>Investor</span>
                     <span className={styles.roleSub}>Fleet Partner</span>
                   </button>
@@ -253,7 +269,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                       id="wl-email"
                       type="email"
                       required
-                      placeholder="you@domain.com"
+                      placeholder="name@domain.com"
                       className={styles.input}
                       value={email}
                       onChange={e => setEmail(e.target.value)}
@@ -261,7 +277,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                   </div>
 
                   <div className={styles.inputGroup}>
-                    <label className={styles.label} htmlFor="wl-phone">WhatsApp / Phone Number</label>
+                    <label className={styles.label} htmlFor="wl-phone">Phone / WhatsApp</label>
                     <input
                       id="wl-phone"
                       type="tel"
@@ -291,17 +307,17 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
 
                   <div className={`${styles.inputGroup} ${styles.inputGroupFull}`}>
                     <label className={styles.label} htmlFor="wl-notes">
-                      {role === 'Driver' ? 'Driving experience / currently drive for Uber/Bolt?' :
-                       role === 'Investor' ? 'Approximate fleet size or investment target' :
-                       'Special route or early rider preferences (optional)'}
+                      {role === 'Driver' ? 'Driving experience / currently drive on rideshare?' :
+                       role === 'Investor' ? 'Target fleet size or investment capacity' :
+                       'Preferred commute routes or travel preferences'}
                     </label>
                     <input
                       id="wl-notes"
                       type="text"
                       placeholder={
-                        role === 'Driver' ? 'e.g. 4 years driving on Uber in Lagos' :
+                        role === 'Driver' ? 'e.g. 4 years driving on Uber/Bolt in Lagos' :
                         role === 'Investor' ? 'e.g. Interested in syndicating 2-5 vehicles' :
-                        'e.g. Daily commute from Lekki to Victoria Island'
+                        'e.g. Daily commute between Lekki and Victoria Island'
                       }
                       className={styles.input}
                       value={notes}
@@ -311,9 +327,18 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                 </div>
 
                 {errorMessage && (
-                  <p style={{ color: '#ff4d4f', fontSize: '0.85rem', marginTop: '1rem', fontFamily: 'var(--font-techno)' }}>
+                  <div style={{
+                    padding: '0.8rem 1rem',
+                    borderRadius: '4px',
+                    border: '1px solid rgba(255,255,255,0.3)',
+                    background: 'rgba(255,255,255,0.05)',
+                    color: '#ffffff',
+                    fontSize: '0.85rem',
+                    marginTop: '1.25rem',
+                    fontFamily: 'var(--font-techno)',
+                  }}>
                     {errorMessage}
-                  </p>
+                  </div>
                 )}
 
                 <button
@@ -322,19 +347,17 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                   className={styles.submitBtn}
                 >
                   {status === 'loading' ? (
-                    <>
-                      <span>Reserving Your Spot...</span>
-                    </>
+                    <span>Registering...</span>
                   ) : (
                     <>
                       <span>Join {role} Waitlist</span>
-                      <span>→</span>
+                      <span>&rarr;</span>
                     </>
                   )}
                 </button>
 
                 <p className={styles.privacyText}>
-                  🔒 Zero spam. We only notify you when vehicle allocations and early access codes open in your city.
+                  Confidential &bull; Strictly zero spam. Notifications sent only for priority vehicle allocations.
                 </p>
               </form>
             )}

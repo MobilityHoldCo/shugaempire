@@ -78,42 +78,40 @@
 
 .ctaWaitlist {
   font-family: var(--font-techno);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #00f5ff;
+  color: #ffffff;
   text-decoration: none;
   padding: 0.6rem 1.1rem;
-  border: 1px solid rgba(0, 245, 255, 0.4);
-  background: rgba(0, 245, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  transition: all 0.25s ease;
-  box-shadow: 0 0 15px rgba(0, 245, 255, 0.15);
+  gap: 0.5rem;
+  transition: all 0.2s ease;
 }
 
 .ctaWaitlist:hover {
-  background: rgba(0, 245, 255, 0.2);
-  border-color: #00f5ff;
-  box-shadow: 0 0 22px rgba(0, 245, 255, 0.4);
-  color: #fff;
+  background: #ffffff;
+  border-color: #ffffff;
+  color: #000000;
 }
 
 .ctaDot {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #00f5ff;
-  box-shadow: 0 0 8px #00f5ff;
+  background: #ffffff;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
   animation: navPulse 2s infinite;
 }
 
 @keyframes navPulse {
-  0% { opacity: 0.6; transform: scale(0.9); }
-  50% { opacity: 1; transform: scale(1.3); }
-  100% { opacity: 0.6; transform: scale(0.9); }
+  0% { opacity: 0.4; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+  100% { opacity: 0.4; transform: scale(0.9); }
 }
 
 .ctaOutline {

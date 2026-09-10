@@ -186,18 +186,18 @@ export default function HeroSection() {
               gap: '0.6rem',
               padding: '0.45rem 1.1rem',
               borderRadius: '999px',
-              background: 'rgba(0, 245, 255, 0.1)',
-              border: '1px solid rgba(0, 245, 255, 0.35)',
-              color: '#00f5ff',
+              background: 'rgba(255, 255, 255, 0.05)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              color: '#ffffff',
               fontFamily: 'var(--font-techno)',
-              fontSize: '0.75rem',
-              letterSpacing: '0.08em',
+              fontSize: '0.72rem',
+              letterSpacing: '0.12em',
               textDecoration: 'none',
               backdropFilter: 'blur(10px)',
             }}
           >
-            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#00f5ff', boxShadow: '0 0 8px #00f5ff' }} />
-            <span>⚡ EARLY ACCESS WAITLIST OPEN &bull; RESERVE SPOT &rarr;</span>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ffffff', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />
+            <span>EARLY ACCESS WAITLIST OPEN &bull; RESERVE SPOT &rarr;</span>
           </Link>
         </motion.div>
 
