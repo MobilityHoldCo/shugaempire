@@ -1,0 +1,566 @@
+.studioWrapper {
+  position: relative;
+  width: 100%;
+  min-height: 740px;
+  background: radial-gradient(ellipse at 50% 45%, rgba(25, 30, 42, 0.65) 0%, rgba(6, 8, 12, 0.98) 70%, #030406 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: grab;
+  user-select: none;
+}
+
+.studioWrapper:active {
+  cursor: grabbing;
+}
+
+/* Subtle holographic studio floor grid & ambient vignette */
+.studioWrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(ellipse at 50% 60%, transparent 20%, rgba(0, 0, 0, 0.75) 100%),
+    linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
+  background-position: center bottom;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Studio overhead soft spotlight */
+.studioWrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  max-width: 900px;
+  height: 220px;
+  background: radial-gradient(ellipse at top, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ── Top Telemetry HUD ── */
+.hudTop {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.75rem 2.5rem;
+  pointer-events: none;
+}
+
+.hudBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(12, 14, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 8px 16px;
+  font-family: var(--font-techno);
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  color: #fff;
+  border-radius: 9999px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.pulseDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00e5ff;
+  box-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0, 229, 255, 0.6);
+  animation: radarPulse 1.8s ease-in-out infinite;
+}
+
+@keyframes radarPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.hudControls {
+  display: flex;
+  gap: 0.75rem;
+  pointer-events: auto;
+}
+
+.hudBtn {
+  background: rgba(12, 14, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-techno);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hudBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-1px);
+}
+
+.hudBtnActive {
+  background: #fff !important;
+  color: #000 !important;
+  border-color: #fff !important;
+  box-shadow: 0 0 18px rgba(255, 255, 255, 0.4);
+  font-weight: 700;
+}
+
+/* ── Turntable Stage Area ── */
+.stageArea {
+  position: relative;
+  flex: 1;
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  perspective: 1200px;
+  z-index: 10;
+  padding: 1rem 0;
+}
+
+/* Illuminated Studio Turntable Platform */
+.turntableBase {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%) rotateX(76deg);
+  width: 900px;
+  max-width: 95vw;
+  height: 480px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.turntableOuterRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 35px rgba(255, 255, 255, 0.08), inset 0 0 40px rgba(0, 229, 255, 0.05);
+  animation: turntableSpin 40s linear infinite;
+}
+
+.turntableInnerRing {
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  border: 1px dashed rgba(255, 255, 255, 0.16);
+}
+
+.turntableCoreGlow {
+  position: absolute;
+  inset: 25%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0, 229, 255, 0.12) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 75%);
+  filter: blur(16px);
+}
+
+@keyframes turntableSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ── Car Presentation ── */
+.carPresentation {
+  position: relative;
+  width: 100%;
+  max-width: 1000px;
+  height: 460px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease-out;
+  transform-style: preserve-3d;
+  z-index: 5;
+}
+
+.carImageLayer {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: filter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  filter: drop-shadow(0 25px 35px rgba(0, 0, 0, 0.85));
+}
+
+.carImage {
+  object-fit: contain !important;
+  object-position: center 55% !important;
+  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.9));
+  pointer-events: none;
+}
+
+/* Dynamic Headlight Projection Beam */
+.headlightBeamGlow {
+  position: absolute;
+  right: 6%;
+  top: 48%;
+  width: 280px;
+  height: 160px;
+  background: radial-gradient(ellipse at 15% 50%, rgba(255, 255, 255, 0.35) 0%, rgba(0, 229, 255, 0.18) 40%, transparent 75%);
+  transform: rotate(-10deg) skewX(-20deg);
+  filter: blur(14px);
+  pointer-events: none;
+  opacity: 0.9;
+  mix-blend-mode: screen;
+}
+
+/* ── Hotspot Inspection Pins ── */
+.hotspotPin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  padding: 0;
+}
+
+.hotspotPulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(0, 229, 255, 0.25);
+  border: 1px solid rgba(0, 229, 255, 0.75);
+  animation: hotspotRipples 2s cubic-bezier(0.1, 0.8, 0.3, 1) infinite;
+}
+
+@keyframes hotspotRipples {
+  0% { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(1.8); opacity: 0; }
+}
+
+.hotspotCenter {
+  position: relative;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px #00e5ff, 0 0 16px rgba(0, 229, 255, 0.9);
+  transition: transform 0.2s ease;
+}
+
+.hotspotPin:hover .hotspotCenter,
+.hotspotPinActive .hotspotCenter {
+  transform: scale(1.4);
+  background: #00e5ff;
+}
+
+.hotspotLabel {
+  position: absolute;
+  left: 36px;
+  white-space: nowrap;
+  background: rgba(10, 12, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  opacity: 0;
+  transform: translateX(-4px);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  backdrop-filter: blur(8px);
+}
+
+.hotspotPin:hover .hotspotLabel {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Hotspot Inspection Modal Card ── */
+.hotspotModal {
+  position: absolute;
+  bottom: 2rem;
+  right: 2.5rem;
+  width: 340px;
+  max-width: calc(100vw - 3rem);
+  background: rgba(10, 12, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 1.25rem 1.4rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(0, 229, 255, 0.12);
+  z-index: 30;
+  animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; transform: translateY(12px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.modalTag {
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  color: #00e5ff;
+}
+
+.modalClose {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.modalClose:hover {
+  color: #fff;
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+.modalDesc {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+  margin-bottom: 0.9rem;
+}
+
+.modalStat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-techno);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: #00e5ff;
+}
+
+.statIcon {
+  font-size: 0.85rem;
+}
+
+/* ── Bottom HUD & Controls ── */
+.hudBottom {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+.paletteContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background: rgba(12, 14, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 10px 18px;
+  border-radius: 8px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.paletteTitle {
+  font-family: var(--font-techno);
+  font-size: 0.6rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.palettePills {
+  display: flex;
+  gap: 12px;
+}
+
+.finishButton {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  padding: 0;
+}
+
+.finishButton:hover {
+  transform: scale(1.18);
+  border-color: #fff;
+}
+
+.finishButtonActive {
+  transform: scale(1.25);
+  border-color: #00e5ff !important;
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.6), 0 0 24px rgba(255, 255, 255, 0.35);
+}
+
+/* Specs Bar */
+.specsBar {
+  display: flex;
+  gap: 2.2rem;
+  background: rgba(12, 14, 20, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 10px 22px;
+  border-radius: 8px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.specBox {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.specValue {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.specValue small {
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  color: rgba(255, 255, 255, 0.6);
+  letter-spacing: 0.08em;
+  margin-left: 2px;
+}
+
+.specLabel {
+  font-family: var(--font-techno);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.ctaGroup {
+  pointer-events: auto;
+}
+
+/* ── Interactive Hint ── */
+.bottomHint {
+  position: relative;
+  z-index: 15;
+  text-align: center;
+  padding-bottom: 0.9rem;
+  font-family: var(--font-techno);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.38);
+  pointer-events: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* ── Mobile & Tablet Responsive ── */
+@media (max-width: 1024px) {
+  .hudBottom {
+    justify-content: center;
+  }
+  .specsBar {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .studioWrapper {
+    min-height: 640px;
+  }
+  .hudTop {
+    padding: 1.25rem 1.5rem;
+  }
+  .carPresentation {
+    height: 340px;
+  }
+  .hudBottom {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem 1.5rem;
+    gap: 1rem;
+  }
+  .specsBar {
+    gap: 1rem;
+    padding: 10px 14px;
+    justify-content: space-between;
+  }
+  .paletteContainer {
+    width: 100%;
+    align-items: center;
+  }
+  .ctaGroup {
+    text-align: center;
+  }
+  .ctaGroup a {
+    width: 100%;
+    text-align: center;
+  }
+  .bottomHint {
+    display: none;
+  }
+  .hotspotModal {
+    position: fixed;
+    bottom: 1rem;
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+  }
+}

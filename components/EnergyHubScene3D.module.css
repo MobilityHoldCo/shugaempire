@@ -1,0 +1,396 @@
+.stationWrap {
+  position: relative;
+  width: 100%;
+  height: 740px;
+  min-height: 600px;
+  background: radial-gradient(ellipse at 50% 35%, rgba(14, 24, 38, 0.85) 0%, rgba(5, 8, 14, 0.98) 75%, #020306 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  user-select: none;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+  cursor: grab;
+  z-index: 2;
+}
+
+.canvas:active {
+  cursor: grabbing;
+}
+
+/* Background matrix grid and solar ambient glow */
+.stationWrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.8) 100%),
+    linear-gradient(rgba(0, 229, 255, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 229, 255, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 56px 56px, 56px 56px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Top HUD */
+.hudTop {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  pointer-events: none;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hudBrand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(8, 11, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+}
+
+.pulseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #00e5ff;
+  box-shadow: 0 0 10px #00e5ff, 0 0 20px rgba(0, 229, 255, 0.8);
+  animation: energyPulse 1.6s ease-in-out infinite;
+}
+
+@keyframes energyPulse {
+  0%, 100% { opacity: 0.5; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
+.hudBrandText {
+  font-family: var(--font-techno);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: #fff;
+  font-weight: 600;
+}
+
+.hudControlsGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+}
+
+.modeToggleBtn {
+  background: rgba(8, 11, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.75);
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-family: var(--font-techno);
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modeToggleBtn:hover {
+  border-color: #00e5ff;
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.modeToggleActive {
+  background: #00e5ff !important;
+  color: #000 !important;
+  font-weight: 700;
+  box-shadow: 0 0 16px rgba(0, 229, 255, 0.4);
+}
+
+.ctrlBtn {
+  background: rgba(8, 11, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.7);
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-family: var(--font-techno);
+  font-size: 0.68rem;
+  letter-spacing: 0.14em;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: all 0.2s ease;
+}
+
+.ctrlBtn:hover {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.ctrlBtnActive {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border-color: #00e5ff;
+}
+
+/* Charging Bay Telemetry Modal Card */
+.bayModal {
+  position: absolute;
+  top: 5.5rem;
+  right: 2.5rem;
+  width: 340px;
+  max-width: calc(100vw - 3rem);
+  background: rgba(7, 10, 16, 0.94);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 8px;
+  padding: 1.25rem 1.4rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(0, 229, 255, 0.15);
+  z-index: 25;
+  animation: cardIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: auto;
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(-10px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modalHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.modalTag {
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  color: #00e5ff;
+}
+
+.modalClose {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+}
+
+.modalClose:hover {
+  color: #fff;
+}
+
+.modalTitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.3rem;
+}
+
+.modalVehicle {
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+  margin-bottom: 0.9rem;
+}
+
+/* Charging progress bar */
+.chargeProgressWrap {
+  margin-bottom: 1rem;
+}
+
+.progressLabels {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-techno);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 6px;
+}
+
+.progressBarBg {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.progressBarFill {
+  height: 100%;
+  background: linear-gradient(90deg, #00e5ff 0%, #388bfd 100%);
+  box-shadow: 0 0 10px #00e5ff;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.modalGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.75rem;
+}
+
+.gridItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gridLabel {
+  font-family: var(--font-techno);
+  font-size: 0.54rem;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.gridVal {
+  font-family: var(--font-techno);
+  font-size: 0.78rem;
+  color: #00e5ff;
+  font-weight: 600;
+}
+
+/* Bottom HUD Bar */
+.hudBottom {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem 2.5rem;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+
+.telemetryDeck {
+  display: flex;
+  gap: 2rem;
+  background: rgba(8, 11, 18, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  padding: 10px 22px;
+  border-radius: 8px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+
+.telMetric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.telVal {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.telVal small {
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  color: #00e5ff;
+  letter-spacing: 0.08em;
+  margin-left: 3px;
+}
+
+.telLabel {
+  font-family: var(--font-techno);
+  font-size: 0.54rem;
+  letter-spacing: 0.14em;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.hudActions {
+  display: flex;
+  gap: 1rem;
+  pointer-events: auto;
+}
+
+.hintBanner {
+  position: relative;
+  z-index: 15;
+  text-align: center;
+  padding-bottom: 0.85rem;
+  font-family: var(--font-techno);
+  font-size: 0.58rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .hudBottom {
+    justify-content: center;
+  }
+  .telemetryDeck {
+    gap: 1.4rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .stationWrap {
+    height: 640px;
+  }
+  .hudTop {
+    padding: 1.25rem 1.25rem;
+  }
+  .hudBottom {
+    padding: 1rem 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .telemetryDeck {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding: 12px 16px;
+  }
+  .hudActions {
+    flex-direction: column;
+  }
+  .hudActions a {
+    text-align: center;
+  }
+  .bayModal {
+    top: auto;
+    bottom: 5.5rem;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+  }
+  .hintBanner {
+    display: none;
+  }
+}

@@ -1,0 +1,146 @@
+/* ── Precision Core Dot ── */
+.dot {
+  position: fixed;
+  top: -3px;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  background: #ffffff;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8), 0 0 0 1px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+  transform: translate3d(-100px, -100px, 0);
+  transition: opacity 0.15s ease;
+}
+
+.dotHidden {
+  opacity: 0;
+}
+
+/* ── Trailing Cybernetic Reticle Ring ── */
+.ring {
+  position: fixed;
+  top: -18px;
+  left: -18px;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  will-change: transform;
+  transform: translate3d(-100px, -100px, 0);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.6), inset 0 0 6px rgba(255, 255, 255, 0.1);
+  transition: width 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              height 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              top 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              left 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.2s ease,
+              background 0.2s ease;
+}
+
+/* Interactive link/button hover state */
+.ringHover {
+  width: 52px;
+  height: 52px;
+  top: -26px;
+  left: -26px;
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+}
+
+/* Hover over 3D scenes / images with context text */
+.ringWithText {
+  width: 58px;
+  height: 58px;
+  top: -29px;
+  left: -29px;
+  border-color: #ffffff;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* ── Reticle Crosshair Ticks ── */
+.tickTop, .tickBottom, .tickLeft, .tickRight {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.9);
+  pointer-events: none;
+}
+
+.tickTop {
+  top: -4px;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  transform: translateX(-50%);
+}
+
+.tickBottom {
+  bottom: -4px;
+  left: 50%;
+  width: 1px;
+  height: 4px;
+  transform: translateX(-50%);
+}
+
+.tickLeft {
+  top: 50%;
+  left: -4px;
+  width: 4px;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+.tickRight {
+  top: 50%;
+  right: -4px;
+  width: 4px;
+  height: 1px;
+  transform: translateY(-50%);
+}
+
+/* ── Dynamic Context Floating Badge ── */
+.badge {
+  position: fixed;
+  top: 0;
+  left: 0;
+  transform: translate3d(-100px, -100px, 0);
+  pointer-events: none;
+  z-index: 99999;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  will-change: transform, opacity;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge span {
+  display: inline-block;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.92);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  padding: 3px 9px;
+  border-radius: 2px;
+  font-family: var(--font-techno);
+  font-size: 0.62rem;
+  letter-spacing: 0.16em;
+  white-space: nowrap;
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.8);
+}
+
+.badgeVisible {
+  opacity: 1;
+}
+
+/* Hide custom cursor on mobile/touch screens */
+@media (pointer: coarse), (max-width: 768px) {
+  .dot, .ring, .badge {
+    display: none !important;
+  }
+}

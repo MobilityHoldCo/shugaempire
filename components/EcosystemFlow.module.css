@@ -1,0 +1,91 @@
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.node {
+  display: flex;
+  gap: 2rem;
+  position: relative;
+  padding: 2rem 0;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  margin-left: 1.5rem;
+  padding-left: 2.5rem;
+}
+
+.final {
+  border-left-color: rgba(255,255,255,0.3);
+}
+
+.final .nodeId {
+  color: #fff;
+  border-color: rgba(255,255,255,0.4);
+  background: rgba(255,255,255,0.05);
+}
+
+.final .nodeName {
+  color: #fff;
+}
+
+.nodeId {
+  position: absolute;
+  left: -1.5rem;
+  top: 2rem;
+  width: 3rem;
+  height: 3rem;
+  background: #000;
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  color: rgba(255,255,255,0.5);
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.nodeContent {
+  padding-left: 1rem;
+}
+
+.nodeName {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  color: rgba(255,255,255,0.9);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  line-height: 1;
+}
+
+.nodeSub {
+  font-family: var(--font-techno);
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 0.75rem;
+}
+
+.nodeDesc {
+  font-family: var(--font-body);
+  font-size: 1.05rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.8;
+  max-width: 460px;
+  margin: 0;
+}
+
+.connector {
+  position: absolute;
+  bottom: -1px;
+  left: -1px;
+  width: 1px;
+  height: 2rem;
+  background: rgba(255,255,255,0.3);
+  transform-origin: top;
+}

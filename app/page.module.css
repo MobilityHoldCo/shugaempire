@@ -1,0 +1,255 @@
+.splitSection {}
+
+.splitGrid {
+  gap: 6rem;
+}
+
+.splitBody {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.splitBody p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.85;
+}
+
+.highlight {
+  font-family: var(--font-techno) !important;
+  font-size: 1.2rem !important;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.9) !important;
+}
+
+.splitVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.visualBox {
+  position: relative;
+  width: 360px;
+  height: 360px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.visualGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.visualCircle {
+  position: absolute;
+  width: 280px;
+  height: 280px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 50%;
+  animation: spin 20s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.visualLabel {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+}
+
+.visualNum {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 5rem;
+  color: #fff;
+  line-height: 1;
+}
+
+.visualSub {
+  display: block;
+  font-family: var(--font-techno);
+  font-size: 0.65rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.5rem;
+}
+
+/* Ecosystem */
+.ecoGrid {
+  align-items: start;
+  gap: 5rem;
+}
+
+/* Epic Section */
+.epicSection {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 8rem 0;
+  overflow: hidden;
+}
+
+.epicBg {
+  position: absolute;
+  inset: 0;
+}
+
+.epicBgGrid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+}
+
+.epicGlow {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 65%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.epicContent {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 6rem;
+  align-items: end;
+  padding: 0;
+}
+
+.epicHeading {
+  margin-top: 1rem;
+}
+
+/* Investor */
+.investorSection {}
+
+.investorGrid {
+  gap: 6rem;
+}
+
+.investorVisual {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.investorBox {
+  width: 340px;
+  height: 340px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255,255,255,0.01);
+}
+
+.investorBox::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.05), transparent 70%);
+}
+
+.investorIcon {
+  width: 80px;
+  height: 80px;
+  color: rgba(255,255,255,0.2);
+}
+
+.investorIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.investorBoxText {
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.5);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  position: relative;
+  z-index: 1;
+}
+
+.investorBody {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.investorBody p {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.85;
+}
+
+/* CTA Banner */
+.ctaBanner {
+  position: relative;
+  padding: 10rem 2rem;
+  overflow: hidden;
+}
+
+.ctaBannerBg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, #0a0a0a, #000);
+}
+
+.ctaBannerBg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(255,255,255,0.04), transparent 70%);
+}
+
+.ctaHeading {
+  margin: 1rem auto;
+  max-width: 900px;
+  text-align: center;
+}
+
+@media (max-width: 1024px) {
+  .splitGrid { gap: 3rem; }
+  .visualBox { width: 280px; height: 280px; }
+  .epicContent { grid-template-columns: 1fr; gap: 2rem; }
+  .investorGrid { gap: 3rem; }
+  .investorBox { width: 280px; height: 280px; }
+}
+
+@media (max-width: 640px) {
+  .splitVisual { display: none; }
+  .investorVisual { display: none; }
+  .epicSection { padding: 5rem 0; }
+}

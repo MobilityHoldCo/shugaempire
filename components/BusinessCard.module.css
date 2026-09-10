@@ -1,0 +1,100 @@
+.card {
+  position: relative;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 4px;
+  padding: 3rem 2.5rem;
+  overflow: hidden;
+  transition: border-color 0.4s, background 0.4s;
+  cursor: default;
+}
+
+.card:hover {
+  border-color: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.04);
+}
+
+.card:hover .glow {
+  opacity: 1;
+}
+
+.glow {
+  position: absolute;
+  inset: -1px;
+  border-radius: 4px;
+  opacity: 0;
+  transition: opacity 0.4s;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.06), transparent 70%);
+  pointer-events: none;
+}
+
+.topRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.num {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.15);
+  letter-spacing: 0.05em;
+}
+
+.badge {
+  font-family: var(--font-techno);
+  font-size: 0.78rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.55);
+  border: 1px solid rgba(255,255,255,0.15);
+  padding: 0.35rem 0.8rem;
+  border-radius: 2px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #fff;
+  letter-spacing: -0.02em;
+  margin: 0 0 1.25rem;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.desc {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.8;
+  margin: 0 0 2rem;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-techno);
+  font-size: 0.9rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.8);
+  text-decoration: none;
+  transition: color 0.2s, gap 0.2s;
+}
+
+.link svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.2s;
+}
+
+.link:hover {
+  color: #fff;
+  gap: 1rem;
+}
+
+.link:hover svg {
+  transform: translateX(4px);
+}
