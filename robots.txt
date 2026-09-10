@@ -1,0 +1,67 @@
+User-Agent: *
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+Disallow: /studio/
+Disallow: /*.json$
+Disallow: /*?*
+
+User-Agent: Googlebot
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+
+User-Agent: Bingbot
+Allow: /
+Disallow: /_next/
+Disallow: /api/
+
+User-Agent: GPTBot
+Disallow: /
+
+User-Agent: Claude-Web
+Disallow: /
+
+User-Agent: anthropic-ai
+Disallow: /
+
+User-Agent: CCBot
+Disallow: /
+
+User-Agent: Google-Extended
+Disallow: /
+
+User-Agent: PerplexityBot
+Disallow: /
+
+User-Agent: Bytespider
+Disallow: /
+
+User-Agent: Diffbot
+Disallow: /
+
+User-Agent: ImagesiftBot
+Disallow: /
+
+User-Agent: Omgilibot
+Disallow: /
+
+User-Agent: Webzio-Extended
+Disallow: /
+
+User-Agent: SemrushBot
+Disallow: /
+
+User-Agent: AhrefsBot
+Disallow: /
+
+User-Agent: MJ12bot
+Disallow: /
+
+User-Agent: DotBot
+Disallow: /
+
+User-Agent: Petalbot
+Disallow: /
+
+Sitemap: https://shugaempire.com/sitemap.xml
