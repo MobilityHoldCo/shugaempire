@@ -46,6 +46,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 }
 
 // 3. Storage Directory & CSV files
+$persistentFile = '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv';
+$dataDir = dirname($persistentFile);
+if (!is_dir($dataDir)) {
+    @mkdir($dataDir, 0777, true);
+}
+
 $apiCsvFile = __DIR__ . '/waitlist_entries.csv';
 $storageDir = __DIR__ . '/../../data';
 if (!is_dir($storageDir)) {
@@ -53,9 +59,12 @@ if (!is_dir($storageDir)) {
 }
 $dataCsvFile = is_dir($storageDir) ? $storageDir . '/waitlist.csv' : null;
 
-// Target files to write to (always write to local __DIR__ for subdomain access, and mirror to data/ if writable)
+// Target files to write to (always include persistent file and local directory)
 $targets = [$apiCsvFile];
-if ($dataCsvFile && $dataCsvFile !== $apiCsvFile) {
+if (is_dir($dataDir) && !in_array($persistentFile, $targets)) {
+    $targets[] = $persistentFile;
+}
+if ($dataCsvFile && !in_array($dataCsvFile, $targets)) {
     $targets[] = $dataCsvFile;
 }
 

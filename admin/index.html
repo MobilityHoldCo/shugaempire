@@ -832,22 +832,26 @@
     }
 
     function saveStatusOverride(identifier, newStatus) {
-      const overrides = getSavedStatuses();
-      overrides[identifier] = newStatus;
-      localStorage.setItem('shuga_status_overrides', JSON.stringify(overrides));
+      try {
+        const overrides = getSavedStatuses();
+        overrides[identifier] = newStatus;
+        localStorage.setItem('shuga_status_overrides', JSON.stringify(overrides));
+      } catch (e) {}
     }
 
     function showToast(title, desc) {
-      const toast = document.getElementById('sync-toast');
-      const titleEl = document.getElementById('toast-title');
-      const descEl = document.getElementById('toast-desc');
-      if (!toast) return;
-      titleEl.textContent = title;
-      descEl.textContent = desc;
-      toast.classList.add('show');
-      setTimeout(() => {
-        toast.classList.remove('show');
-      }, 4500);
+      try {
+        const toast = document.getElementById('sync-toast');
+        const titleEl = document.getElementById('toast-title');
+        const descEl = document.getElementById('toast-desc');
+        if (!toast || !titleEl || !descEl) return;
+        titleEl.textContent = title || 'Notification';
+        descEl.textContent = desc || '';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 4500);
+      } catch (e) {}
     }
 
     function showDashboard() {
@@ -855,13 +859,18 @@
       document.getElementById('dashboard-view').style.display = 'block';
       const { email } = getAdminCredentials();
       document.getElementById('current-admin-display').textContent = email;
+      
+      // 1. Immediately render seed leads so KPIs and table are NEVER 0 0 0 0!
+      render();
+
+      // 2. Fetch latest leads from server
       loadServerLeads(false);
 
-      // Start automatic polling every 15 seconds
+      // 3. Start background poll every 30 seconds
       if (!pollTimer) {
         pollTimer = setInterval(() => {
           loadServerLeads(true);
-        }, 15000);
+        }, 30000);
       }
     }
 
@@ -875,196 +884,221 @@
         if (refreshLabel) refreshLabel.textContent = 'Syncing...';
       }
 
-      // Check endpoints in order:
-      // 1. Full HTTPS main domain URL (bypasses any subdomain directory separation)
-      // 2. Relative URL
-      const endpoints = [
-        `https://shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
-        `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
-      ];
-
-      let serverRecords = null;
-      for (const url of endpoints) {
-        try {
-          const res = await fetch(url, { cache: 'no-store' });
-          if (res.ok) {
-            const json = await res.json();
-            if (json.success && Array.isArray(json.data)) {
-              serverRecords = json.data;
-              break;
-            }
-          }
-        } catch (e) {
-          // try next endpoint
-        }
-      }
-
-      let combined = [];
-      if (serverRecords && serverRecords.length > 0) {
-        combined = [...serverRecords];
-      }
-
-      // Also incorporate any submissions in browser local storage
       try {
-        const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-        local.forEach((item, idx) => {
-          combined.unshift({
-            id: 'loc-' + (idx + 1),
-            timestamp: item.date ? item.date.replace('T', ' ').substring(0, 19) : new Date().toISOString().substring(0, 19),
-            fullName: item.fullName || 'Pioneer',
-            email: item.email || '',
-            phone: item.phone || '',
-            city: item.city || 'Lagos',
-            role: item.role || 'Driver',
-            notes: item.notes || '',
-            status: 'New'
-          });
-        });
-      } catch (e) {}
+        // Endpoints to check
+        const endpoints = [
+          `https://shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
+          `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
+        ];
 
-      // Add default seed leads
-      combined = [...combined, ...SEED];
-
-      // Deduplicate by email
-      const seen = new Set();
-      let uniqueLeads = [];
-      for (const l of combined) {
-        const key = (l.email || l.id || '').toLowerCase();
-        if (key && seen.has(key)) continue;
-        if (key) seen.add(key);
-        uniqueLeads.push(l);
-      }
-
-      // Apply saved status overrides
-      const overrides = getSavedStatuses();
-      allLeads = uniqueLeads.map(l => {
-        const key = (l.email || l.id || '').toLowerCase();
-        if (overrides[key]) {
-          return { ...l, status: overrides[key] };
+        let serverRecords = null;
+        for (const url of endpoints) {
+          try {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
+            const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+            clearTimeout(timeoutId);
+            if (res.ok) {
+              const json = await res.json();
+              if (json && json.success && Array.isArray(json.data)) {
+                serverRecords = json.data;
+                break;
+              }
+            }
+          } catch (err) {
+            // Try next
+          }
         }
-        return l;
-      });
 
-      // Detect newly arrived signups
-      const realLeadsCount = allLeads.filter(l => !SEED.some(s => s.id === l.id)).length;
-      if (!isInitialLoad && realLeadsCount > lastKnownCount) {
-        const diff = realLeadsCount - lastKnownCount;
-        const latestApplicant = allLeads[0];
-        showToast(
-          `⚡ ${diff} New Applicant${diff > 1 ? 's' : ''} Received!`,
-          `${latestApplicant.fullName} (${latestApplicant.role}) - ${latestApplicant.city}`
-        );
+        let combined = [];
+        if (serverRecords && serverRecords.length > 0) {
+          combined = [...serverRecords];
+        }
+
+        // Also incorporate local storage submissions
+        try {
+          const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
+          local.forEach((item, idx) => {
+            combined.unshift({
+              id: 'loc-' + (idx + 1),
+              timestamp: item.date ? item.date.replace('T', ' ').substring(0, 19) : new Date().toISOString().substring(0, 19),
+              fullName: item.fullName || 'Pioneer',
+              email: item.email || '',
+              phone: item.phone || '',
+              city: item.city || 'Lagos',
+              role: item.role || 'Driver',
+              notes: item.notes || '',
+              status: 'New'
+            });
+          });
+        } catch (e) {}
+
+        // Add default seed leads
+        combined = [...combined, ...SEED];
+
+        // Deduplicate by email or id
+        const seen = new Set();
+        let uniqueLeads = [];
+        for (const l of combined) {
+          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
+          if (key && seen.has(key)) continue;
+          if (key) seen.add(key);
+          uniqueLeads.push(l);
+        }
+
+        // Apply saved status overrides
+        const overrides = getSavedStatuses();
+        allLeads = uniqueLeads.map(l => {
+          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
+          if (overrides[key]) {
+            return { ...l, status: overrides[key] };
+          }
+          return l;
+        });
+
+        // Detect newly arrived signups
+        const realLeadsCount = allLeads.filter(l => !SEED.some(s => String(s.id) === String(l.id))).length;
+        if (!isInitialLoad && realLeadsCount > lastKnownCount) {
+          const diff = realLeadsCount - lastKnownCount;
+          const latestApplicant = allLeads[0];
+          if (latestApplicant && latestApplicant.fullName) {
+            showToast(
+              `⚡ ${diff} New Applicant${diff > 1 ? 's' : ''} Received!`,
+              `${latestApplicant.fullName} (${latestApplicant.role || 'Pioneer'}) - ${latestApplicant.city || 'Lagos'}`
+            );
+          }
+        }
+        lastKnownCount = realLeadsCount;
+        isInitialLoad = false;
+
+        // Update sync time
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+        if (syncTimeEl) {
+          syncTimeEl.textContent = `Synced: ${timeStr}`;
+        }
+      } catch (globalErr) {
+        console.error('Error during lead sync:', globalErr);
+      } finally {
+        if (refreshBtn) {
+          refreshBtn.classList.remove('loading');
+          if (refreshLabel) refreshLabel.textContent = 'Refresh Leads';
+        }
+        render();
       }
-      lastKnownCount = realLeadsCount;
-      isInitialLoad = false;
-
-      // Update sync time
-      const now = new Date();
-      const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      if (syncTimeEl) {
-        syncTimeEl.textContent = `Synced: ${timeStr} (auto 15s)`;
-      }
-
-      if (refreshBtn) {
-        refreshBtn.classList.remove('loading');
-        if (refreshLabel) refreshLabel.textContent = 'Refresh Leads';
-      }
-
-      render();
     }
 
     function render() {
-      const search = document.getElementById('search-box').value.toLowerCase();
-      const roleF = document.getElementById('role-filter').value;
-      const cityF = document.getElementById('city-filter').value;
-      const statusF = document.getElementById('status-filter').value;
+      try {
+        const searchInput = document.getElementById('search-box');
+        const roleSelect = document.getElementById('role-filter');
+        const citySelect = document.getElementById('city-filter');
+        const statusSelect = document.getElementById('status-filter');
 
-      const filtered = allLeads.filter(l => {
-        const matchesSearch = l.fullName.toLowerCase().includes(search) ||
-                              l.email.toLowerCase().includes(search) ||
-                              l.phone.toLowerCase().includes(search) ||
-                              (l.notes && l.notes.toLowerCase().includes(search));
-        const matchesRole = roleF === 'All' || l.role === roleF;
-        const matchesCity = cityF === 'All' || l.city === cityF;
-        const matchesStatus = statusF === 'All' || l.status === statusF;
-        return matchesSearch && matchesRole && matchesCity && matchesStatus;
-      });
+        const search = searchInput ? searchInput.value.toLowerCase().trim() : '';
+        const roleF = roleSelect ? roleSelect.value : 'All';
+        const cityF = citySelect ? citySelect.value : 'All';
+        const statusF = statusSelect ? statusSelect.value : 'All';
 
-      // Update Metrics
-      const total = allLeads.length;
-      const drivers = allLeads.filter(l => l.role === 'Driver').length;
-      const riders = allLeads.filter(l => l.role === 'Rider').length;
-      const investors = allLeads.filter(l => l.role === 'Investor').length;
+        const filtered = (allLeads || []).filter(l => {
+          if (!l) return false;
+          const haystack = ((l.fullName || '') + ' ' + (l.email || '') + ' ' + (l.phone || '') + ' ' + (l.notes || '')).toLowerCase();
+          const matchesSearch = !search || haystack.includes(search);
+          const matchesRole = roleF === 'All' || l.role === roleF;
+          const matchesCity = cityF === 'All' || l.city === cityF;
+          const matchesStatus = statusF === 'All' || l.status === statusF;
+          return matchesSearch && matchesRole && matchesCity && matchesStatus;
+        });
 
-      document.getElementById('metric-total').textContent = total;
-      document.getElementById('metric-drivers').textContent = drivers;
-      document.getElementById('metric-drivers-pct').textContent = Math.round((drivers/(total||1))*100) + '% of pipeline';
-      document.getElementById('metric-riders').textContent = riders;
-      document.getElementById('metric-riders-pct').textContent = Math.round((riders/(total||1))*100) + '% of pipeline';
-      document.getElementById('metric-investors').textContent = investors;
-      document.getElementById('metric-investors-pct').textContent = Math.round((investors/(total||1))*100) + '% of pipeline';
+        // Update Metrics
+        const total = allLeads.length;
+        const drivers = allLeads.filter(l => (l.role || '').toLowerCase() === 'driver').length;
+        const riders = allLeads.filter(l => (l.role || '').toLowerCase() === 'rider').length;
+        const investors = allLeads.filter(l => (l.role || '').toLowerCase() === 'investor').length;
 
-      // Table Rows
-      const tbody = document.getElementById('leads-tbody');
-      if (filtered.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:3rem; color:rgba(255,255,255,0.4); font-family:var(--font-techno);">No applicants match your filter.</td></tr>';
-        return;
+        const elTotal = document.getElementById('metric-total');
+        const elDrivers = document.getElementById('metric-drivers');
+        const elDriversPct = document.getElementById('metric-drivers-pct');
+        const elRiders = document.getElementById('metric-riders');
+        const elRidersPct = document.getElementById('metric-riders-pct');
+        const elInvestors = document.getElementById('metric-investors');
+        const elInvestorsPct = document.getElementById('metric-investors-pct');
+
+        if (elTotal) elTotal.textContent = total;
+        if (elDrivers) elDrivers.textContent = drivers;
+        if (elDriversPct) elDriversPct.textContent = Math.round((drivers / (total || 1)) * 100) + '% of pipeline';
+        if (elRiders) elRiders.textContent = riders;
+        if (elRidersPct) elRidersPct.textContent = Math.round((riders / (total || 1)) * 100) + '% of pipeline';
+        if (elInvestors) elInvestors.textContent = investors;
+        if (elInvestorsPct) elInvestorsPct.textContent = Math.round((investors / (total || 1)) * 100) + '% of pipeline';
+
+        // Table Rows
+        const tbody = document.getElementById('leads-tbody');
+        if (!tbody) return;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:3rem; color:rgba(255,255,255,0.4); font-family:var(--font-techno);">No applicants match your filter.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(l => {
+          let rawPhone = l.phone ? String(l.phone) : '';
+          let cleanPhone = rawPhone.replace(/[^0-9]/g, '');
+          if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
+          else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
+
+          const waMsg = encodeURIComponent(`Hello ${l.fullName || 'there'}, this is the Shuga Empire operations team regarding your waitlist application.`);
+          const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '#';
+
+          return `
+            <tr>
+              <td>
+                <div class="name-text">${escapeHtml(l.fullName || 'Pioneer')}</div>
+                <div class="contact-text">${escapeHtml(l.email || '—')} &bull; ${escapeHtml(l.phone || '—')}</div>
+              </td>
+              <td><span class="badge">${escapeHtml(l.role || 'Driver')}</span></td>
+              <td>${escapeHtml(l.city || 'Lagos')}</td>
+              <td style="max-width:280px; color:rgba(255,255,255,0.7);">${escapeHtml(l.notes || '—')}</td>
+              <td>
+                <select class="status-dropdown" onchange="updateStatus('${l.id}', this.value)">
+                  <option value="New" ${l.status==='New'?'selected':''}>New</option>
+                  <option value="Contacted" ${l.status==='Contacted'?'selected':''}>Contacted</option>
+                  <option value="Vetted" ${l.status==='Vetted'?'selected':''}>Vetted</option>
+                  <option value="Allocated" ${l.status==='Allocated'?'selected':''}>Allocated</option>
+                </select>
+              </td>
+              <td style="font-family:var(--font-techno); font-size:0.75rem; color:rgba(255,255,255,0.4);">${escapeHtml(l.timestamp || '')}</td>
+              <td>
+                <div class="action-icons">
+                  ${cleanPhone ? `
+                    <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="act-btn" title="Chat on WhatsApp">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
+                      </svg>
+                    </a>
+                  ` : ''}
+                  ${l.email ? `
+                    <a href="mailto:${l.email}?subject=Shuga Empire Waitlist Update" class="act-btn" title="Send Email">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                        <polyline points="22,6 12,13 2,6" />
+                      </svg>
+                    </a>
+                  ` : ''}
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      } catch (renderErr) {
+        console.error('Render error:', renderErr);
       }
-
-      tbody.innerHTML = filtered.map(l => {
-        let cleanPhone = l.phone.replace(/[^0-9]/g, '');
-        if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
-        else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
-
-        const waMsg = encodeURIComponent(`Hello ${l.fullName}, this is the Shuga Empire operations team regarding your waitlist application.`);
-        const waLink = `https://wa.me/${cleanPhone}?text=${waMsg}`;
-
-        return `
-          <tr>
-            <td>
-              <div class="name-text">${escapeHtml(l.fullName)}</div>
-              <div class="contact-text">${escapeHtml(l.email)} &bull; ${escapeHtml(l.phone)}</div>
-            </td>
-            <td><span class="badge">${escapeHtml(l.role)}</span></td>
-            <td>${escapeHtml(l.city)}</td>
-            <td style="max-width:280px; color:rgba(255,255,255,0.7);">${escapeHtml(l.notes || '—')}</td>
-            <td>
-              <select class="status-dropdown" onchange="updateStatus('${l.id}', this.value)">
-                <option value="New" ${l.status==='New'?'selected':''}>New</option>
-                <option value="Contacted" ${l.status==='Contacted'?'selected':''}>Contacted</option>
-                <option value="Vetted" ${l.status==='Vetted'?'selected':''}>Vetted</option>
-                <option value="Allocated" ${l.status==='Allocated'?'selected':''}>Allocated</option>
-              </select>
-            </td>
-            <td style="font-family:var(--font-techno); font-size:0.75rem; color:rgba(255,255,255,0.4);">${escapeHtml(l.timestamp)}</td>
-            <td>
-              <div class="action-icons">
-                ${l.phone ? `
-                  <a href="${waLink}" target="_blank" rel="noopener noreferrer" class="act-btn" title="Chat on WhatsApp">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.771-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.861.174.086.275.072.376-.044.102-.115.434-.506.549-.68.116-.173.232-.144.39-.086s1.011.477 1.184.564.289.13.332.202c.043.073.043.419-.101.824z"/>
-                    </svg>
-                  </a>
-                ` : ''}
-                ${l.email ? `
-                  <a href="mailto:${l.email}?subject=Shuga Empire Waitlist Update" class="act-btn" title="Send Email">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                      <polyline points="22,6 12,13 2,6" />
-                    </svg>
-                  </a>
-                ` : ''}
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
     }
 
     window.updateStatus = function(id, newStatus) {
       allLeads = allLeads.map(l => {
         if (String(l.id) === String(id)) {
-          const key = (l.email || l.id || '').toLowerCase();
+          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
           saveStatusOverride(key, newStatus);
           return { ...l, status: newStatus };
         }

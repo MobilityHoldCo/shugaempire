@@ -31,9 +31,12 @@ if ($passcode !== $ADMIN_PASSCODE) {
 
 // 2. CSV File Location - Multi-path locator for main domain and subdomain setups
 $candidates = [
+    '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv',
     __DIR__ . '/waitlist_entries.csv',
+    dirname(dirname(__DIR__)) . '/data/waitlist_entries.csv',
     dirname(dirname(__DIR__)) . '/api/waitlist_entries.csv',
     dirname(dirname(__DIR__)) . '/data/waitlist.csv',
+    __DIR__ . '/../../data/waitlist_entries.csv',
     __DIR__ . '/../../data/waitlist.csv',
     dirname(__DIR__) . '/waitlist_entries.csv',
     ($_SERVER['DOCUMENT_ROOT'] ?? '') . '/api/waitlist_entries.csv',
