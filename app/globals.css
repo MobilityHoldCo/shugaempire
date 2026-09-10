@@ -461,8 +461,68 @@ a { text-decoration: none; }
   .impact-row { grid-template-columns: 1fr; gap: 0.5rem; }
 }
 
-@media (max-width: 640px) {
-  :root { --section-pad: 5rem 1.25rem; }
-  .grid-3 { grid-template-columns: 1fr; }
-  .steps-grid { grid-template-columns: 1fr 1fr; }
+@media (max-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+  :root {
+    --section-pad: 4.5rem 1.25rem;
+  }
+  .container {
+    padding: 0 1.25rem;
+  }
+  .heading-xl {
+    font-size: clamp(2rem, 8vw, 3.2rem);
+    line-height: 1.05;
+  }
+  .heading-lg {
+    font-size: clamp(1.75rem, 6.5vw, 2.5rem);
+    line-height: 1.15;
+  }
+  .lead {
+    font-size: 1.05rem;
+    line-height: 1.65;
+  }
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+  .steps-grid {
+    grid-template-columns: 1fr;
+  }
+  .step-item {
+    padding: 2rem 1.25rem;
+  }
+  .step-num {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+  }
+  .step-title {
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .step-desc {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  .btn {
+    min-height: 48px;
+    padding: 0.85rem 1.75rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 480px) {
+  html {
+    font-size: 14.5px;
+  }
+  :root {
+    --section-pad: 3.75rem 1rem;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
 }

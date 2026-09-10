@@ -5,14 +5,14 @@ import Image from 'next/image';
 import styles from './Navbar.module.css';
 
 const links = [
-  { href: '/about', label: 'About' },
-  { href: '/shuga-cars', label: 'SHUGA FLEET' },
-  { href: '/shuga-ride', label: 'Shuga Ride' },
-  { href: '/shuga-energy', label: 'Shuga Energy' },
-  { href: '/investors', label: 'Investors' },
-  { href: '/waitlist', label: 'Waitlist' },
-  { href: '/faq', label: 'FAQ' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/about', label: 'About', num: '01' },
+  { href: '/shuga-cars', label: 'SHUGA FLEET', num: '02' },
+  { href: '/shuga-ride', label: 'Shuga Ride', num: '03' },
+  { href: '/shuga-energy', label: 'Shuga Energy', num: '04' },
+  { href: '/investors', label: 'Investors', num: '05' },
+  { href: '/waitlist', label: 'Waitlist', num: '06' },
+  { href: '/faq', label: 'FAQ', num: '07' },
+  { href: '/contact', label: 'Contact', num: '08' },
 ];
 
 export default function Navbar() {
@@ -20,49 +20,152 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60);
+    const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  return (
-    <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
-      <div className={styles.inner}>
-        <Link href="/" className={styles.brand} aria-label="Mobility Hold Co. home">
-          <Image
-            src="/text logo with icon.jpeg"
-            alt="Shuga Empire — Mobility Hold Co."
-            width={160}
-            height={48}
-            className={styles.logo}
-            priority
-          />
-        </Link>
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (open) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.touchAction = '';
+    };
+  }, [open]);
 
-        <nav className={`${styles.nav} ${open ? styles.navOpen : ''}`}>
+  // Handle escape key
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, []);
+
+  return (
+    <>
+      <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
+        <div className={styles.inner}>
+          <Link href="/" className={styles.brand} aria-label="Mobility Hold Co. home" onClick={() => setOpen(false)}>
+            <Image
+              src="/text logo with icon.jpeg"
+              alt="Shuga Empire — Mobility Hold Co."
+              width={160}
+              height={48}
+              className={styles.logo}
+              priority
+            />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className={styles.navDesktop}>
+            {links.map(l => (
+              <Link key={l.href} href={l.href} className={styles.navLink}>
+                {l.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Desktop CTA buttons */}
+          <div className={styles.cta}>
+            <Link href="/waitlist" className={styles.ctaWaitlist}>
+              <span className={styles.ctaDot} />
+              Join Waitlist
+            </Link>
+            <Link href="/shuga-cars" className={styles.ctaSolid}>Get a Car</Link>
+          </div>
+
+          {/* Mobile Right Controls: Quick CTA + Hamburger */}
+          <div className={styles.mobileControls}>
+            <Link href="/shuga-cars" className={styles.mobileQuickCta} onClick={() => setOpen(false)}>
+              GET A CAR
+            </Link>
+            <button
+              className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
+              onClick={() => setOpen(!open)}
+              aria-label={open ? 'Close menu' : 'Open menu'}
+              aria-expanded={open}
+            >
+              <span /><span /><span />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile Drawer Backdrop Overlay */}
+      <div
+        className={`${styles.backdrop} ${open ? styles.backdropActive : ''}`}
+        onClick={() => setOpen(false)}
+        aria-hidden={!open}
+      />
+
+      {/* Mobile Slide-in Drawer */}
+      <div className={`${styles.drawer} ${open ? styles.drawerOpen : ''}`} aria-hidden={!open}>
+        <div className={styles.drawerHeader}>
+          <div className={styles.drawerBrand}>
+            <span className={styles.drawerLogoText}>SHUGA EMPIRE</span>
+            <span className={styles.drawerStatusBadge}>
+              <span className={styles.drawerStatusDot} />
+              ONLINE
+            </span>
+          </div>
+          <button
+            className={styles.closeBtn}
+            onClick={() => setOpen(false)}
+            aria-label="Close navigation"
+          >
+            ✕
+          </button>
+        </div>
+
+        <nav className={styles.drawerNav}>
           {links.map(l => (
-            <Link key={l.href} href={l.href} className={styles.navLink} onClick={() => setOpen(false)}>
-              {l.label}
+            <Link
+              key={l.href}
+              href={l.href}
+              className={styles.drawerLink}
+              onClick={() => setOpen(false)}
+            >
+              <div className={styles.drawerLinkLeft}>
+                <span className={styles.drawerLinkNum}>{l.num}</span>
+                <span className={styles.drawerLinkLabel}>{l.label}</span>
+              </div>
+              <span className={styles.drawerLinkArrow}>→</span>
             </Link>
           ))}
         </nav>
 
-        <div className={styles.cta}>
-          <Link href="/waitlist" className={styles.ctaWaitlist}>
+        <div className={styles.drawerFooter}>
+          <Link
+            href="/waitlist"
+            className={styles.drawerWaitlistBtn}
+            onClick={() => setOpen(false)}
+          >
             <span className={styles.ctaDot} />
-            Join Waitlist
+            Join Early Access Waitlist
           </Link>
-          <Link href="/shuga-cars" className={styles.ctaSolid}>Get a Car</Link>
+          <Link
+            href="/shuga-cars"
+            className={styles.drawerCarBtn}
+            onClick={() => setOpen(false)}
+          >
+            Apply For Vehicle (Hire-Purchase)
+          </Link>
+          <div className={styles.drawerContactInfo}>
+            <span>Lagos & Abuja, Nigeria</span>
+            <span>&bull;</span>
+            <Link href="/contact" onClick={() => setOpen(false)}>Contact Team</Link>
+          </div>
         </div>
-
-        <button
-          className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
-          onClick={() => setOpen(!open)}
-          aria-label="Toggle menu"
-        >
-          <span /><span /><span />
-        </button>
       </div>
-    </header>
+    </>
   );
 }
+

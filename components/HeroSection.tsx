@@ -67,8 +67,21 @@ export default function HeroSection() {
     if (Math.abs(dx) > 50) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
 
+  const onTouchStart = (e: React.TouchEvent) => {
+    dragStartX.current = e.touches[0].clientX;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - dragStartX.current;
+    if (Math.abs(dx) > 40) { go(dx < 0 ? 1 : -1); resetTimer(); }
+  };
+
   return (
-    <section ref={ref} className={styles.hero}>
+    <section
+      ref={ref}
+      className={styles.hero}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
+    >
 
       {/* ── 3D Carousel Background ── */}
       <motion.div
