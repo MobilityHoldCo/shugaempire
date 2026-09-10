@@ -9,6 +9,7 @@ import RoadScene from '@/components/RoadScene';
 import GlobeScene from '@/components/GlobeScene';
 import WaitlistSection from '@/components/WaitlistSection';
 import Link from 'next/link';
+import Image from 'next/image';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
@@ -118,14 +119,36 @@ export default function HomePage() {
               We understand what driving means to you — the early mornings, the traffic, the hours in service of passengers. SHUGA FLEET is designed to turn that work into ownership.
             </p>
           </div>
-          <div className="steps-grid skew-on-scroll">
+          <div className={`${styles.driverStepsGrid} skew-on-scroll`}>
             {steps.map(s => (
-              <div key={s.num} className="step-item">
+              <div key={s.num} className={`step-item ${s.num === '07' ? styles.stepOwnerCard : ''}`}>
                 <span className="step-num">{s.num}</span>
                 <div className="step-title">{s.title}</div>
                 <p className="step-desc">{s.desc}</p>
               </div>
             ))}
+
+            {/* Cinematic EV Delivery Banner filling the remaining slots */}
+            <div className={styles.driverRewardBanner}>
+              <Image
+                src="/shuga-ownership-ev.jpg"
+                alt="Shuga Luxury Electric Vehicle Delivery"
+                fill
+                sizes="(max-width: 768px) 100vw, 75vw"
+                className={styles.driverRewardImage}
+              />
+              <div className={styles.driverRewardOverlay} />
+              <div className={styles.driverRewardContent}>
+                <p className={styles.driverRewardEyebrow}>The Destination &bull; 100% Ownership</p>
+                <h3 className={styles.driverRewardTitle}>Your Hard Work Turns Into A Debt-Free Electric Asset</h3>
+                <p className={styles.driverRewardDesc}>
+                  Complete the agreed lease-to-own period with steady daily payments, zero petrol expense, and solar charging credits.
+                </p>
+                <Link href="/shuga-cars" className={styles.driverRewardBtn} data-cursor>
+                  Apply for a Vehicle &rarr;
+                </Link>
+              </div>
+            </div>
           </div>
           <div style={{ marginTop: '3rem' }}>
             <Link href="/shuga-cars" className="btn btn--white" data-cursor>Apply for a Shuga Car</Link>
