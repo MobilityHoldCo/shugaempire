@@ -173,6 +173,35 @@ export default function HeroSection() {
         </motion.p>
 
         <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.95 }}
+          style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}
+        >
+          <Link
+            href="/waitlist"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.6rem',
+              padding: '0.45rem 1.1rem',
+              borderRadius: '999px',
+              background: 'rgba(0, 245, 255, 0.1)',
+              border: '1px solid rgba(0, 245, 255, 0.35)',
+              color: '#00f5ff',
+              fontFamily: 'var(--font-techno)',
+              fontSize: '0.75rem',
+              letterSpacing: '0.08em',
+              textDecoration: 'none',
+              backdropFilter: 'blur(10px)',
+            }}
+          >
+            <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: '#00f5ff', boxShadow: '0 0 8px #00f5ff' }} />
+            <span>⚡ EARLY ACCESS WAITLIST OPEN &bull; RESERVE SPOT &rarr;</span>
+          </Link>
+        </motion.div>
+
+        <motion.div
           className={styles.ctas}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

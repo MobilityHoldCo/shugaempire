@@ -1,0 +1,47 @@
+# Hostinger / LiteSpeed configuration for Next.js Static Export & API
+RewriteEngine On
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Protect CSV database files from direct browser download
+<FilesMatch "\.(csv|log)$">
+  Order Allow,Deny
+  Deny from all
+</FilesMatch>
+
+# Route /api/waitlist to /api/waitlist.php
+RewriteRule ^api/waitlist/?$ api/waitlist.php [L]
+
+# If requested file exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# If requested folder exists, serve it directly
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Clean URLs: Map /page to /page.html if it exists
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^([^/]+)/?$ $1.html [L]
+
+# Fallback for nested clean URLs: Map /folder/page to /folder/page.html
+RewriteCond %{DOCUMENT_ROOT}/$1.html -f
+RewriteRule ^(.*)$ $1.html [L]
+
+# Custom 404 Error Document
+ErrorDocument 404 /404.html
+
+# Cache Static Assets for fast loading
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType video/webm "access plus 1 year"
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+</IfModule>

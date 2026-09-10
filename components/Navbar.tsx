@@ -10,6 +10,7 @@ const links = [
   { href: '/shuga-ride', label: 'Shuga Ride' },
   { href: '/shuga-energy', label: 'Shuga Energy' },
   { href: '/investors', label: 'Investors' },
+  { href: '/waitlist', label: 'Waitlist' },
   { href: '/faq', label: 'FAQ' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -47,7 +48,10 @@ export default function Navbar() {
         </nav>
 
         <div className={styles.cta}>
-          <Link href="/shuga-ride" className={styles.ctaOutline}>Ride</Link>
+          <Link href="/waitlist" className={styles.ctaWaitlist}>
+            <span className={styles.ctaDot} />
+            Join Waitlist
+          </Link>
           <Link href="/shuga-cars" className={styles.ctaSolid}>Get a Car</Link>
         </div>
 

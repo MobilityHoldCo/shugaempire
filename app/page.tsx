@@ -7,6 +7,7 @@ import EcosystemFlow from '@/components/EcosystemFlow';
 import RevealText from '@/components/RevealText';
 import RoadScene from '@/components/RoadScene';
 import GlobeScene from '@/components/GlobeScene';
+import WaitlistSection from '@/components/WaitlistSection';
 import Link from 'next/link';
 import styles from './page.module.css';
 
@@ -221,6 +222,11 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ══════════════════════════════════════════
+          08B — JOIN THE WAITLIST
+      ══════════════════════════════════════════ */}
+      <WaitlistSection id="waitlist" />
 
       {/* ══════════════════════════════════════════
           09 — FINAL CTA BANNER
