@@ -12,15 +12,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 // 1. Secret Admin Passcode for API authorization
 $ADMIN_PASSCODE = 'ShugaAdmin2026!';
 
-// Check passcode from header or query param
+$rawJson = @json_decode(file_get_contents('php://input'), true);
+if (!is_array($rawJson)) {
+    $rawJson = [];
+}
+
+// Check passcode from header, GET, POST, or JSON body
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-$authQuery  = $_GET['key'] ?? '';
+$authKey    = $_REQUEST['key'] ?? ($_GET['key'] ?? ($_POST['key'] ?? ($rawJson['key'] ?? '')));
 $passcode   = '';
 
 if (str_starts_with($authHeader, 'Bearer ')) {
     $passcode = substr($authHeader, 7);
-} elseif (!empty($authQuery)) {
-    $passcode = $authQuery;
+} elseif (!empty($authKey)) {
+    $passcode = $authKey;
 }
 
 if ($passcode !== $ADMIN_PASSCODE) {
@@ -54,7 +59,8 @@ foreach ($candidates as $cand) {
 }
 
 // If export requested as raw CSV download
-if (isset($_GET['export']) && $_GET['export'] === 'csv') {
+$exportParam = $_REQUEST['export'] ?? ($_GET['export'] ?? ($rawJson['export'] ?? ''));
+if ($exportParam === 'csv') {
     if (!file_exists($csvFile)) {
         http_response_code(404);
         die('No waitlist records found.');
@@ -66,18 +72,22 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
 }
 
 // 3. If delete requested - purge from ALL existing candidate files
-if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'delete') {
-    $deleteId        = $_REQUEST['id'] ?? '';
-    $deleteEmail     = strtolower(trim($_REQUEST['email'] ?? ''));
-    $deleteTimestamp = trim($_REQUEST['timestamp'] ?? '');
-    $deleteName      = strtolower(trim($_REQUEST['name'] ?? ''));
+$action          = $_REQUEST['action'] ?? ($_GET['action'] ?? ($_POST['action'] ?? ($rawJson['action'] ?? '')));
+$deleteId        = $_REQUEST['id'] ?? ($_GET['id'] ?? ($_POST['id'] ?? ($rawJson['id'] ?? '')));
+$deleteEmail     = strtolower(trim($_REQUEST['email'] ?? ($_GET['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? '')))));
+$deleteTimestamp = trim($_REQUEST['timestamp'] ?? ($_GET['timestamp'] ?? ($_POST['timestamp'] ?? ($rawJson['timestamp'] ?? ''))));
+$deleteName      = strtolower(trim($_REQUEST['name'] ?? ($_GET['name'] ?? ($_POST['name'] ?? ($rawJson['name'] ?? '')))));
 
+if ($action === 'delete') {
     $deletedAny = false;
     $seenPaths  = [];
 
     foreach ($candidates as $cand) {
-        if (!empty($cand) && file_exists($cand) && !in_array(realpath($cand), $seenPaths)) {
-            $seenPaths[] = realpath($cand);
+        if (!empty($cand) && file_exists($cand)) {
+            $real = realpath($cand);
+            if ($real && in_array($real, $seenPaths)) continue;
+            if ($real) $seenPaths[] = $real;
+
             $rows    = [];
             $headers = [];
             $fp = @fopen($cand, 'r');

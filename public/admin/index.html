@@ -1202,7 +1202,11 @@
 
         for (const ep of endpoints) {
           try {
-            await fetch(ep, { method: 'POST', cache: 'no-store' });
+            await fetch(ep, {
+              method: 'POST',
+              headers: { 'Authorization': 'Bearer ShugaAdmin2026!' },
+              cache: 'no-store'
+            });
           } catch (err) {}
         }
       } catch (err) {
