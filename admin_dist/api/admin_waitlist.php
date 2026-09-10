@@ -29,7 +29,7 @@ if ($passcode !== $ADMIN_PASSCODE) {
     exit;
 }
 
-// 2. CSV File Location - Multi-path locator for main domain and subdomain setups
+// 2. Candidate CSV File Locations
 $candidates = [
     '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv',
     __DIR__ . '/waitlist_entries.csv',
@@ -65,7 +65,69 @@ if (isset($_GET['export']) && $_GET['export'] === 'csv') {
     exit;
 }
 
-// 3. Read All Records
+// 3. If delete requested - purge from ALL existing candidate files
+if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'delete') {
+    $deleteId        = $_REQUEST['id'] ?? '';
+    $deleteEmail     = strtolower(trim($_REQUEST['email'] ?? ''));
+    $deleteTimestamp = trim($_REQUEST['timestamp'] ?? '');
+    $deleteName      = strtolower(trim($_REQUEST['name'] ?? ''));
+
+    $deletedAny = false;
+    $seenPaths  = [];
+
+    foreach ($candidates as $cand) {
+        if (!empty($cand) && file_exists($cand) && !in_array(realpath($cand), $seenPaths)) {
+            $seenPaths[] = realpath($cand);
+            $rows    = [];
+            $headers = [];
+            $fp = @fopen($cand, 'r');
+            if ($fp) {
+                $headers = fgetcsv($fp);
+                $currId = 1;
+                while (($row = fgetcsv($fp)) !== false) {
+                    if (empty($row) || count($row) < 2) continue;
+                    $rowTimestamp = trim($row[0] ?? '');
+                    $rowName      = strtolower(trim($row[1] ?? ''));
+                    $rowEmail     = strtolower(trim($row[2] ?? ''));
+
+                    $match = false;
+                    if (!empty($deleteEmail) && $rowEmail === $deleteEmail) {
+                        $match = true;
+                    } elseif (!empty($deleteTimestamp) && !empty($deleteName) && $rowTimestamp === $deleteTimestamp && $rowName === $deleteName) {
+                        $match = true;
+                    } elseif (!empty($deleteId) && is_numeric($deleteId) && intval($deleteId) === $currId) {
+                        $match = true;
+                    }
+
+                    if ($match) {
+                        $deletedAny = true;
+                    } else {
+                        $rows[] = $row;
+                    }
+                    $currId++;
+                }
+                fclose($fp);
+            }
+
+            // Rewrite CSV without the deleted row
+            $fpOut = @fopen($cand, 'w');
+            if ($fpOut) {
+                if (!empty($headers)) {
+                    fputcsv($fpOut, $headers);
+                }
+                foreach ($rows as $r) {
+                    fputcsv($fpOut, $r);
+                }
+                fclose($fpOut);
+            }
+        }
+    }
+
+    echo json_encode(['success' => true, 'deleted' => $deletedAny, 'message' => 'Record deleted successfully']);
+    exit;
+}
+
+// 4. Read All Records
 $records = [];
 if (file_exists($csvFile)) {
     $fp = fopen($csvFile, 'r');
@@ -95,7 +157,7 @@ if (file_exists($csvFile)) {
 // Reverse so newest entries appear first
 $records = array_reverse($records);
 
-// 4. Return Records
+// 5. Return Records
 echo json_encode([
     'success' => true,
     'count'   => count($records),
