@@ -19,7 +19,7 @@
 }
 
 .container {
-  max-width: 1200px;
+  max-width: 860px;
   margin: 0 auto;
   position: relative;
   z-index: 2;
@@ -87,126 +87,24 @@
   line-height: 1.7;
 }
 
-/* Card Wrapper */
+/* Focused Centered Card */
 .cardWrapper {
-  display: grid;
-  grid-template-columns: 1fr 1.25fr;
-  gap: 3.5rem;
   background: #080808;
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 16px;
   padding: 3.5rem;
   box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8);
   position: relative;
+  max-width: 780px;
+  margin: 0 auto;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 768px) {
   .cardWrapper {
-    grid-template-columns: 1fr;
     padding: 2rem 1.5rem;
-    gap: 2.5rem;
   }
 }
 
-/* Left Column: Perks */
-.perksCol {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
-  padding-right: 3rem;
-}
-
-@media (max-width: 960px) {
-  .perksCol {
-    border-right: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding-right: 0;
-    padding-bottom: 2.5rem;
-  }
-}
-
-.perksHeading {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: #ffffff;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  margin-bottom: 2rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-
-.perksList {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.perkItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.perkIcon {
-  width: 32px;
-  height: 32px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #ffffff;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-
-.perkTitle {
-  font-family: var(--font-display);
-  font-size: 0.92rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin-bottom: 0.35rem;
-  letter-spacing: 0.02em;
-}
-
-.perkDesc {
-  font-family: var(--font-body);
-  font-size: 0.88rem;
-  color: rgba(255, 255, 255, 0.5);
-  line-height: 1.55;
-}
-
-.statsTicker {
-  margin-top: 3rem;
-  padding: 1.5rem;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.tickerCount {
-  font-family: var(--font-display);
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-}
-
-.tickerLabel {
-  font-family: var(--font-techno);
-  font-size: 0.7rem;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.45);
-  text-transform: uppercase;
-  margin-top: 0.35rem;
-}
-
-/* Right Column: Form */
 .formCol {
   display: flex;
   flex-direction: column;

@@ -108,63 +108,6 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
 
         {/* Card Box */}
         <div className={styles.cardWrapper}>
-          
-          {/* Left Column: Perks & Value */}
-          <div className={styles.perksCol}>
-            <div>
-              <h3 className={styles.perksHeading}>
-                Pioneer Privileges
-              </h3>
-
-              <ul className={styles.perksList}>
-                <li className={styles.perkItem}>
-                  <div className={styles.perkIcon}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <line x1="12" y1="8" x2="12" y2="12" />
-                      <line x1="12" y1="16" x2="12.01" y2="16" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className={styles.perkTitle}>Zero Onboarding Fee</h4>
-                    <p className={styles.perkDesc}>First 500 drivers get complete onboarding and EV orientation at zero charge.</p>
-                  </div>
-                </li>
-
-                <li className={styles.perkItem}>
-                  <div className={styles.perkIcon}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className={styles.perkTitle}>Priority Vehicle Allocation</h4>
-                    <p className={styles.perkDesc}>First access to our incoming batch of premium long-range electric SUVs and sedans.</p>
-                  </div>
-                </li>
-
-                <li className={styles.perkItem}>
-                  <div className={styles.perkIcon}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10" />
-                      <polyline points="12 6 12 12 16 14" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h4 className={styles.perkTitle}>Exclusive Solar Hub Rates</h4>
-                    <p className={styles.perkDesc}>Discounted energy credits at all Shuga solar corridors across Lagos and Abuja.</p>
-                  </div>
-                </li>
-              </ul>
-            </div>
-
-            <div className={styles.statsTicker}>
-              <div className={styles.tickerCount}>1,420+</div>
-              <div className={styles.tickerLabel}>Pioneers on the waitlist across Nigeria</div>
-            </div>
-          </div>
-
-          {/* Right Column: Form or Success */}
           <div className={styles.formCol}>
             {status === 'success' ? (
               <div className={styles.successCard}>
@@ -298,10 +241,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     >
                       <option value="Lagos">Lagos</option>
                       <option value="Abuja">Abuja</option>
-                      <option value="Port Harcourt">Port Harcourt</option>
-                      <option value="Ibadan">Ibadan</option>
-                      <option value="Kano">Kano</option>
-                      <option value="Other">Other City</option>
+                      <option value="Other Cities">Other Cities</option>
                     </select>
                   </div>
 
