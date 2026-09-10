@@ -50,6 +50,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
       if (res.ok) {
         const data = await res.json();
         setQueuePosition(data.position || 1428);
+        saveLocalSubmission(payload);
         setStatus('success');
       } else {
         saveLocalSubmission(payload);

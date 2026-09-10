@@ -1,0 +1,11 @@
+RewriteEngine On
+
+# Ensure DirectoryIndex prioritizes index.html
+DirectoryIndex index.html index.php
+
+# Force HTTPS
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Route API calls
+RewriteRule ^api/admin_waitlist/?$ api/admin_waitlist.php [L]

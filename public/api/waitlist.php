@@ -45,30 +45,37 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
-// 3. Storage Directory & CSV file
+// 3. Storage Directory & CSV files
+$apiCsvFile = __DIR__ . '/waitlist_entries.csv';
 $storageDir = __DIR__ . '/../../data';
 if (!is_dir($storageDir)) {
     @mkdir($storageDir, 0755, true);
 }
+$dataCsvFile = is_dir($storageDir) ? $storageDir . '/waitlist.csv' : null;
 
-// If data dir can't be created outside public_html, store locally in protected data directory
-$csvFile = is_dir($storageDir) ? $storageDir . '/waitlist.csv' : __DIR__ . '/waitlist_entries.csv';
-
-$isNew = !file_exists($csvFile) || filesize($csvFile) === 0;
-
-$fp = @fopen($csvFile, 'a');
-if ($fp) {
-    if ($isNew) {
-        fputcsv($fp, ['Timestamp', 'Full Name', 'Email', 'Phone', 'City', 'Role', 'Notes', 'IP Address', 'User Agent']);
-    }
-
-    $timestamp = date('Y-m-d H:i:s');
-    $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
-    $ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
-
-    fputcsv($fp, [$timestamp, $fullName, $email, $phone, $city, $role, $notes, $ip, $ua]);
-    fclose($fp);
+// Target files to write to (always write to local __DIR__ for subdomain access, and mirror to data/ if writable)
+$targets = [$apiCsvFile];
+if ($dataCsvFile && $dataCsvFile !== $apiCsvFile) {
+    $targets[] = $dataCsvFile;
 }
+
+$timestamp = date('Y-m-d H:i:s');
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+$ua = $_SERVER['HTTP_USER_AGENT'] ?? '';
+
+foreach ($targets as $file) {
+    $isNew = !file_exists($file) || filesize($file) === 0;
+    $fp = @fopen($file, 'a');
+    if ($fp) {
+        if ($isNew) {
+            fputcsv($fp, ['Timestamp', 'Full Name', 'Email', 'Phone', 'City', 'Role', 'Notes', 'IP Address', 'User Agent']);
+        }
+        fputcsv($fp, [$timestamp, $fullName, $email, $phone, $city, $role, $notes, $ip, $ua]);
+        fclose($fp);
+    }
+}
+
+$csvFile = $apiCsvFile;
 
 // Count total waitlist entries for queue position
 $queueCount = 1420;
