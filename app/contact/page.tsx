@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import RevealText from '@/components/RevealText';
 import Link from 'next/link';
+import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -39,50 +40,8 @@ export default function ContactPage() {
               ))}
             </div>
 
-            {/* Contact form */}
-            <form style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-              {[
-                { id: 'name', label: 'Full Name', type: 'text', placeholder: 'Your full name' },
-                { id: 'email', label: 'Email Address', type: 'email', placeholder: 'your@email.com' },
-                { id: 'phone', label: 'Phone Number', type: 'tel', placeholder: '+234 000 000 0000' },
-              ].map(field => (
-                <div key={field.id} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label htmlFor={field.id} style={{ fontFamily: 'var(--font-techno)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>{field.label}</label>
-                  <input
-                    id={field.id}
-                    name={field.id}
-                    type={field.type}
-                    placeholder={field.placeholder}
-                    style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '2px', padding: '0.875rem 1rem', color: '#fff', fontFamily: 'var(--font-body)', fontSize: '0.95rem', outline: 'none', width: '100%' }}
-                  />
-                </div>
-              ))}
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label htmlFor="interest" style={{ fontFamily: 'var(--font-techno)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>I am a…</label>
-                <select id="interest" name="interest" style={{ background: '#0a0a0a', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '2px', padding: '0.875rem 1rem', color: 'rgba(255,255,255,0.7)', fontFamily: 'var(--font-body)', fontSize: '0.95rem', outline: 'none', width: '100%' }}>
-                  <option value="driver">Driver — I want a Shuga Car</option>
-                  <option value="investor">Investor — I want to acquire a vehicle</option>
-                  <option value="passenger">Passenger — I want to ride</option>
-                  <option value="other">Other enquiry</option>
-                </select>
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label htmlFor="message" style={{ fontFamily: 'var(--font-techno)', fontSize: '0.65rem', letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)' }}>Message</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  placeholder="Tell us more..."
-                  style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '2px', padding: '0.875rem 1rem', color: '#fff', fontFamily: 'var(--font-body)', fontSize: '0.95rem', outline: 'none', width: '100%', resize: 'vertical' }}
-                />
-              </div>
-
-              <button type="submit" className="btn btn--white" style={{ alignSelf: 'flex-start' }} data-cursor>
-                Send Message
-              </button>
-            </form>
+            {/* Dynamic Interactive Contact form connected to Admin */}
+            <ContactForm />
           </div>
         </div>
       </section>

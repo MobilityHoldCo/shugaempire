@@ -1,0 +1,181 @@
+.formWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: #080808;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  padding: 2.5rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.label {
+  font-family: var(--font-techno);
+  font-size: 0.68rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.input,
+.select,
+.textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 16px; /* Prevents iOS auto-zoom */
+  outline: none;
+  width: 100%;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+
+.input:focus,
+.select:focus,
+.textarea:focus {
+  border-color: #ffffff;
+  background: rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 0 1px #ffffff;
+}
+
+.select option {
+  background: #0d0d0d;
+  color: #ffffff;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.submitBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #ffffff;
+  border-radius: 6px;
+  padding: 1rem 2rem;
+  font-family: var(--font-display);
+  font-size: 0.88rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background: transparent;
+  color: #ffffff;
+}
+
+.submitBtn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-top-color: #000000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.errorBox {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  color: #fca5a5;
+  padding: 0.85rem 1rem;
+  border-radius: 6px;
+  font-family: var(--font-techno);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+/* Success Card */
+.successCard {
+  background: #080808;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+}
+
+.successIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid #10b981;
+  color: #10b981;
+  display: grid;
+  place-items: center;
+  font-size: 1.6rem;
+}
+
+.successTitle {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.successDesc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 440px;
+  line-height: 1.6;
+}
+
+.resetBtn {
+  margin-top: 1rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  padding: 0.7rem 1.4rem;
+  border-radius: 6px;
+  font-family: var(--font-techno);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .formWrapper {
+    padding: 1.75rem 1.25rem;
+  }
+}

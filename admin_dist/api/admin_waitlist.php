@@ -67,6 +67,56 @@ if ($action === 'verify_login') {
     exit;
 }
 
+// 3b. Handle Contact Form Submission
+if ($action === 'contact_submit') {
+    $fullName = trim(strip_tags($_REQUEST['fullName'] ?? ($_REQUEST['name'] ?? ($rawJson['fullName'] ?? ($rawJson['name'] ?? '')))));
+    $email    = trim(filter_var($_REQUEST['email'] ?? ($rawJson['email'] ?? ''), FILTER_SANITIZE_EMAIL));
+    $phone    = trim(strip_tags($_REQUEST['phone'] ?? ($rawJson['phone'] ?? '')));
+    $interest = trim(strip_tags($_REQUEST['interest'] ?? ($rawJson['interest'] ?? 'General')));
+    $message  = trim(strip_tags($_REQUEST['message'] ?? ($_REQUEST['notes'] ?? ($rawJson['message'] ?? ($rawJson['notes'] ?? '')))));
+
+    if (empty($fullName) || empty($email) || empty($message)) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'error' => 'Name, email, and message are required']);
+        exit;
+    }
+
+    $timestamp = date('Y-m-d H:i:s');
+    $ip        = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
+    $ua        = $_SERVER['HTTP_USER_AGENT'] ?? '';
+    $roleTag   = "Contact (" . ucfirst($interest) . ")";
+
+    $targetCsv = '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv';
+    if (!file_exists($targetCsv)) {
+        $targetCsv = __DIR__ . '/waitlist_entries.csv';
+    }
+
+    $isNew = !file_exists($targetCsv) || filesize($targetCsv) === 0;
+    $fp = @fopen($targetCsv, 'a');
+    if ($fp) {
+        if ($isNew) {
+            fputcsv($fp, ['Timestamp', 'Full Name', 'Email', 'Phone', 'City', 'Role', 'Notes', 'IP Address', 'User Agent']);
+        }
+        fputcsv($fp, [$timestamp, $fullName, $email, $phone, 'Nigeria', $roleTag, $message, $ip, $ua]);
+        fclose($fp);
+    }
+
+    // Also write to dedicated contact_messages.csv
+    $contactCsv = dirname($targetCsv) . '/contact_messages.csv';
+    $isNewContact = !file_exists($contactCsv) || filesize($contactCsv) === 0;
+    $fp2 = @fopen($contactCsv, 'a');
+    if ($fp2) {
+        if ($isNewContact) {
+            fputcsv($fp2, ['Timestamp', 'Full Name', 'Email', 'Phone', 'Interest', 'Message', 'IP Address', 'User Agent']);
+        }
+        fputcsv($fp2, [$timestamp, $fullName, $email, $phone, ucfirst($interest), $message, $ip, $ua]);
+        fclose($fp2);
+    }
+
+    echo json_encode(['success' => true, 'message' => 'Enquiry transmitted to Admin']);
+    exit;
+}
+
 // 4. Passcode Check for protected administrative actions
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 $authKey    = $_REQUEST['key'] ?? ($_GET['key'] ?? ($_POST['key'] ?? ($rawJson['key'] ?? '')));
