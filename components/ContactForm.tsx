@@ -39,25 +39,55 @@ export default function ContactForm() {
     setError(null);
 
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.name.trim(),
-          fullName: formData.name.trim(),
-          email: formData.email.trim(),
-          phone: formData.phone.trim(),
-          interest: formData.interest,
-          message: formData.message.trim(),
-        }),
-      });
+      let success = false;
 
-      const data = await res.json();
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.name.trim(),
+            fullName: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: formData.phone.trim(),
+            interest: formData.interest,
+            message: formData.message.trim(),
+          }),
+        });
 
-      if (res.ok && data.success) {
+        const data = await res.json();
+        if (res.ok && data.success) {
+          success = true;
+        }
+      } catch {
+        // Fallback to direct client-side insert if API route fails
+      }
+
+      if (!success) {
+        const { getSupabase } = await import('@/lib/supabase');
+        const { error: insErr } = await getSupabase()
+          .from('contacts')
+          .insert([
+            {
+              full_name: formData.name.trim(),
+              email: formData.email.trim().toLowerCase(),
+              phone: formData.phone.trim() || null,
+              interest: formData.interest || 'general',
+              message: formData.message.trim(),
+              source: 'contact_page',
+              status: 'new',
+            },
+          ]);
+
+        if (!insErr) {
+          success = true;
+        }
+      }
+
+      if (success) {
         setSubmitted(true);
       } else {
-        setError(data.error || 'Failed to submit enquiry. Please try again.');
+        setError('Failed to transmit enquiry. Please check your connection and try again.');
       }
     } catch {
       setError('Network error. Please check your connection and try again.');

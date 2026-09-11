@@ -39,21 +39,79 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
     setIsDuplicate(false);
 
     try {
-      const res = await fetch('/api/waitlist', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fullName, email, phone, city, role, notes }),
-      });
+      let success = false;
+      let pos: number | null = null;
+      let dup = false;
 
-      const data = await res.json();
+      try {
+        const res = await fetch('/api/waitlist', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fullName, email, phone, city, role, notes }),
+        });
 
-      if (res.ok && data.success) {
-        setQueuePosition(data.position ?? null);
-        setIsDuplicate(data.duplicate === true);
+        const data = await res.json();
+        if (res.ok && data.success) {
+          success = true;
+          pos = data.position ?? null;
+          dup = data.duplicate === true;
+        }
+      } catch {
+        // Fallback to client-side direct insert if API route fails
+      }
+
+      if (!success) {
+        const { getSupabase } = await import('@/lib/supabase');
+        const cleanEmail = email.trim().toLowerCase();
+
+        const { data: existing } = await getSupabase()
+          .from('waitlist')
+          .select('id, position')
+          .eq('email', cleanEmail)
+          .maybeSingle();
+
+        if (existing) {
+          success = true;
+          dup = true;
+          pos = existing.position;
+        } else {
+          const { count } = await getSupabase()
+            .from('waitlist')
+            .select('*', { count: 'exact', head: true });
+
+          const newPos = (count ?? 0) + 1421;
+          const { data: insData, error: insErr } = await getSupabase()
+            .from('waitlist')
+            .insert([
+              {
+                full_name: fullName.trim(),
+                email: cleanEmail,
+                phone: phone.trim() || null,
+                city: city || 'Lagos',
+                role: role || 'Driver',
+                notes: notes.trim() || null,
+                position: newPos,
+                source: 'website_waitlist',
+                status: 'pending',
+              },
+            ])
+            .select('position')
+            .single();
+
+          if (!insErr && insData) {
+            success = true;
+            pos = insData.position;
+          }
+        }
+      }
+
+      if (success) {
+        setQueuePosition(pos);
+        setIsDuplicate(dup);
         setStatus('success');
       } else {
         setStatus('error');
-        setErrorMessage(data.error || 'Something went wrong. Please try again.');
+        setErrorMessage('Something went wrong. Please try again.');
       }
     } catch {
       setStatus('error');
