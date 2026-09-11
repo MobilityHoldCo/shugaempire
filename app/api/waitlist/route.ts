@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/lib/supabase';
+
+// Never pre-render — this route needs runtime env vars
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -21,7 +24,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Check for duplicate email ───────────────────────────────────────────
-    const { data: existing } = await supabaseAdmin
+    const { data: existing } = await getSupabaseAdmin()
       .from('waitlist')
       .select('id, position')
       .eq('email', email.trim().toLowerCase())
@@ -37,14 +40,14 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Get current count to assign a position ─────────────────────────────
-    const { count } = await supabaseAdmin
+    const { count } = await getSupabaseAdmin()
       .from('waitlist')
       .select('*', { count: 'exact', head: true });
 
     const position = (count ?? 0) + 1420; // start queue at 1420
 
     // ── Insert record ───────────────────────────────────────────────────────
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await getSupabaseAdmin()
       .from('waitlist')
       .insert([
         {
@@ -88,7 +91,7 @@ export async function POST(req: NextRequest) {
 export async function GET(req: NextRequest) {
   // Returns the current waitlist count (public, safe)
   try {
-    const { count, error } = await supabaseAdmin
+    const { count, error } = await getSupabaseAdmin()
       .from('waitlist')
       .select('*', { count: 'exact', head: true });
 

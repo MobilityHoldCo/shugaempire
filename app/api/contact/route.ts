@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase';
+import { getSupabaseAdmin } from '@/lib/supabase';
+
+// Never pre-render — this route needs runtime env vars
+export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {
   try {
@@ -30,7 +33,7 @@ export async function POST(req: NextRequest) {
     }
 
     // ── Insert into contacts table ──────────────────────────────────────────
-    const { error } = await supabaseAdmin
+    const { error } = await getSupabaseAdmin()
       .from('contacts')
       .insert([
         {

@@ -1,21 +1,61 @@
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+import { createClient, SupabaseClient } from '@supabase/supabase-js';
 
 /**
- * Client-side Supabase client (uses anon key — safe to expose in browser)
+ * Resolve env vars — Hostinger injects SUPABASE_URL + SUPABASE_API_KEY.
+ * Local dev uses NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY.
+ * We support both so the same code works everywhere.
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+function getSupabaseUrl(): string {
+  const url =
+    process.env.SUPABASE_URL ||
+    process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!url) throw new Error('Missing env var: SUPABASE_URL or NEXT_PUBLIC_SUPABASE_URL');
+  return url;
+}
+
+function getSupabaseAnonKey(): string {
+  const key =
+    process.env.SUPABASE_API_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!key) throw new Error('Missing env var: SUPABASE_API_KEY or NEXT_PUBLIC_SUPABASE_ANON_KEY');
+  return key;
+}
+
+function getSupabaseServiceKey(): string {
+  return (
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_API_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    ''
+  );
+}
+
+// ── Lazy singletons — created on first access, not at module load ────────────
+let _supabase: SupabaseClient | null = null;
+let _supabaseAdmin: SupabaseClient | null = null;
 
 /**
- * Server-side Supabase admin client (uses service role key — never expose client-side)
- * Use this only in API routes / server components.
+ * Client-side Supabase client (anon key — safe to expose in browser).
  */
-export const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey ?? supabaseAnonKey, {
-  auth: {
-    autoRefreshToken: false,
-    persistSession: false,
-  },
-});
+export function getSupabase(): SupabaseClient {
+  if (!_supabase) {
+    _supabase = createClient(getSupabaseUrl(), getSupabaseAnonKey());
+  }
+  return _supabase;
+}
+
+/**
+ * Server-side admin client (service role key — only use in API routes).
+ */
+export function getSupabaseAdmin(): SupabaseClient {
+  if (!_supabaseAdmin) {
+    _supabaseAdmin = createClient(getSupabaseUrl(), getSupabaseServiceKey(), {
+      auth: { autoRefreshToken: false, persistSession: false },
+    });
+  }
+  return _supabaseAdmin;
+}
+
+// Convenience named exports for backward compatibility
+export const supabase = { get client() { return getSupabase(); } };
+export const supabaseAdmin = { get client() { return getSupabaseAdmin(); } };
