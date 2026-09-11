@@ -1098,17 +1098,9 @@
       return { email, password };
     }
 
-    // Seed Leads
-    const SEED = [
-      { id: 101, timestamp: '2026-09-09 18:42:10', fullName: 'Oluwaseun Adeleke', email: 'o.adeleke@gmail.com', phone: '+234 803 452 9182', city: 'Lagos', role: 'Driver', notes: '5 years commercial experience on Uber Lagos', status: 'Vetted' },
-      { id: 102, timestamp: '2026-09-09 19:15:30', fullName: 'Dr. Ibrahim Danjuma', email: 'danjuma.invest@holdings.ng', phone: '+234 802 884 1102', city: 'Abuja', role: 'Investor', notes: 'Looking to syndicate 5 electric SUVs for fleet', status: 'Contacted' },
-      { id: 103, timestamp: '2026-09-09 20:04:45', fullName: 'Chidinma Okonkwo', email: 'chidinma.o@yahoo.com', phone: '+234 814 220 9831', city: 'Lagos', role: 'Rider', notes: 'Daily commute between Victoria Island & Lekki', status: 'New' },
-      { id: 104, timestamp: '2026-09-09 21:30:12', fullName: 'Emmanuel Babatunde', email: 'emmanuel.b@gmail.com', phone: '+234 805 771 4439', city: 'Lagos', role: 'Driver', notes: 'Valid LASDRI & FRSC licenses', status: 'New' },
-      { id: 105, timestamp: '2026-09-09 22:11:05', fullName: 'Amina Bello', email: 'amina.bello@fct.gov.ng', phone: '+234 809 123 7765', city: 'Abuja', role: 'Rider', notes: 'Airport & Central Business District commute', status: 'Contacted' },
-      { id: 106, timestamp: '2026-09-09 23:55:18', fullName: 'Capital Ventures NG', email: 'invest@capventures.com', phone: '+234 818 990 0012', city: 'Other Cities', role: 'Investor', notes: 'Port Harcourt expansion syndicate', status: 'New' },
-    ];
-
-    let allLeads = [...SEED];
+    // Real Database Leads (Strictly fetched from Supabase)
+    const SEED = [];
+    let allLeads = [];
     let pollTimer = null;
     let lastKnownCount = 0;
     let isInitialLoad = true;
@@ -1322,17 +1314,23 @@
 
       try {
         const endpoints = [
+          `/api/admin/leads?key=ShugaAdmin2026!&nocache=${Date.now()}`,
+          `https://shugaempire.com/api/admin/leads?key=ShugaAdmin2026!&nocache=${Date.now()}`,
+          `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
           `https://shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
-          `https://admin.shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
-          `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
+          `https://admin.shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
         ];
 
         let serverRecords = null;
         for (const url of endpoints) {
           try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
-            const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
+            const res = await fetch(url, {
+              cache: 'no-store',
+              signal: controller.signal,
+              headers: { 'Authorization': 'Bearer ShugaAdmin2026!' }
+            });
             clearTimeout(timeoutId);
             if (res.ok) {
               const json = await res.json();
@@ -1344,78 +1342,7 @@
           } catch (err) { }
         }
 
-        let combined = [];
-        if (serverRecords && serverRecords.length > 0) {
-          combined = [...serverRecords];
-        }
-
-        // Incorporate local storage submissions
-        try {
-          const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-          local.forEach((item, idx) => {
-            combined.unshift({
-              id: 'loc-' + (idx + 1),
-              timestamp: item.date ? item.date.replace('T', ' ').substring(0, 19) : new Date().toISOString().substring(0, 19),
-              fullName: item.fullName || 'Pioneer',
-              email: item.email || '',
-              phone: item.phone || '',
-              city: item.city || 'Lagos',
-              role: item.role || 'Driver',
-              notes: item.notes || '',
-              status: 'New'
-            });
-          });
-        } catch (e) { }
-
-        // Add default seed leads
-        combined = [...combined, ...SEED];
-
-        // Deduplicate by email or id
-        const seen = new Set();
-        let uniqueLeads = [];
-        for (const l of combined) {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          if (key && seen.has(key)) continue;
-          if (key) seen.add(key);
-          uniqueLeads.push(l);
-        }
-
-        // Filter out any applicant that has been deleted by the admin!
-        try {
-          const deletedList = JSON.parse(localStorage.getItem('shuga_deleted_leads') || '[]');
-          const deletedSet = new Set(deletedList.map(s => String(s).toLowerCase().trim()));
-          uniqueLeads = uniqueLeads.filter(l => {
-            const idKey = String(l.id || '').toLowerCase().trim();
-            const emailKey = String(l.email || '').toLowerCase().trim();
-            if (idKey && deletedSet.has(idKey)) return false;
-            if (emailKey && deletedSet.has(emailKey)) return false;
-            return true;
-          });
-        } catch (e) { }
-
-        // Apply saved status overrides
-        const overrides = getSavedStatuses();
-        allLeads = uniqueLeads.map(l => {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          if (overrides[key]) {
-            return { ...l, status: overrides[key] };
-          }
-          return l;
-        });
-
-        // Detect newly arrived signups
-        const realLeadsCount = allLeads.filter(l => !SEED.some(s => String(s.id) === String(l.id))).length;
-        if (!isInitialLoad && realLeadsCount > lastKnownCount) {
-          const diff = realLeadsCount - lastKnownCount;
-          const latestApplicant = allLeads[0];
-          if (latestApplicant && latestApplicant.fullName) {
-            showToast(
-              `⚡ ${diff} New Applicant${diff > 1 ? 's' : ''} Received!`,
-              `${latestApplicant.fullName} (${latestApplicant.role || 'Pioneer'}) - ${latestApplicant.city || 'Lagos'}`
-            );
-          }
-        }
-        lastKnownCount = realLeadsCount;
+        allLeads = serverRecords || [];
         isInitialLoad = false;
 
         // Update sync time
@@ -1482,69 +1409,57 @@
 
     // ── Delete Applicant ──
     window.deleteApplicant = async function (id, encodedEmail, encodedName, encodedTimestamp) {
-      const name = decodeURIComponent(encodedName || 'this applicant');
+      const name = decodeURIComponent(encodedName || 'this record');
       const email = decodeURIComponent(encodedEmail || '').toLowerCase().trim();
-      const timestamp = decodeURIComponent(encodedTimestamp || '').trim();
 
-      if (!confirm(`Are you sure you want to permanently delete "${name}" from the waitlist? This action cannot be undone.`)) {
+      if (!confirm(`Are you sure you want to permanently delete "${name}" from the database? This cannot be undone.`)) {
         return;
       }
 
-      // 1. Instantly remove from in-memory leads
+      showToast('Deleting...', `Removing "${name}" from Supabase database.`);
+
+      // 1. Instantly remove from in-memory array so the UI reflects immediately
       allLeads = allLeads.filter(l => {
         if (id && String(l.id) === String(id)) return false;
         if (email && (l.email || '').toLowerCase().trim() === email) return false;
         return true;
       });
-
-      // 2. Persist deleted key to localStorage so future syncs never restore it
-      try {
-        const deletedList = JSON.parse(localStorage.getItem('shuga_deleted_leads') || '[]');
-        if (id) deletedList.push(String(id));
-        if (email) deletedList.push(email);
-        localStorage.setItem('shuga_deleted_leads', JSON.stringify(Array.from(new Set(deletedList))));
-      } catch (e) { }
-
-      // 3. Prune from localStorage waitlist if present
-      try {
-        const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-        const filteredLocal = local.filter(item => {
-          if (email && (item.email || '').toLowerCase().trim() === email) return false;
-          return true;
-        });
-        localStorage.setItem('shuga_waitlist', JSON.stringify(filteredLocal));
-      } catch (e) { }
-
-      // 4. Instant UI update & toast notification
       render();
-      showToast('✓ Record Deleted', `"${name}" was permanently removed.`);
 
-      // 5. Send asynchronous deletion to server CSV
+      // 2. Permanently delete from Supabase via backend API
       try {
         const params = new URLSearchParams({
-          action: 'delete',
           key: 'ShugaAdmin2026!',
           id: id || '',
           email: email || '',
-          name: name || '',
-          timestamp: timestamp || ''
+          action: 'delete'
         });
 
         const endpoints = [
+          `/api/admin/leads?${params.toString()}`,
+          `https://shugaempire.com/api/admin/leads?${params.toString()}`,
+          `/api/admin_waitlist.php?${params.toString()}`,
           `https://shugaempire.com/api/admin_waitlist.php?${params.toString()}`,
-          `https://admin.shugaempire.com/api/admin_waitlist.php?${params.toString()}`,
-          `/api/admin_waitlist.php?${params.toString()}`
+          `https://admin.shugaempire.com/api/admin_waitlist.php?${params.toString()}`
         ];
 
         for (const ep of endpoints) {
           try {
-            await fetch(ep, {
-              method: 'POST',
+            const res = await fetch(ep, {
+              method: 'DELETE',
               headers: { 'Authorization': 'Bearer ShugaAdmin2026!' },
               cache: 'no-store'
             });
+            if (res.ok) {
+              const j = await res.json();
+              if (j && j.success) {
+                break;
+              }
+            }
           } catch (err) { }
         }
+
+        showToast('✓ Record Deleted', `"${name}" was permanently removed from Supabase.`);
       } catch (err) {
         console.error('Server deletion sync error:', err);
       }
@@ -1784,16 +1699,43 @@
       }
     }
 
-    window.updateStatus = function (id, newStatus) {
+    window.updateStatus = async function (id, newStatus) {
+      const lead = allLeads.find(l => String(l.id) === String(id));
       allLeads = allLeads.map(l => {
         if (String(l.id) === String(id)) {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          saveStatusOverride(key, newStatus);
           return { ...l, status: newStatus };
         }
         return l;
       });
       render();
+
+      try {
+        const endpoints = [
+          '/api/admin/leads',
+          'https://shugaempire.com/api/admin/leads',
+          '/api/admin_waitlist.php?action=update_status&key=ShugaAdmin2026!',
+          'https://shugaempire.com/api/admin_waitlist.php?action=update_status&key=ShugaAdmin2026!'
+        ];
+        for (const ep of endpoints) {
+          try {
+            await fetch(ep, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ShugaAdmin2026!'
+              },
+              body: JSON.stringify({
+                id: id,
+                table: lead?.table || 'waitlist',
+                status: newStatus
+              })
+            });
+            break;
+          } catch (e) { }
+        }
+      } catch (err) {
+        console.error('Status sync error:', err);
+      }
     };
 
     // Manual Refresh Button
