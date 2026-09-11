@@ -88,9 +88,59 @@ const TRANSITION_STYLES: TransitionStyle[] = [
     name: 'glitch',
     duration: 0.9,
     ease: [0.87, 0, 0.13, 1],
-    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
-    getExit:   (d) => ({ opacity: 0, scale: 0.92, rotateY: 0, rotateX: 0, x: d * -30, y: 0, skewX: d * -8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
-    getEnter:  (d) => ({ opacity: 0, scale: 1.08, rotateY: 0, rotateX: 0, x: d * 30, y: 0, skewX: d * 8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.92, rotateY: 0, rotateX: 0, rotate: 0, x: d * -30, y: 0, skewX: d * -8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.08, rotateY: 0, rotateX: 0, rotate: 0, x: d * 30, y: 0, skewX: d * 8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
+  },
+
+  // 8 ── Vortex Portal (rotational spin + deep scale dive)
+  {
+    name: 'vortexPortal',
+    duration: 1.25,
+    ease: [0.25, 1, 0.5, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.65, rotateY: 0, rotateX: 0, rotate: d * -18, x: 0, y: 0, skewX: 0, filter: 'brightness(0.2) blur(12px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.35, rotateY: 0, rotateX: 0, rotate: d * 18, x: 0, y: 0, skewX: 0, filter: 'brightness(0.2) blur(12px)' }),
+  },
+
+  // 9 ── 3D Revolving Cube (deep corner perspective shift)
+  {
+    name: 'cubeRevolve',
+    duration: 1.15,
+    ease: [0.65, 0, 0.35, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.88, rotateY: d * -28, rotateX: 0, rotate: 0, x: d * -80, y: 0, skewX: 0, filter: 'brightness(0.25) blur(4px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 0.88, rotateY: d * 28, rotateX: 0, rotate: 0, x: d * 80, y: 0, skewX: 0, filter: 'brightness(0.25) blur(4px)' }),
+  },
+
+  // 10 ── Speed Flash & Kinetic Surge
+  {
+    name: 'speedSurge',
+    duration: 0.85,
+    ease: [0.16, 1, 0.3, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) contrast(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 1.15, rotateY: 0, rotateX: 0, rotate: 0, x: d * -120, y: 0, skewX: d * -12, filter: 'brightness(2.2) contrast(1.3) blur(6px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 0.9, rotateY: 0, rotateX: 0, rotate: 0, x: d * 120, y: 0, skewX: d * 12, filter: 'brightness(0.3) blur(6px)' }),
+  },
+
+  // 11 ── Deep Drop & Tilt (theatrical curtain drop)
+  {
+    name: 'theaterDrop',
+    duration: 1.2,
+    ease: [0.33, 1, 0.68, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.92, rotateY: 0, rotateX: d * -22, rotate: 0, x: 0, y: d * -110, skewX: 0, filter: 'brightness(0.2) blur(8px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.05, rotateY: 0, rotateX: d * 22, rotate: 0, x: 0, y: d * 110, skewX: 0, filter: 'brightness(0.2) blur(8px)' }),
+  },
+
+  // 12 ── Horizon Fold (isometric diagonal fold)
+  {
+    name: 'horizonFold',
+    duration: 1.1,
+    ease: [0.22, 1, 0.36, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, rotate: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.85, rotateY: d * -18, rotateX: 14, rotate: d * -4, x: d * -60, y: -40, skewX: d * -4, filter: 'brightness(0.2) blur(6px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.12, rotateY: d * 18, rotateX: -14, rotate: d * 4, x: d * 60, y: 40, skewX: d * 4, filter: 'brightness(0.2) blur(6px)' }),
   },
 ];
 
@@ -242,30 +292,6 @@ export default function HeroSection() {
         </motion.div>
       </AnimatePresence>
 
-      {/* Transition style indicator (subtle, top-right) */}
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={`style-${transitionIdx}`}
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 0.35, y: 0 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.4 }}
-          style={{
-            position: 'absolute',
-            top: '5.5rem',
-            right: '2rem',
-            fontFamily: 'var(--font-techno)',
-            fontSize: '0.6rem',
-            letterSpacing: '0.18em',
-            color: '#ffffff',
-            textTransform: 'uppercase',
-            zIndex: 20,
-            pointerEvents: 'none',
-          }}
-        >
-          {ts.name.replace(/([A-Z])/g, ' $1').trim()}
-        </motion.div>
-      </AnimatePresence>
 
       {/* ── Subtle grid overlay ── */}
       <motion.div className={styles.bgGrid} style={{ y: bgY }} />
