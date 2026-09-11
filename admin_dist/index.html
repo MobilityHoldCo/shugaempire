@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shuga Empire | Admin Waitlist Command Center</title>
+  <title>SHUGA Empire HoldCo | Admin Waitlist Command Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     :root {
       --font-display: 'Orbitron', sans-serif;
       --font-body: 'Syne', sans-serif;
       --font-techno: 'Space Mono', monospace;
     }
+
     body {
       background: #000000;
       color: #ffffff;
@@ -31,6 +42,7 @@
       padding: 2rem;
       background: radial-gradient(circle at 50% 30%, rgba(255, 255, 255, 0.04) 0%, transparent 60%), #000;
     }
+
     .login-card {
       width: 100%;
       max-width: 440px;
@@ -41,6 +53,7 @@
       text-align: center;
       box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9);
     }
+
     .login-icon {
       width: 52px;
       height: 52px;
@@ -53,6 +66,7 @@
       margin-bottom: 1.5rem;
       color: #fff;
     }
+
     .login-title {
       font-family: var(--font-display);
       font-size: 1.5rem;
@@ -61,6 +75,7 @@
       letter-spacing: 0.04em;
       margin-bottom: 0.4rem;
     }
+
     .login-sub {
       font-family: var(--font-techno);
       font-size: 0.72rem;
@@ -69,6 +84,7 @@
       text-transform: uppercase;
       margin-bottom: 2rem;
     }
+
     .input-label {
       display: block;
       text-align: left;
@@ -79,6 +95,7 @@
       text-transform: uppercase;
       margin-bottom: 0.4rem;
     }
+
     .input-field {
       width: 100%;
       padding: 0.85rem 1.1rem;
@@ -91,11 +108,13 @@
       letter-spacing: 0.05em;
       margin-bottom: 1.25rem;
     }
+
     .input-field:focus {
       outline: none;
       border-color: #fff;
       box-shadow: 0 0 0 1px #fff;
     }
+
     .btn-solid {
       width: 100%;
       padding: 1rem;
@@ -112,8 +131,12 @@
       transition: all 0.2s ease;
       margin-top: 0.5rem;
     }
-    .btn-solid:hover { background: transparent; color: #fff; }
-    
+
+    .btn-solid:hover {
+      background: transparent;
+      color: #fff;
+    }
+
     .preset-hint {
       font-family: var(--font-techno);
       font-size: 0.68rem;
@@ -121,6 +144,7 @@
       margin-top: 1.25rem;
       line-height: 1.5;
     }
+
     .error-msg {
       font-family: var(--font-techno);
       font-size: 0.75rem;
@@ -134,9 +158,16 @@
     }
 
     /* ── Dashboard Screen ── */
-    #dashboard-view { display: none; padding: 4rem 2rem; }
-    .dash-container { max-width: 1360px; margin: 0 auto; }
-    
+    #dashboard-view {
+      display: none;
+      padding: 4rem 2rem;
+    }
+
+    .dash-container {
+      max-width: 1360px;
+      margin: 0 auto;
+    }
+
     .top-header {
       display: flex;
       align-items: center;
@@ -147,6 +178,7 @@
       flex-wrap: wrap;
       gap: 1.5rem;
     }
+
     .header-title {
       font-family: var(--font-display);
       font-size: 2rem;
@@ -154,13 +186,17 @@
       text-transform: uppercase;
       letter-spacing: 0.03em;
     }
+
     .header-sub {
       font-family: var(--font-techno);
       font-size: 0.78rem;
       color: rgba(255, 255, 255, 0.5);
       margin-top: 0.35rem;
     }
-    .header-sub span { color: #fff; }
+
+    .header-sub span {
+      color: #fff;
+    }
 
     .live-sync-pill {
       display: inline-flex;
@@ -176,6 +212,7 @@
       color: #fff;
       letter-spacing: 0.05em;
     }
+
     .pulse-dot {
       width: 7px;
       height: 7px;
@@ -184,16 +221,33 @@
       box-shadow: 0 0 10px #fff;
       animation: pulse 1.8s infinite ease-in-out;
     }
+
     @keyframes pulse {
-      0%, 100% { opacity: 0.3; transform: scale(0.9); }
-      50% { opacity: 1; transform: scale(1.25); }
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(0.9);
+      }
+
+      50% {
+        opacity: 1;
+        transform: scale(1.25);
+      }
     }
+
     .sync-time {
       color: rgba(255, 255, 255, 0.45);
       font-size: 0.65rem;
     }
 
-    .top-actions { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+    .top-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
     .btn-refresh {
       display: inline-flex;
       align-items: center;
@@ -210,9 +264,21 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .btn-refresh:hover { background: #fff; color: #000; }
-    .btn-refresh.loading svg { animation: spin 1s linear infinite; }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
+
+    .btn-refresh:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .btn-refresh.loading svg {
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
 
     .btn-export {
       display: inline-flex;
@@ -230,8 +296,12 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .btn-export:hover { background: #fff; color: #000; }
-    
+
+    .btn-export:hover {
+      background: #fff;
+      color: #000;
+    }
+
     .btn-change-pwd {
       display: inline-flex;
       align-items: center;
@@ -248,7 +318,11 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .btn-change-pwd:hover { border-color: #fff; color: #fff; }
+
+    .btn-change-pwd:hover {
+      border-color: #fff;
+      color: #fff;
+    }
 
     .btn-logout {
       padding: 0.75rem 1.25rem;
@@ -263,7 +337,11 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .btn-logout:hover { border-color: #fff; color: #fff; }
+
+    .btn-logout:hover {
+      border-color: #fff;
+      color: #fff;
+    }
 
     /* ── Metrics Row ── */
     .metrics-grid {
@@ -272,6 +350,7 @@
       gap: 1.25rem;
       margin-bottom: 2.5rem;
     }
+
     .metric-card {
       background: #080808;
       border: 1px solid rgba(255, 255, 255, 0.12);
@@ -282,17 +361,20 @@
       position: relative;
       user-select: none;
     }
+
     .metric-card:hover {
       border-color: rgba(255, 255, 255, 0.45);
       background: #0d0d0d;
       transform: translateY(-2px);
       box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
     }
+
     .metric-card.active-filter {
       border-color: #ffffff !important;
       background: rgba(255, 255, 255, 0.07) !important;
       box-shadow: 0 0 25px rgba(255, 255, 255, 0.12) !important;
     }
+
     .metric-card.active-filter::after {
       content: "ACTIVE FILTER";
       position: absolute;
@@ -307,6 +389,7 @@
       border-radius: 3px;
       font-weight: 700;
     }
+
     .metric-label {
       font-family: var(--font-techno);
       font-size: 0.68rem;
@@ -315,6 +398,7 @@
       text-transform: uppercase;
       margin-bottom: 0.4rem;
     }
+
     .metric-val {
       font-family: var(--font-display);
       font-size: 2.4rem;
@@ -322,10 +406,12 @@
       line-height: 1;
       margin-bottom: 0.35rem;
     }
+
     .metric-sub {
       font-size: 0.78rem;
       color: rgba(255, 255, 255, 0.45);
     }
+
     .metric-hint {
       font-size: 0.65rem;
       color: rgba(255, 255, 255, 0.4);
@@ -348,6 +434,7 @@
       gap: 1rem;
       flex-wrap: wrap;
     }
+
     .search-input {
       flex: 1;
       min-width: 260px;
@@ -359,9 +446,19 @@
       font-family: var(--font-body);
       font-size: 0.9rem;
     }
-    .search-input:focus { outline: none; border-color: #fff; }
-    
-    .filter-group { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #fff;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
     .filter-select {
       padding: 0.75rem 1rem;
       background: #000;
@@ -373,8 +470,16 @@
       text-transform: uppercase;
       cursor: pointer;
     }
-    .filter-select:focus { outline: none; border-color: #fff; }
-    .filter-select option { background: #000; color: #fff; }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #fff;
+    }
+
+    .filter-select option {
+      background: #000;
+      color: #fff;
+    }
 
     .btn-reset {
       display: inline-flex;
@@ -392,11 +497,13 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
+
     .btn-reset:hover {
       border-color: #fff;
       color: #fff;
       background: rgba(255, 255, 255, 0.05);
     }
+
     .filtered-pill {
       font-family: var(--font-techno);
       font-size: 0.72rem;
@@ -416,7 +523,14 @@
       border-radius: 8px;
       overflow-x: auto;
     }
-    table { width: 100%; border-collapse: collapse; min-width: 950px; text-align: left; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 950px;
+      text-align: left;
+    }
+
     th {
       font-family: var(--font-techno);
       font-size: 0.7rem;
@@ -427,17 +541,32 @@
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
       background: #050505;
     }
+
     td {
       padding: 1.1rem 1.25rem;
       font-size: 0.9rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
       vertical-align: middle;
     }
-    tr:hover td { background: rgba(255, 255, 255, 0.02); }
-    
-    .name-text { font-family: var(--font-display); font-weight: 700; color: #fff; font-size: 0.95rem; }
-    .contact-text { font-family: var(--font-techno); font-size: 0.75rem; color: rgba(255, 255, 255, 0.5); margin-top: 0.25rem; }
-    
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .name-text {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.95rem;
+    }
+
+    .contact-text {
+      font-family: var(--font-techno);
+      font-size: 0.75rem;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.25rem;
+    }
+
     .badge {
       display: inline-block;
       padding: 0.25rem 0.65rem;
@@ -450,6 +579,7 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
       background: rgba(255, 255, 255, 0.04);
     }
+
     .status-dropdown {
       padding: 0.4rem 0.7rem;
       background: #000;
@@ -462,9 +592,18 @@
       cursor: pointer;
       transition: border-color 0.2s ease;
     }
-    .status-dropdown:focus { outline: none; border-color: #fff; }
-    
-    .action-icons { display: flex; align-items: center; gap: 0.5rem; }
+
+    .status-dropdown:focus {
+      outline: none;
+      border-color: #fff;
+    }
+
+    .action-icons {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
     .act-btn {
       width: 34px;
       height: 34px;
@@ -479,10 +618,17 @@
       cursor: pointer;
       transition: all 0.15s ease;
     }
-    .act-btn:hover { background: #fff; color: #000; transform: translateY(-1px); }
+
+    .act-btn:hover {
+      background: #fff;
+      color: #000;
+      transform: translateY(-1px);
+    }
+
     .act-btn.btn-delete {
       color: rgba(255, 255, 255, 0.65);
     }
+
     .act-btn.btn-delete:hover {
       background: #dc2626 !important;
       border-color: #dc2626 !important;
@@ -502,6 +648,7 @@
       z-index: 9999;
       padding: 1.5rem;
     }
+
     .modal-box {
       width: 100%;
       max-width: 440px;
@@ -512,6 +659,7 @@
       box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9);
       position: relative;
     }
+
     .modal-title {
       font-family: var(--font-display);
       font-size: 1.35rem;
@@ -520,6 +668,7 @@
       letter-spacing: 0.04em;
       margin-bottom: 0.35rem;
     }
+
     .modal-sub {
       font-family: var(--font-techno);
       font-size: 0.7rem;
@@ -528,6 +677,7 @@
       text-transform: uppercase;
       margin-bottom: 1.75rem;
     }
+
     .modal-msg {
       font-family: var(--font-techno);
       font-size: 0.75rem;
@@ -536,21 +686,25 @@
       margin-bottom: 1.25rem;
       display: none;
     }
+
     .modal-msg.success {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid #fff;
       color: #fff;
     }
+
     .modal-msg.error {
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.3);
       color: #fff;
     }
+
     .modal-actions {
       display: flex;
       gap: 0.75rem;
       margin-top: 1rem;
     }
+
     .btn-secondary {
       flex: 1;
       padding: 0.9rem;
@@ -565,7 +719,11 @@
       cursor: pointer;
       transition: all 0.2s ease;
     }
-    .btn-secondary:hover { border-color: #fff; color: #fff; }
+
+    .btn-secondary:hover {
+      border-color: #fff;
+      color: #fff;
+    }
 
     /* ── Toast Notification ── */
     .toast-popup {
@@ -579,7 +737,7 @@
       display: flex;
       align-items: center;
       gap: 0.85rem;
-      box-shadow: 0 15px 40px rgba(0,0,0,0.8);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8);
       z-index: 10000;
       opacity: 0;
       transform: translateY(20px);
@@ -587,11 +745,13 @@
       pointer-events: none;
       max-width: 380px;
     }
+
     .toast-popup.show {
       opacity: 1;
       transform: translateY(0);
       pointer-events: auto;
     }
+
     .toast-icon {
       width: 32px;
       height: 32px;
@@ -605,6 +765,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- ══════════════════════════════════════════
@@ -623,10 +784,12 @@
 
       <form id="login-form">
         <label class="input-label" for="login-email">Email Address</label>
-        <input type="email" id="login-email" class="input-field" placeholder="admin@shugaempire.com" autocomplete="username" required>
+        <input type="email" id="login-email" class="input-field" placeholder="admin@shugaempire.com"
+          autocomplete="username" required>
 
         <label class="input-label" for="login-password">Password</label>
-        <input type="password" id="login-password" class="input-field" placeholder="Enter password" autocomplete="current-password" required>
+        <input type="password" id="login-password" class="input-field" placeholder="Enter password"
+          autocomplete="current-password" required>
 
         <div id="error-alert" class="error-msg">Invalid email or password.</div>
 
@@ -640,7 +803,7 @@
   ══════════════════════════════════════════ -->
   <div id="dashboard-view">
     <div class="dash-container">
-      
+
       <!-- Top Header -->
       <div class="top-header">
         <div>
@@ -655,7 +818,7 @@
         <div class="top-actions">
           <button id="btn-refresh-leads" class="btn-refresh" title="Check server for new signups now">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              <path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
             </svg>
             <span id="refresh-label">Refresh Leads</span>
           </button>
@@ -683,31 +846,36 @@
 
       <!-- KPI Metrics Row (Clickable Filters) -->
       <div class="metrics-grid">
-        <div id="card-all" class="metric-card active-filter" onclick="setRoleFilter('All')" title="Click to show all applicants">
+        <div id="card-all" class="metric-card active-filter" onclick="setRoleFilter('All')"
+          title="Click to show all applicants">
           <div class="metric-label">Total Waitlist Pipeline</div>
           <div id="metric-total" class="metric-val">0</div>
           <div class="metric-sub">Registered pioneers</div>
           <div class="metric-hint">Show all &bull; Click to filter</div>
         </div>
-        <div id="card-driver" class="metric-card" onclick="setRoleFilter('Driver')" title="Click to filter by Drivers only">
+        <div id="card-driver" class="metric-card" onclick="setRoleFilter('Driver')"
+          title="Click to filter by Drivers only">
           <div class="metric-label">Drivers (SHUGA FLEET)</div>
           <div id="metric-drivers" class="metric-val">0</div>
           <div id="metric-drivers-pct" class="metric-sub">0% of pipeline</div>
           <div class="metric-hint">Drivers only &bull; Click to filter</div>
         </div>
-        <div id="card-rider" class="metric-card" onclick="setRoleFilter('Rider')" title="Click to filter by Riders only">
+        <div id="card-rider" class="metric-card" onclick="setRoleFilter('Rider')"
+          title="Click to filter by Riders only">
           <div class="metric-label">Riders (Shuga Ride)</div>
           <div id="metric-riders" class="metric-val">0</div>
           <div id="metric-riders-pct" class="metric-sub">0% of pipeline</div>
           <div class="metric-hint">Riders only &bull; Click to filter</div>
         </div>
-        <div id="card-investor" class="metric-card" onclick="setRoleFilter('Investor')" title="Click to filter by Investors only">
+        <div id="card-investor" class="metric-card" onclick="setRoleFilter('Investor')"
+          title="Click to filter by Investors only">
           <div class="metric-label">Fleet Investors</div>
           <div id="metric-investors" class="metric-val">0</div>
           <div id="metric-investors-pct" class="metric-sub">0% of pipeline</div>
           <div class="metric-hint">Investors only &bull; Click to filter</div>
         </div>
-        <div id="card-contact" class="metric-card" onclick="setRoleFilter('Contact')" title="Click to filter by Contact Inquiries">
+        <div id="card-contact" class="metric-card" onclick="setRoleFilter('Contact')"
+          title="Click to filter by Contact Inquiries">
           <div class="metric-label">Contact Inquiries</div>
           <div id="metric-contact-val" class="metric-val">0</div>
           <div id="metric-contact-pct" class="metric-sub">0% of pipeline</div>
@@ -743,10 +911,11 @@
             <option value="Allocated">Allocated</option>
           </select>
 
-          <button id="btn-reset-filters" type="button" class="btn-reset" onclick="resetAllFilters()" title="Reset all filters">
+          <button id="btn-reset-filters" type="button" class="btn-reset" onclick="resetAllFilters()"
+            title="Reset all filters">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
-              <path d="M3 3v5h5"/>
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
             </svg>
             Reset
           </button>
@@ -813,34 +982,47 @@
     <div class="modal-box" style="max-width: 580px;">
       <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
         <div>
-          <span id="inquiry-badge" class="badge" style="background:rgba(139,92,246,0.18); border-color:#8b5cf6; color:#c4b5fd;">Contact Inquiry</span>
+          <span id="inquiry-badge" class="badge"
+            style="background:rgba(139,92,246,0.18); border-color:#8b5cf6; color:#c4b5fd;">Contact Inquiry</span>
           <h2 id="inquiry-name" class="modal-title" style="margin-top:0.6rem; font-size:1.45rem;">Sender Name</h2>
           <p id="inquiry-time" class="modal-sub" style="margin-bottom:0;">Received: —</p>
         </div>
-        <button type="button" onclick="closeInquiryModal()" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.25); color:#fff; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem; display:grid; place-items:center;">✕</button>
+        <button type="button" onclick="closeInquiryModal()"
+          style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.25); color:#fff; width:34px; height:34px; border-radius:50%; cursor:pointer; font-size:1rem; display:grid; place-items:center;">✕</button>
       </div>
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.25rem;">
         <div style="background:#000; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:0.85rem;">
-          <div style="font-family:var(--font-techno); font-size:0.65rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.08em;">Email Address</div>
-          <div id="inquiry-email" style="font-size:0.9rem; color:#fff; word-break:break-all; font-weight:600; margin-top:0.3rem;">—</div>
+          <div
+            style="font-family:var(--font-techno); font-size:0.65rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.08em;">
+            Email Address</div>
+          <div id="inquiry-email"
+            style="font-size:0.9rem; color:#fff; word-break:break-all; font-weight:600; margin-top:0.3rem;">—</div>
         </div>
         <div style="background:#000; border:1px solid rgba(255,255,255,0.12); border-radius:6px; padding:0.85rem;">
-          <div style="font-family:var(--font-techno); font-size:0.65rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.08em;">Phone Number</div>
+          <div
+            style="font-family:var(--font-techno); font-size:0.65rem; color:rgba(255,255,255,0.45); text-transform:uppercase; letter-spacing:0.08em;">
+            Phone Number</div>
           <div id="inquiry-phone" style="font-size:0.9rem; color:#fff; font-weight:600; margin-top:0.3rem;">—</div>
         </div>
       </div>
 
       <div style="margin-bottom:1.5rem;">
-        <div style="font-family:var(--font-techno); font-size:0.68rem; letter-spacing:0.12em; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:0.5rem;">Message Content:</div>
-        <div id="inquiry-message" style="background:#000; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:1.25rem; font-family:var(--font-body); font-size:0.95rem; color:#fff; line-height:1.65; max-height:220px; overflow-y:auto; white-space:pre-wrap;">—</div>
+        <div
+          style="font-family:var(--font-techno); font-size:0.68rem; letter-spacing:0.12em; color:rgba(255,255,255,0.5); text-transform:uppercase; margin-bottom:0.5rem;">
+          Message Content:</div>
+        <div id="inquiry-message"
+          style="background:#000; border:1px solid rgba(255,255,255,0.18); border-radius:8px; padding:1.25rem; font-family:var(--font-body); font-size:0.95rem; color:#fff; line-height:1.65; max-height:220px; overflow-y:auto; white-space:pre-wrap;">
+          —</div>
       </div>
 
       <div style="display:flex; gap:0.75rem; flex-wrap:wrap;">
-        <a id="inquiry-reply-email" href="#" class="btn-solid" style="flex:1; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-size:0.78rem; margin-top:0; min-height:42px;">
+        <a id="inquiry-reply-email" href="#" class="btn-solid"
+          style="flex:1; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-size:0.78rem; margin-top:0; min-height:42px;">
           Reply via Email
         </a>
-        <a id="inquiry-reply-wa" href="#" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="flex:1; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-size:0.78rem; min-height:42px;">
+        <a id="inquiry-reply-wa" href="#" target="_blank" rel="noopener noreferrer" class="btn-secondary"
+          style="flex:1; text-align:center; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:0.5rem; font-size:0.78rem; min-height:42px;">
           WhatsApp Sender
         </a>
       </div>
@@ -876,7 +1058,7 @@
         if (window.location.hostname.includes('shugaempire.com')) {
           document.cookie = `${name}=${encodeURIComponent(value)}; domain=.shugaempire.com; path=/; max-age=31536000; SameSite=Lax`;
         }
-      } catch (e) {}
+      } catch (e) { }
     }
 
     let activePassword = getCookie('shuga_admin_password') || localStorage.getItem('shuga_admin_password') || DEFAULT_PASSWORD;
@@ -904,9 +1086,9 @@
                 break;
               }
             }
-          } catch (err) {}
+          } catch (err) { }
         }
-      } catch (e) {}
+      } catch (e) { }
     }
     syncAdminCreds();
 
@@ -916,17 +1098,9 @@
       return { email, password };
     }
 
-    // Seed Leads
-    const SEED = [
-      { id: 101, timestamp: '2026-09-09 18:42:10', fullName: 'Oluwaseun Adeleke', email: 'o.adeleke@gmail.com', phone: '+234 803 452 9182', city: 'Lagos', role: 'Driver', notes: '5 years commercial experience on Uber Lagos', status: 'Vetted' },
-      { id: 102, timestamp: '2026-09-09 19:15:30', fullName: 'Dr. Ibrahim Danjuma', email: 'danjuma.invest@holdings.ng', phone: '+234 802 884 1102', city: 'Abuja', role: 'Investor', notes: 'Looking to syndicate 5 electric SUVs for fleet', status: 'Contacted' },
-      { id: 103, timestamp: '2026-09-09 20:04:45', fullName: 'Chidinma Okonkwo', email: 'chidinma.o@yahoo.com', phone: '+234 814 220 9831', city: 'Lagos', role: 'Rider', notes: 'Daily commute between Victoria Island & Lekki', status: 'New' },
-      { id: 104, timestamp: '2026-09-09 21:30:12', fullName: 'Emmanuel Babatunde', email: 'emmanuel.b@gmail.com', phone: '+234 805 771 4439', city: 'Lagos', role: 'Driver', notes: 'Valid LASDRI & FRSC licenses', status: 'New' },
-      { id: 105, timestamp: '2026-09-09 22:11:05', fullName: 'Amina Bello', email: 'amina.bello@fct.gov.ng', phone: '+234 809 123 7765', city: 'Abuja', role: 'Rider', notes: 'Airport & Central Business District commute', status: 'Contacted' },
-      { id: 106, timestamp: '2026-09-09 23:55:18', fullName: 'Capital Ventures NG', email: 'invest@capventures.com', phone: '+234 818 990 0012', city: 'Other Cities', role: 'Investor', notes: 'Port Harcourt expansion syndicate', status: 'New' },
-    ];
-
-    let allLeads = [...SEED];
+    // Real Database Leads (Strictly fetched from Supabase)
+    const SEED = [];
+    let allLeads = [];
     let pollTimer = null;
     let lastKnownCount = 0;
     let isInitialLoad = true;
@@ -972,7 +1146,7 @@
                 break;
               }
             }
-          } catch (err) {}
+          } catch (err) { }
         }
         if (verified) {
           localStorage.setItem('shuga_admin_password', enteredPwd);
@@ -984,7 +1158,7 @@
           showDashboard();
           return;
         }
-      } catch (e) {}
+      } catch (e) { }
 
       document.getElementById('error-alert').style.display = 'block';
     });
@@ -1064,9 +1238,9 @@
               headers: { 'Authorization': 'Bearer ShugaAdmin2026!' },
               body: formData
             });
-          } catch (e) {}
+          } catch (e) { }
         }
-      } catch (err) {}
+      } catch (err) { }
 
       modalMsg.className = 'modal-msg success';
       modalMsg.textContent = '✓ Password updated successfully! Use your new password next time you log in.';
@@ -1090,7 +1264,7 @@
         const overrides = getSavedStatuses();
         overrides[identifier] = newStatus;
         localStorage.setItem('shuga_status_overrides', JSON.stringify(overrides));
-      } catch (e) {}
+      } catch (e) { }
     }
 
     function showToast(title, desc) {
@@ -1105,7 +1279,7 @@
         setTimeout(() => {
           toast.classList.remove('show');
         }, 4500);
-      } catch (e) {}
+      } catch (e) { }
     }
 
     function showDashboard() {
@@ -1113,7 +1287,7 @@
       document.getElementById('dashboard-view').style.display = 'block';
       const { email } = getAdminCredentials();
       document.getElementById('current-admin-display').textContent = email;
-      
+
       // 1. Immediately render seed/existing leads so KPIs and table are NEVER empty
       render();
 
@@ -1140,17 +1314,23 @@
 
       try {
         const endpoints = [
+          `/api/admin/leads?key=ShugaAdmin2026!&nocache=${Date.now()}`,
+          `https://shugaempire.com/api/admin/leads?key=ShugaAdmin2026!&nocache=${Date.now()}`,
+          `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
           `https://shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
-          `https://admin.shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`,
-          `/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
+          `https://admin.shugaempire.com/api/admin_waitlist.php?key=ShugaAdmin2026!&nocache=${Date.now()}`
         ];
 
         let serverRecords = null;
         for (const url of endpoints) {
           try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000);
-            const res = await fetch(url, { cache: 'no-store', signal: controller.signal });
+            const timeoutId = setTimeout(() => controller.abort(), 6000);
+            const res = await fetch(url, {
+              cache: 'no-store',
+              signal: controller.signal,
+              headers: { 'Authorization': 'Bearer ShugaAdmin2026!' }
+            });
             clearTimeout(timeoutId);
             if (res.ok) {
               const json = await res.json();
@@ -1159,81 +1339,10 @@
                 break;
               }
             }
-          } catch (err) {}
+          } catch (err) { }
         }
 
-        let combined = [];
-        if (serverRecords && serverRecords.length > 0) {
-          combined = [...serverRecords];
-        }
-
-        // Incorporate local storage submissions
-        try {
-          const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-          local.forEach((item, idx) => {
-            combined.unshift({
-              id: 'loc-' + (idx + 1),
-              timestamp: item.date ? item.date.replace('T', ' ').substring(0, 19) : new Date().toISOString().substring(0, 19),
-              fullName: item.fullName || 'Pioneer',
-              email: item.email || '',
-              phone: item.phone || '',
-              city: item.city || 'Lagos',
-              role: item.role || 'Driver',
-              notes: item.notes || '',
-              status: 'New'
-            });
-          });
-        } catch (e) {}
-
-        // Add default seed leads
-        combined = [...combined, ...SEED];
-
-        // Deduplicate by email or id
-        const seen = new Set();
-        let uniqueLeads = [];
-        for (const l of combined) {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          if (key && seen.has(key)) continue;
-          if (key) seen.add(key);
-          uniqueLeads.push(l);
-        }
-
-        // Filter out any applicant that has been deleted by the admin!
-        try {
-          const deletedList = JSON.parse(localStorage.getItem('shuga_deleted_leads') || '[]');
-          const deletedSet = new Set(deletedList.map(s => String(s).toLowerCase().trim()));
-          uniqueLeads = uniqueLeads.filter(l => {
-            const idKey = String(l.id || '').toLowerCase().trim();
-            const emailKey = String(l.email || '').toLowerCase().trim();
-            if (idKey && deletedSet.has(idKey)) return false;
-            if (emailKey && deletedSet.has(emailKey)) return false;
-            return true;
-          });
-        } catch (e) {}
-
-        // Apply saved status overrides
-        const overrides = getSavedStatuses();
-        allLeads = uniqueLeads.map(l => {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          if (overrides[key]) {
-            return { ...l, status: overrides[key] };
-          }
-          return l;
-        });
-
-        // Detect newly arrived signups
-        const realLeadsCount = allLeads.filter(l => !SEED.some(s => String(s.id) === String(l.id))).length;
-        if (!isInitialLoad && realLeadsCount > lastKnownCount) {
-          const diff = realLeadsCount - lastKnownCount;
-          const latestApplicant = allLeads[0];
-          if (latestApplicant && latestApplicant.fullName) {
-            showToast(
-              `⚡ ${diff} New Applicant${diff > 1 ? 's' : ''} Received!`,
-              `${latestApplicant.fullName} (${latestApplicant.role || 'Pioneer'}) - ${latestApplicant.city || 'Lagos'}`
-            );
-          }
-        }
-        lastKnownCount = realLeadsCount;
+        allLeads = serverRecords || [];
         isInitialLoad = false;
 
         // Update sync time
@@ -1254,7 +1363,7 @@
     }
 
     // ── KPI Card Filtering & Reset ──
-    window.setRoleFilter = function(role) {
+    window.setRoleFilter = function (role) {
       const roleSelect = document.getElementById('role-filter');
       if (roleSelect) {
         roleSelect.value = role;
@@ -1283,7 +1392,7 @@
       });
     }
 
-    window.resetAllFilters = function() {
+    window.resetAllFilters = function () {
       const searchInput = document.getElementById('search-box');
       const roleSelect = document.getElementById('role-filter');
       const citySelect = document.getElementById('city-filter');
@@ -1299,77 +1408,65 @@
     };
 
     // ── Delete Applicant ──
-    window.deleteApplicant = async function(id, encodedEmail, encodedName, encodedTimestamp) {
-      const name = decodeURIComponent(encodedName || 'this applicant');
+    window.deleteApplicant = async function (id, encodedEmail, encodedName, encodedTimestamp) {
+      const name = decodeURIComponent(encodedName || 'this record');
       const email = decodeURIComponent(encodedEmail || '').toLowerCase().trim();
-      const timestamp = decodeURIComponent(encodedTimestamp || '').trim();
 
-      if (!confirm(`Are you sure you want to permanently delete "${name}" from the waitlist? This action cannot be undone.`)) {
+      if (!confirm(`Are you sure you want to permanently delete "${name}" from the database? This cannot be undone.`)) {
         return;
       }
 
-      // 1. Instantly remove from in-memory leads
+      showToast('Deleting...', `Removing "${name}" from Supabase database.`);
+
+      // 1. Instantly remove from in-memory array so the UI reflects immediately
       allLeads = allLeads.filter(l => {
         if (id && String(l.id) === String(id)) return false;
         if (email && (l.email || '').toLowerCase().trim() === email) return false;
         return true;
       });
-
-      // 2. Persist deleted key to localStorage so future syncs never restore it
-      try {
-        const deletedList = JSON.parse(localStorage.getItem('shuga_deleted_leads') || '[]');
-        if (id) deletedList.push(String(id));
-        if (email) deletedList.push(email);
-        localStorage.setItem('shuga_deleted_leads', JSON.stringify(Array.from(new Set(deletedList))));
-      } catch (e) {}
-
-      // 3. Prune from localStorage waitlist if present
-      try {
-        const local = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-        const filteredLocal = local.filter(item => {
-          if (email && (item.email || '').toLowerCase().trim() === email) return false;
-          return true;
-        });
-        localStorage.setItem('shuga_waitlist', JSON.stringify(filteredLocal));
-      } catch (e) {}
-
-      // 4. Instant UI update & toast notification
       render();
-      showToast('✓ Record Deleted', `"${name}" was permanently removed.`);
 
-      // 5. Send asynchronous deletion to server CSV
+      // 2. Permanently delete from Supabase via backend API
       try {
         const params = new URLSearchParams({
-          action: 'delete',
           key: 'ShugaAdmin2026!',
           id: id || '',
           email: email || '',
-          name: name || '',
-          timestamp: timestamp || ''
+          action: 'delete'
         });
 
         const endpoints = [
+          `/api/admin/leads?${params.toString()}`,
+          `https://shugaempire.com/api/admin/leads?${params.toString()}`,
+          `/api/admin_waitlist.php?${params.toString()}`,
           `https://shugaempire.com/api/admin_waitlist.php?${params.toString()}`,
-          `https://admin.shugaempire.com/api/admin_waitlist.php?${params.toString()}`,
-          `/api/admin_waitlist.php?${params.toString()}`
+          `https://admin.shugaempire.com/api/admin_waitlist.php?${params.toString()}`
         ];
 
         for (const ep of endpoints) {
           try {
-            await fetch(ep, {
-              method: 'POST',
+            const res = await fetch(ep, {
+              method: 'DELETE',
               headers: { 'Authorization': 'Bearer ShugaAdmin2026!' },
               cache: 'no-store'
             });
-          } catch (err) {}
+            if (res.ok) {
+              const j = await res.json();
+              if (j && j.success) {
+                break;
+              }
+            }
+          } catch (err) { }
         }
+
+        showToast('✓ Record Deleted', `"${name}" was permanently removed from Supabase.`);
       } catch (err) {
         console.error('Server deletion sync error:', err);
       }
     };
 
     // ── Inquiry Details Modal ──
-    window.openInquiryModal = function(id) {
+    window.openInquiryModal = function (id) {
       const lead = (allLeads || []).find(l => String(l.id) === String(id));
       if (!lead) return;
 
@@ -1382,7 +1479,7 @@
 
       const replyEmail = document.getElementById('inquiry-reply-email');
       if (replyEmail) {
-        replyEmail.href = lead.email ? `mailto:${lead.email}?subject=Re: Shuga Empire Inquiry` : '#';
+        replyEmail.href = lead.email ? `mailto:${lead.email}?subject=Re: SHUGA Empire HoldCo Inquiry` : '#';
       }
 
       const replyWa = document.getElementById('inquiry-reply-wa');
@@ -1390,7 +1487,7 @@
         let cleanPhone = (lead.phone || '').replace(/[^0-9]/g, '');
         if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
         else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
-        const msg = encodeURIComponent(`Hello ${lead.fullName || ''}, this is Shuga Empire leadership following up on your enquiry.`);
+        const msg = encodeURIComponent(`Hello ${lead.fullName || ''}, this is SHUGA Empire HoldCo leadership following up on your enquiry.`);
         replyWa.href = cleanPhone ? `https://wa.me/${cleanPhone}?text=${msg}` : '#';
       }
 
@@ -1398,7 +1495,7 @@
       if (modal) modal.style.display = 'flex';
     };
 
-    window.closeInquiryModal = function() {
+    window.closeInquiryModal = function () {
       const modal = document.getElementById('inquiry-modal');
       if (modal) modal.style.display = 'none';
     };
@@ -1523,7 +1620,7 @@
           if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
           else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
 
-          const waMsg = encodeURIComponent(`Hello ${l.fullName || 'there'}, this is the Shuga Empire operations team regarding your enquiry.`);
+          const waMsg = encodeURIComponent(`Hello ${l.fullName || 'there'}, this is the SHUGA Empire HoldCo operations team regarding your enquiry.`);
           const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '#';
 
           const safeId = escapeHtml(String(l.id || ''));
@@ -1554,10 +1651,10 @@
               </td>
               <td>
                 <select class="status-dropdown" onchange="updateStatus('${safeId}', this.value)">
-                  <option value="New" ${(l.status||'').toLowerCase()==='new'?'selected':''}>New</option>
-                  <option value="Contacted" ${(l.status||'').toLowerCase()==='contacted'?'selected':''}>Contacted</option>
-                  <option value="Vetted" ${(l.status||'').toLowerCase()==='vetted'?'selected':''}>Vetted</option>
-                  <option value="Allocated" ${(l.status||'').toLowerCase()==='allocated'?'selected':''}>Allocated</option>
+                  <option value="New" ${(l.status || '').toLowerCase() === 'new' ? 'selected' : ''}>New</option>
+                  <option value="Contacted" ${(l.status || '').toLowerCase() === 'contacted' ? 'selected' : ''}>Contacted</option>
+                  <option value="Vetted" ${(l.status || '').toLowerCase() === 'vetted' ? 'selected' : ''}>Vetted</option>
+                  <option value="Allocated" ${(l.status || '').toLowerCase() === 'allocated' ? 'selected' : ''}>Allocated</option>
                 </select>
               </td>
               <td style="font-family:var(--font-techno); font-size:0.75rem; color:rgba(255,255,255,0.4);">${escapeHtml(l.timestamp || '')}</td>
@@ -1577,7 +1674,7 @@
                     </a>
                   ` : ''}
                   ${l.email ? `
-                    <a href="mailto:${l.email}?subject=Shuga Empire Enquiry" class="act-btn" title="Send Email">
+                    <a href="mailto:${l.email}?subject=SHUGA Empire HoldCo Enquiry" class="act-btn" title="Send Email">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                         <polyline points="22,6 12,13 2,6" />
@@ -1602,16 +1699,43 @@
       }
     }
 
-    window.updateStatus = function(id, newStatus) {
+    window.updateStatus = async function (id, newStatus) {
+      const lead = allLeads.find(l => String(l.id) === String(id));
       allLeads = allLeads.map(l => {
         if (String(l.id) === String(id)) {
-          const key = ((l.email || l.id || '') + '').toLowerCase().trim();
-          saveStatusOverride(key, newStatus);
           return { ...l, status: newStatus };
         }
         return l;
       });
       render();
+
+      try {
+        const endpoints = [
+          '/api/admin/leads',
+          'https://shugaempire.com/api/admin/leads',
+          '/api/admin_waitlist.php?action=update_status&key=ShugaAdmin2026!',
+          'https://shugaempire.com/api/admin_waitlist.php?action=update_status&key=ShugaAdmin2026!'
+        ];
+        for (const ep of endpoints) {
+          try {
+            await fetch(ep, {
+              method: 'PATCH',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ShugaAdmin2026!'
+              },
+              body: JSON.stringify({
+                id: id,
+                table: lead?.table || 'waitlist',
+                status: newStatus
+              })
+            });
+            break;
+          } catch (e) { }
+        }
+      } catch (err) {
+        console.error('Status sync error:', err);
+      }
     };
 
     // Manual Refresh Button
@@ -1642,13 +1766,13 @@
       const rows = allLeads.map(l => [
         `"${l.id}"`,
         `"${l.timestamp}"`,
-        `"${(l.fullName||'').replace(/"/g, '""')}"`,
-        `"${(l.email||'').replace(/"/g, '""')}"`,
-        `"${(l.phone||'').replace(/"/g, '""')}"`,
-        `"${(l.city||'').replace(/"/g, '""')}"`,
-        `"${(l.role||'').replace(/"/g, '""')}"`,
-        `"${(l.notes||'').replace(/"/g, '""')}"`,
-        `"${l.status||'New'}"`
+        `"${(l.fullName || '').replace(/"/g, '""')}"`,
+        `"${(l.email || '').replace(/"/g, '""')}"`,
+        `"${(l.phone || '').replace(/"/g, '""')}"`,
+        `"${(l.city || '').replace(/"/g, '""')}"`,
+        `"${(l.role || '').replace(/"/g, '""')}"`,
+        `"${(l.notes || '').replace(/"/g, '""')}"`,
+        `"${l.status || 'New'}"`
       ]);
       const csv = [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1662,4 +1786,5 @@
     });
   </script>
 </body>
+
 </html>

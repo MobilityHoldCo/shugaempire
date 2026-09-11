@@ -1,7 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Methods: GET, POST, DELETE, PATCH, OPTIONS');
 header('Access-Control-Allow-Headers: Content-Type, Authorization');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
@@ -11,6 +11,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 // 1. Secret Admin Passcode for API authorization
 $ADMIN_PASSCODE = 'ShugaAdmin2026!';
+
+// Dynamic Supabase configuration (resolved from Hostinger environment or server config)
+function getSupabaseEnvKey() {
+    $val = getenv('SUPABASE_SERVICE_ROLE_KEY') ?: (getenv('SUPABASE_API_KEY') ?: getenv('NEXT_PUBLIC_SUPABASE_ANON_KEY'));
+    if (!empty($val)) return $val;
+
+    $envPaths = [
+        dirname(__DIR__) . '/.env.local',
+        dirname(dirname(__DIR__)) . '/.env.local',
+        dirname(dirname(dirname(__DIR__))) . '/.env.local',
+        '/home/u142840867/domains/shugaempire.com/.env.local',
+    ];
+    foreach ($envPaths as $p) {
+        if (file_exists($p)) {
+            $lines = file($p, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if (str_starts_with($line, 'SUPABASE_SERVICE_ROLE_KEY=') || str_starts_with($line, 'NEXT_PUBLIC_SUPABASE_ANON_KEY=')) {
+                    $parts = explode('=', $line, 2);
+                    if (!empty($parts[1])) return trim($parts[1]);
+                }
+            }
+        }
+    }
+    return '';
+}
+
+function getSupabaseEnvUrl() {
+    $val = getenv('SUPABASE_URL') ?: getenv('NEXT_PUBLIC_SUPABASE_URL');
+    if (!empty($val)) return $val;
+
+    $envPaths = [
+        dirname(__DIR__) . '/.env.local',
+        dirname(dirname(__DIR__)) . '/.env.local',
+        dirname(dirname(dirname(__DIR__))) . '/.env.local',
+        '/home/u142840867/domains/shugaempire.com/.env.local',
+    ];
+    foreach ($envPaths as $p) {
+        if (file_exists($p)) {
+            $lines = file($p, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+            foreach ($lines as $line) {
+                $line = trim($line);
+                if (str_starts_with($line, 'NEXT_PUBLIC_SUPABASE_URL=') || str_starts_with($line, 'SUPABASE_URL=')) {
+                    $parts = explode('=', $line, 2);
+                    if (!empty($parts[1])) return trim($parts[1]);
+                }
+            }
+        }
+    }
+    return 'https://dphgopxtvvpyiteuatqe.supabase.co';
+}
+
+$SUPABASE_URL = getSupabaseEnvUrl();
+$SUPABASE_KEY = getSupabaseEnvKey();
 
 $rawJson = @json_decode(file_get_contents('php://input'), true);
 if (!is_array($rawJson)) {
@@ -53,7 +107,61 @@ function getStoredAdminCreds($path) {
 
 $storedCreds = getStoredAdminCreds($credsFile);
 
-// 3. Handle Verify Login (can be called by login form directly)
+// Helper function to query Supabase REST API
+function callSupabaseRest($endpoint, $method = 'GET', $body = null) {
+    global $SUPABASE_URL, $SUPABASE_KEY;
+    $url = rtrim($SUPABASE_URL, '/') . '/rest/v1/' . ltrim($endpoint, '/');
+
+    $headers = [
+        'apikey: ' . $SUPABASE_KEY,
+        'Authorization: Bearer ' . $SUPABASE_KEY,
+        'Content-Type: application/json',
+        'Prefer: return=representation'
+    ];
+
+    if (function_exists('curl_init')) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 12);
+
+        if ($body !== null) {
+            curl_setopt($ch, CURLOPT_POSTFIELDS, is_string($body) ? $body : json_encode($body));
+        }
+
+        $res = curl_exec($ch);
+        $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+
+        return [
+            'code' => $code,
+            'data' => @json_decode($res, true)
+        ];
+    } else {
+        $opts = [
+            'http' => [
+                'method'  => $method,
+                'header'  => implode("\r\n", $headers) . "\r\n",
+                'timeout' => 12,
+                'ignore_errors' => true
+            ]
+        ];
+        if ($body !== null) {
+            $opts['http']['content'] = is_string($body) ? $body : json_encode($body);
+        }
+        $context = stream_context_create($opts);
+        $res = @file_get_contents($url, false, $context);
+        return [
+            'code' => 200,
+            'data' => @json_decode($res, true)
+        ];
+    }
+}
+
+// 3. Handle Verify Login
 if ($action === 'verify_login') {
     $attemptEmail = strtolower(trim($_REQUEST['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? ''))));
     $attemptPwd   = $_REQUEST['password'] ?? ($_POST['password'] ?? ($rawJson['password'] ?? ''));
@@ -67,57 +175,7 @@ if ($action === 'verify_login') {
     exit;
 }
 
-// 3b. Handle Contact Form Submission
-if ($action === 'contact_submit') {
-    $fullName = trim(strip_tags($_REQUEST['fullName'] ?? ($_REQUEST['name'] ?? ($rawJson['fullName'] ?? ($rawJson['name'] ?? '')))));
-    $email    = trim(filter_var($_REQUEST['email'] ?? ($rawJson['email'] ?? ''), FILTER_SANITIZE_EMAIL));
-    $phone    = trim(strip_tags($_REQUEST['phone'] ?? ($rawJson['phone'] ?? '')));
-    $interest = trim(strip_tags($_REQUEST['interest'] ?? ($rawJson['interest'] ?? 'General')));
-    $message  = trim(strip_tags($_REQUEST['message'] ?? ($_REQUEST['notes'] ?? ($rawJson['message'] ?? ($rawJson['notes'] ?? '')))));
-
-    if (empty($fullName) || empty($email) || empty($message)) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'Name, email, and message are required']);
-        exit;
-    }
-
-    $timestamp = date('Y-m-d H:i:s');
-    $ip        = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
-    $ua        = $_SERVER['HTTP_USER_AGENT'] ?? '';
-    $roleTag   = "Contact (" . ucfirst($interest) . ")";
-
-    $targetCsv = '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv';
-    if (!file_exists($targetCsv)) {
-        $targetCsv = __DIR__ . '/waitlist_entries.csv';
-    }
-
-    $isNew = !file_exists($targetCsv) || filesize($targetCsv) === 0;
-    $fp = @fopen($targetCsv, 'a');
-    if ($fp) {
-        if ($isNew) {
-            fputcsv($fp, ['Timestamp', 'Full Name', 'Email', 'Phone', 'City', 'Role', 'Notes', 'IP Address', 'User Agent']);
-        }
-        fputcsv($fp, [$timestamp, $fullName, $email, $phone, 'Nigeria', $roleTag, $message, $ip, $ua]);
-        fclose($fp);
-    }
-
-    // Also write to dedicated contact_messages.csv
-    $contactCsv = dirname($targetCsv) . '/contact_messages.csv';
-    $isNewContact = !file_exists($contactCsv) || filesize($contactCsv) === 0;
-    $fp2 = @fopen($contactCsv, 'a');
-    if ($fp2) {
-        if ($isNewContact) {
-            fputcsv($fp2, ['Timestamp', 'Full Name', 'Email', 'Phone', 'Interest', 'Message', 'IP Address', 'User Agent']);
-        }
-        fputcsv($fp2, [$timestamp, $fullName, $email, $phone, ucfirst($interest), $message, $ip, $ua]);
-        fclose($fp2);
-    }
-
-    echo json_encode(['success' => true, 'message' => 'Enquiry transmitted to Admin']);
-    exit;
-}
-
-// 4. Passcode Check for protected administrative actions
+// 4. Passcode Check for protected actions
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
 $authKey    = $_REQUEST['key'] ?? ($_GET['key'] ?? ($_POST['key'] ?? ($rawJson['key'] ?? '')));
 $passcode   = '';
@@ -134,7 +192,7 @@ if ($passcode !== $ADMIN_PASSCODE) {
     exit;
 }
 
-// 5. Change Password Handler (permanently updates data/admin_creds.json)
+// 5. Change Password Handler
 if ($action === 'change_password') {
     $currentEntered = $_REQUEST['current_password'] ?? ($_POST['current_password'] ?? ($rawJson['current_password'] ?? ''));
     $newPwd         = $_REQUEST['new_password'] ?? ($_POST['new_password'] ?? ($rawJson['new_password'] ?? ''));
@@ -151,11 +209,6 @@ if ($action === 'change_password') {
         exit;
     }
 
-    $dataDir = dirname($credsFile);
-    if (!is_dir($dataDir)) {
-        @mkdir($dataDir, 0777, true);
-    }
-
     $toSave = [
         'email'      => $storedCreds['email'],
         'password'   => $newPwd,
@@ -163,20 +216,18 @@ if ($action === 'change_password') {
         'ip'         => $_SERVER['REMOTE_ADDR'] ?? ''
     ];
 
-    $saved = @file_put_contents($credsFile, json_encode($toSave, JSON_PRETTY_PRINT));
-    
-    // Also backup to other candidate paths if they exist
+    @file_put_contents($credsFile, json_encode($toSave, JSON_PRETTY_PRINT));
     foreach ($credsCandidates as $cf) {
         if ($cf !== $credsFile && is_dir(dirname($cf))) {
             @file_put_contents($cf, json_encode($toSave, JSON_PRETTY_PRINT));
         }
     }
 
-    echo json_encode(['success' => true, 'message' => 'Password permanently updated on server']);
+    echo json_encode(['success' => true, 'message' => 'Password permanently updated']);
     exit;
 }
 
-// 6. Get Current Admin Credentials (returns server stored password)
+// 6. Get Current Admin Credentials
 if ($action === 'get_credentials') {
     echo json_encode([
         'success'  => true,
@@ -186,141 +237,128 @@ if ($action === 'get_credentials') {
     exit;
 }
 
-// 7. Candidate CSV File Locations
-$candidates = [
-    '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv',
-    __DIR__ . '/waitlist_entries.csv',
-    dirname(dirname(__DIR__)) . '/data/waitlist_entries.csv',
-    dirname(dirname(__DIR__)) . '/api/waitlist_entries.csv',
-    dirname(dirname(__DIR__)) . '/data/waitlist.csv',
-    __DIR__ . '/../../data/waitlist_entries.csv',
-    __DIR__ . '/../../data/waitlist.csv',
-    dirname(__DIR__) . '/waitlist_entries.csv',
-    ($_SERVER['DOCUMENT_ROOT'] ?? '') . '/api/waitlist_entries.csv',
-    ($_SERVER['DOCUMENT_ROOT'] ?? '') . '/../public_html/api/waitlist_entries.csv',
-    '/home/u142840867/domains/shugaempire.com/public_html/api/waitlist_entries.csv',
-    '/home/u142840867/domains/shugaempire.com/data/waitlist.csv',
-];
+// 7. Delete Record — STRICTLY FROM SUPABASE
+$deleteId    = $_REQUEST['id'] ?? ($_GET['id'] ?? ($_POST['id'] ?? ($rawJson['id'] ?? '')));
+$deleteEmail = strtolower(trim($_REQUEST['email'] ?? ($_GET['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? '')))));
 
-$csvFile = __DIR__ . '/waitlist_entries.csv';
-foreach ($candidates as $cand) {
-    if (!empty($cand) && file_exists($cand) && filesize($cand) > 0) {
-        $csvFile = $cand;
-        break;
+if ($action === 'delete' || $_SERVER['REQUEST_METHOD'] === 'DELETE') {
+    if (!empty($deleteId)) {
+        // Delete by UUID in waitlist table
+        callSupabaseRest('waitlist?id=eq.' . urlencode($deleteId), 'DELETE');
+        // Delete by UUID in contacts table
+        callSupabaseRest('contacts?id=eq.' . urlencode($deleteId), 'DELETE');
     }
-}
-
-// If export requested as raw CSV download
-$exportParam = $_REQUEST['export'] ?? ($_GET['export'] ?? ($rawJson['export'] ?? ''));
-if ($exportParam === 'csv') {
-    if (!file_exists($csvFile)) {
-        http_response_code(404);
-        die('No waitlist records found.');
+    if (!empty($deleteEmail)) {
+        // Delete by Email in waitlist table
+        callSupabaseRest('waitlist?email=eq.' . urlencode($deleteEmail), 'DELETE');
+        // Delete by Email in contacts table
+        callSupabaseRest('contacts?email=eq.' . urlencode($deleteEmail), 'DELETE');
     }
-    header('Content-Type: text/csv');
-    header('Content-Disposition: attachment; filename="shuga_waitlist_' . date('Y-m-d') . '.csv"');
-    readfile($csvFile);
-    exit;
-}
 
-// 8. If delete requested - purge from ALL existing candidate files
-$deleteId        = $_REQUEST['id'] ?? ($_GET['id'] ?? ($_POST['id'] ?? ($rawJson['id'] ?? '')));
-$deleteEmail     = strtolower(trim($_REQUEST['email'] ?? ($_GET['email'] ?? ($_POST['email'] ?? ($rawJson['email'] ?? '')))));
-$deleteTimestamp = trim($_REQUEST['timestamp'] ?? ($_GET['timestamp'] ?? ($_POST['timestamp'] ?? ($rawJson['timestamp'] ?? ''))));
-$deleteName      = strtolower(trim($_REQUEST['name'] ?? ($_GET['name'] ?? ($_POST['name'] ?? ($rawJson['name'] ?? '')))));
-
-if ($action === 'delete') {
-    $deletedAny = false;
-    $seenPaths  = [];
-
-    foreach ($candidates as $cand) {
-        if (!empty($cand) && file_exists($cand)) {
-            $real = realpath($cand);
-            if ($real && in_array($real, $seenPaths)) continue;
-            if ($real) $seenPaths[] = $real;
-
-            $rows    = [];
+    // Also purge legacy CSV files if they still exist on disk
+    $legacyCsvs = [
+        '/home/u142840867/domains/shugaempire.com/data/waitlist_entries.csv',
+        __DIR__ . '/waitlist_entries.csv',
+        dirname(dirname(__DIR__)) . '/data/waitlist_entries.csv',
+    ];
+    foreach ($legacyCsvs as $lcsv) {
+        if (file_exists($lcsv)) {
+            $rows = [];
             $headers = [];
-            $fp = @fopen($cand, 'r');
+            $fp = @fopen($lcsv, 'r');
             if ($fp) {
                 $headers = fgetcsv($fp);
-                $currId = 1;
                 while (($row = fgetcsv($fp)) !== false) {
-                    if (empty($row) || count($row) < 2) continue;
-                    $rowTimestamp = trim($row[0] ?? '');
-                    $rowName      = strtolower(trim($row[1] ?? ''));
-                    $rowEmail     = strtolower(trim($row[2] ?? ''));
-
-                    $match = false;
-                    if (!empty($deleteEmail) && $rowEmail === $deleteEmail) {
-                        $match = true;
-                    } elseif (!empty($deleteTimestamp) && !empty($deleteName) && $rowTimestamp === $deleteTimestamp && $rowName === $deleteName) {
-                        $match = true;
-                    } elseif (!empty($deleteId) && is_numeric($deleteId) && intval($deleteId) === $currId) {
-                        $match = true;
-                    }
-
-                    if ($match) {
-                        $deletedAny = true;
-                    } else {
-                        $rows[] = $row;
-                    }
-                    $currId++;
+                    $rowEmail = strtolower(trim($row[2] ?? ''));
+                    if (!empty($deleteEmail) && $rowEmail === $deleteEmail) continue;
+                    $rows[] = $row;
                 }
                 fclose($fp);
             }
-
-            // Rewrite CSV without the deleted row
-            $fpOut = @fopen($cand, 'w');
+            $fpOut = @fopen($lcsv, 'w');
             if ($fpOut) {
-                if (!empty($headers)) {
-                    fputcsv($fpOut, $headers);
-                }
-                foreach ($rows as $r) {
-                    fputcsv($fpOut, $r);
-                }
+                if (!empty($headers)) fputcsv($fpOut, $headers);
+                foreach ($rows as $r) fputcsv($fpOut, $r);
                 fclose($fpOut);
             }
         }
     }
 
-    echo json_encode(['success' => true, 'deleted' => $deletedAny, 'message' => 'Record deleted successfully']);
+    echo json_encode([
+        'success' => true,
+        'message' => 'Record permanently deleted from Supabase database'
+    ]);
     exit;
 }
 
-// 9. Read All Records
-$records = [];
-if (file_exists($csvFile)) {
-    $fp = fopen($csvFile, 'r');
-    if ($fp) {
-        $headers = fgetcsv($fp);
-        $id = 1;
-        while (($row = fgetcsv($fp)) !== false) {
-            if (count($row) >= 6) {
-                $records[] = [
-                    'id'        => $id++,
-                    'timestamp' => $row[0] ?? '',
-                    'fullName'  => $row[1] ?? '',
-                    'email'     => $row[2] ?? '',
-                    'phone'     => $row[3] ?? '',
-                    'city'      => $row[4] ?? 'Lagos',
-                    'role'      => $row[5] ?? 'Driver',
-                    'notes'     => $row[6] ?? '',
-                    'status'    => 'New',
-                    'ip'        => $row[7] ?? '',
-                ];
-            }
-        }
-        fclose($fp);
+// 8. Update Status — STRICTLY IN SUPABASE
+if ($action === 'update_status' || $_SERVER['REQUEST_METHOD'] === 'PATCH') {
+    $updateId     = $_REQUEST['id'] ?? ($rawJson['id'] ?? '');
+    $updateStatus = strtolower(trim($_REQUEST['status'] ?? ($rawJson['status'] ?? '')));
+    $updateTable  = $_REQUEST['table'] ?? ($rawJson['table'] ?? 'waitlist');
+
+    if (!empty($updateId) && !empty($updateStatus)) {
+        $targetTable = ($updateTable === 'contacts') ? 'contacts' : 'waitlist';
+        callSupabaseRest($targetTable . '?id=eq.' . urlencode($updateId), 'PATCH', ['status' => $updateStatus]);
+        echo json_encode(['success' => true, 'message' => 'Status updated in Supabase']);
+        exit;
     }
 }
 
-// Reverse so newest entries appear first
-$records = array_reverse($records);
+// 9. Read All Records — STRICTLY FROM SUPABASE (No CSV reading)
+$records = [];
+
+// Fetch from Supabase waitlist table
+$waitlistRes = callSupabaseRest('waitlist?select=*&order=created_at.desc');
+if (!empty($waitlistRes['data']) && is_array($waitlistRes['data'])) {
+    foreach ($waitlistRes['data'] as $w) {
+        $records[] = [
+            'id'        => $w['id'],
+            'table'     => 'waitlist',
+            'timestamp' => !empty($w['created_at']) ? substr(str_replace('T', ' ', $w['created_at']), 0, 19) : '',
+            'fullName'  => $w['full_name'] ?? '',
+            'email'     => $w['email'] ?? '',
+            'phone'     => $w['phone'] ?? '',
+            'city'      => $w['city'] ?? 'Lagos',
+            'role'      => $w['role'] ?? 'Driver',
+            'notes'     => $w['notes'] ?? '',
+            'position'  => $w['position'] ?? null,
+            'status'    => !empty($w['status']) ? ucfirst($w['status']) : 'New',
+            'source'    => $w['source'] ?? 'website_waitlist',
+        ];
+    }
+}
+
+// Fetch from Supabase contacts table
+$contactsRes = callSupabaseRest('contacts?select=*&order=created_at.desc');
+if (!empty($contactsRes['data']) && is_array($contactsRes['data'])) {
+    foreach ($contactsRes['data'] as $c) {
+        $interest = !empty($c['interest']) ? ucfirst($c['interest']) : 'General';
+        $records[] = [
+            'id'        => $c['id'],
+            'table'     => 'contacts',
+            'timestamp' => !empty($c['created_at']) ? substr(str_replace('T', ' ', $c['created_at']), 0, 19) : '',
+            'fullName'  => $c['full_name'] ?? '',
+            'email'     => $c['email'] ?? '',
+            'phone'     => $c['phone'] ?? '',
+            'city'      => 'Nigeria',
+            'role'      => "Contact ($interest)",
+            'notes'     => $c['message'] ?? '',
+            'status'    => !empty($c['status']) ? ucfirst($c['status']) : 'New',
+            'source'    => $c['source'] ?? 'contact_page',
+        ];
+    }
+}
+
+// Sort newest first
+usort($records, function ($a, $b) {
+    return strtotime($b['timestamp']) - strtotime($a['timestamp']);
+});
 
 // 10. Return Records
 echo json_encode([
     'success' => true,
+    'source'  => 'supabase',
     'count'   => count($records),
     'data'    => $records,
 ]);
