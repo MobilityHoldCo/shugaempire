@@ -42,7 +42,25 @@ RewriteRule ^(.*)$ $1.html [L]
 # 8. Custom 404 Error Document
 ErrorDocument 404 /404.html
 
-# 9. Cache Static Assets for fast loading
+# 9. Ensure Proper MIME Types
+<IfModule mod_mime.c>
+  AddType text/css .css
+  AddType application/javascript .js .mjs
+  AddType image/svg+xml .svg
+  AddType image/webp .webp
+  AddType video/webm .webm
+</IfModule>
+
+# 10. Prevent HTML Caching (Stops FOUC & Old Chunk Mismatch)
+<IfModule mod_headers.c>
+  <FilesMatch "\.(html|htm)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
+    Header set Pragma "no-cache"
+    Header set Expires "0"
+  </FilesMatch>
+</IfModule>
+
+# 11. Cache Static Assets for fast loading
 <IfModule mod_expires.c>
   ExpiresActive On
   ExpiresByType image/jpg "access plus 1 year"
@@ -54,3 +72,4 @@ ErrorDocument 404 /404.html
   ExpiresByType text/css "access plus 1 month"
   ExpiresByType application/javascript "access plus 1 month"
 </IfModule>
+

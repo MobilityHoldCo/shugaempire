@@ -94,8 +94,39 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html lang="en" style={{ backgroundColor: '#000000', color: '#ffffff' }}>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html, body {
+                background-color: #000000 !important;
+                color: #ffffff !important;
+                margin: 0;
+                padding: 0;
+                font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                min-height: 100vh;
+              }
+              a {
+                color: inherit;
+                text-decoration: none;
+              }
+              img, video {
+                max-width: 100%;
+                height: auto;
+              }
+              button {
+                font-family: inherit;
+              }
+            `,
+          }}
+        />
+      </head>
+      <body style={{ backgroundColor: '#000000', color: '#ffffff', margin: 0, minHeight: '100vh' }}>
         <div className="noise-overlay" aria-hidden="true" />
         <CursorFollower />
         <ScrollProgress />
