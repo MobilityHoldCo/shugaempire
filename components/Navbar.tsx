@@ -80,20 +80,9 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Desktop CTA buttons */}
-          <div className={styles.cta}>
-            <Link href="/waitlist" className={styles.ctaWaitlist}>
-              <span className={styles.ctaDot} />
-              Join Waitlist
-            </Link>
-            <Link href="/shuga-cars" className={styles.ctaSolid}>Get a Car</Link>
-          </div>
 
-          {/* Mobile Right Controls: Quick CTA + Hamburger */}
+          {/* Mobile Right Controls: Hamburger only */}
           <div className={styles.mobileControls}>
-            <Link href="/shuga-cars" className={styles.mobileQuickCta} onClick={() => setOpen(false)}>
-              GET A CAR
-            </Link>
             <button
               className={`${styles.burger} ${open ? styles.burgerOpen : ''}`}
               onClick={() => setOpen(!open)}

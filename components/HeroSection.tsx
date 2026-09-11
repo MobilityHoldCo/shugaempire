@@ -1,8 +1,7 @@
 'use client';
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, AnimatePresence, type TargetAndTransition, type Transition } from 'framer-motion';
 import styles from './HeroSection.module.css';
-import Link from 'next/link';
 import Image from 'next/image';
 
 const SLIDES = [
@@ -11,27 +10,124 @@ const SLIDES = [
   { src: '/c3.jpeg', label: 'SHUGA ENERGY', sub: 'Power your world, sustainably.' },
 ];
 
-const AUTOPLAY_MS = 5000;
+const AUTOPLAY_MS = 5500;
+
+// ── 7 DISTINCT TRANSITION STYLES ─────────────────────────────────────────────
+type TransitionStyle = {
+  name: string;
+  duration: number;
+  ease: Transition['ease'];
+  getActive: () => TargetAndTransition;
+  getExit: (dir: number) => TargetAndTransition;
+  getEnter: (dir: number) => TargetAndTransition;
+};
+
+const TRANSITION_STYLES: TransitionStyle[] = [
+  // 1 ── Cinematic 3D Rotate Y (premium depth)
+  {
+    name: 'rotate3d',
+    duration: 1.1,
+    ease: [0.22, 1, 0.36, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 1.07, rotateY: d * -14, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(0.3) blur(0px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 0.95, rotateY: d * 14, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(0.3) blur(0px)' }),
+  },
+
+  // 2 ── Vertical Lift (slides from above/below + blur)
+  {
+    name: 'verticalLift',
+    duration: 1.2,
+    ease: [0.16, 1, 0.3, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 1.04, rotateY: 0, rotateX: 0, x: 0, y: d * -90, skewX: 0, filter: 'brightness(0.2) blur(6px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 0.97, rotateY: 0, rotateX: 0, x: 0, y: d * 90, skewX: 0, filter: 'brightness(0.2) blur(6px)' }),
+  },
+
+  // 3 ── Zoom Dissolve (cosmic zoom-in with heavy blur)
+  {
+    name: 'zoomDissolve',
+    duration: 1.5,
+    ease: [0.25, 0.46, 0.45, 0.94],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (_d) => ({ opacity: 0, scale: 1.25, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(0.05) blur(18px)' }),
+    getEnter:  (_d) => ({ opacity: 0, scale: 0.78, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(0.05) blur(18px)' }),
+  },
+
+  // 4 ── Diagonal Sweep (moves at an angle)
+  {
+    name: 'diagonal',
+    duration: 1.0,
+    ease: [0.43, 0.13, 0.23, 0.96],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 1.06, rotateY: 0, rotateX: 0, x: d * -140, y: d * -50, skewX: 0, filter: 'brightness(0.2) blur(8px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 0.94, rotateY: 0, rotateX: 0, x: d * 140, y: d * 50, skewX: 0, filter: 'brightness(0.2) blur(8px)' }),
+  },
+
+  // 5 ── 3D Flip X (rotates on horizontal axis — dramatic)
+  {
+    name: 'flipX',
+    duration: 1.3,
+    ease: [0.77, 0, 0.175, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 1.02, rotateY: 0, rotateX: d * -20, x: 0, y: 0, skewX: 0, filter: 'brightness(0.3) blur(2px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.02, rotateY: 0, rotateX: d * 20, x: 0, y: 0, skewX: 0, filter: 'brightness(0.3) blur(2px)' }),
+  },
+
+  // 6 ── Horizontal Slide (clean linear push)
+  {
+    name: 'slideX',
+    duration: 0.95,
+    ease: [0.76, 0, 0.24, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: '0%', y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0.3, scale: 1, rotateY: 0, rotateX: 0, x: `${d * -60}%`, y: 0, skewX: 0, filter: 'brightness(0.5) blur(3px)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1, rotateY: 0, rotateX: 0, x: `${d * 60}%`, y: 0, skewX: 0, filter: 'brightness(0.5) blur(3px)' }),
+  },
+
+  // 7 ── Skew Glitch (dramatic skew + warp — cinematic shutter feel)
+  {
+    name: 'glitch',
+    duration: 0.9,
+    ease: [0.87, 0, 0.13, 1],
+    getActive: () => ({ opacity: 1, scale: 1, rotateY: 0, rotateX: 0, x: 0, y: 0, skewX: 0, filter: 'brightness(1) blur(0px)' }),
+    getExit:   (d) => ({ opacity: 0, scale: 0.92, rotateY: 0, rotateX: 0, x: d * -30, y: 0, skewX: d * -8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
+    getEnter:  (d) => ({ opacity: 0, scale: 1.08, rotateY: 0, rotateX: 0, x: d * 30, y: 0, skewX: d * 8, filter: 'brightness(0.15) blur(5px) saturate(2)' }),
+  },
+];
+
+let _styleIdx = 0; // tracks which style was last used so we never repeat consecutively
+
+function pickNextStyle(currentIdx: number): number {
+  // Pick a random index that is different from the current one
+  const pool = TRANSITION_STYLES.length;
+  let next = Math.floor(Math.random() * (pool - 1));
+  if (next >= currentIdx) next += 1; // skip current
+  return next;
+}
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   const [active, setActive] = useState(0);
   const [prev, setPrev] = useState<number | null>(null);
   const [direction, setDirection] = useState<1 | -1>(1);
-  const [dragging, setDragging] = useState(false);
+  const [transitionIdx, setTransitionIdx] = useState(0);
   const dragStartX = useRef(0);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const dragging = useRef(false);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
   const opacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
   const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
-  // Parallax for each slide layer
   const slideY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
   const slideScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
 
   const go = useCallback((dir: 1 | -1) => {
     setDirection(dir);
+    setTransitionIdx(prev => {
+      const next = pickNextStyle(prev);
+      _styleIdx = next;
+      return next;
+    });
     setActive(a => {
       const next = (a + dir + SLIDES.length) % SLIDES.length;
       setPrev(a);
@@ -39,11 +135,17 @@ export default function HeroSection() {
     });
   }, []);
 
-  const goTo = useCallback((idx: number) => {
-    setDirection(idx > active ? 1 : -1);
-    setPrev(active);
+  const goTo = useCallback((idx: number, currentActive: number) => {
+    const dir: 1 | -1 = idx > currentActive ? 1 : -1;
+    setDirection(dir);
+    setTransitionIdx(prev => {
+      const next = pickNextStyle(prev);
+      _styleIdx = next;
+      return next;
+    });
+    setPrev(currentActive);
     setActive(idx);
-  }, [active]);
+  }, []);
 
   const resetTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
@@ -55,25 +157,23 @@ export default function HeroSection() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [resetTimer]);
 
-  // Drag / swipe
   const onPointerDown = (e: React.PointerEvent) => {
-    setDragging(true);
+    dragging.current = true;
     dragStartX.current = e.clientX;
   };
   const onPointerUp = (e: React.PointerEvent) => {
-    if (!dragging) return;
-    setDragging(false);
+    if (!dragging.current) return;
+    dragging.current = false;
     const dx = e.clientX - dragStartX.current;
     if (Math.abs(dx) > 50) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    dragStartX.current = e.touches[0].clientX;
-  };
+  const onTouchStart = (e: React.TouchEvent) => { dragStartX.current = e.touches[0].clientX; };
   const onTouchEnd = (e: React.TouchEvent) => {
     const dx = e.changedTouches[0].clientX - dragStartX.current;
     if (Math.abs(dx) > 40) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
+
+  const ts = TRANSITION_STYLES[transitionIdx];
 
   return (
     <section
@@ -82,7 +182,6 @@ export default function HeroSection() {
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
-
       {/* ── 3D Carousel Background ── */}
       <motion.div
         className={styles.carouselBg}
@@ -91,7 +190,6 @@ export default function HeroSection() {
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
       >
-        {/* Slides */}
         {SLIDES.map((slide, i) => {
           const isActive = i === active;
           const isPrev = i === prev;
@@ -100,16 +198,16 @@ export default function HeroSection() {
               key={slide.src}
               className={styles.carouselSlide}
               initial={false}
-              animate={{
-                opacity: isActive ? 1 : isPrev ? 0 : 0,
-                scale: isActive ? 1 : isPrev ? 1.06 : 0.96,
-                rotateY: isActive ? 0 : isPrev ? direction * -8 : direction * 8,
-                z: isActive ? 0 : -120,
-                filter: isActive ? 'brightness(1)' : 'brightness(0.4)',
-              }}
+              animate={
+                isActive
+                  ? ts.getActive()
+                  : isPrev
+                  ? ts.getExit(direction)
+                  : ts.getEnter(direction)
+              }
               transition={{
-                duration: 1.1,
-                ease: [0.22, 1, 0.36, 1],
+                duration: ts.duration,
+                ease: ts.ease as Transition['ease'],
               }}
               style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
             >
@@ -129,7 +227,7 @@ export default function HeroSection() {
         <div className={styles.carouselOverlay} />
       </motion.div>
 
-      {/* Slide label badge — anchored to hero, not carousel (avoids inset clipping) */}
+      {/* Slide label badge */}
       <AnimatePresence mode="wait">
         <motion.div
           key={active}
@@ -141,6 +239,31 @@ export default function HeroSection() {
         >
           <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
           <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
+        </motion.div>
+      </AnimatePresence>
+
+      {/* Transition style indicator (subtle, top-right) */}
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={`style-${transitionIdx}`}
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 0.35, y: 0 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+          style={{
+            position: 'absolute',
+            top: '5.5rem',
+            right: '2rem',
+            fontFamily: 'var(--font-techno)',
+            fontSize: '0.6rem',
+            letterSpacing: '0.18em',
+            color: '#ffffff',
+            textTransform: 'uppercase',
+            zIndex: 20,
+            pointerEvents: 'none',
+          }}
+        >
+          {ts.name.replace(/([A-Z])/g, ' $1').trim()}
         </motion.div>
       </AnimatePresence>
 
@@ -174,51 +297,6 @@ export default function HeroSection() {
           <br />
           The Future.
         </motion.h1>
-
-
-
-        <motion.div
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.95 }}
-          style={{ marginTop: '1.25rem', marginBottom: '0.5rem' }}
-        >
-          <Link
-            href="/waitlist"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              padding: '0.45rem 1.1rem',
-              borderRadius: '999px',
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
-              color: '#ffffff',
-              fontFamily: 'var(--font-techno)',
-              fontSize: '0.72rem',
-              letterSpacing: '0.12em',
-              textDecoration: 'none',
-              backdropFilter: 'blur(10px)',
-            }}
-          >
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#ffffff', boxShadow: '0 0 6px rgba(255,255,255,0.8)' }} />
-            <span>EARLY ACCESS WAITLIST OPEN &bull; RESERVE SPOT &rarr;</span>
-          </Link>
-        </motion.div>
-
-        <motion.div
-          className={styles.ctas}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 1.1 }}
-        >
-          <Link href="/shuga-cars" className={styles.ctaPrimary} data-cursor>
-            GET A CAR FROM SHUGA
-          </Link>
-          <Link href="/shuga-ride" className={styles.ctaSecondary} data-cursor>
-            Ride with Shuga
-          </Link>
-        </motion.div>
       </motion.div>
 
       {/* ── Carousel controls ── */}
@@ -245,7 +323,7 @@ export default function HeroSection() {
             <button
               key={i}
               className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
-              onClick={() => { goTo(i); resetTimer(); }}
+              onClick={() => { goTo(i, active); resetTimer(); }}
               aria-label={`Go to slide ${i + 1}`}
             >
               {i === active && (
