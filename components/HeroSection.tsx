@@ -225,203 +225,217 @@ export default function HeroSection() {
 
   const ts = TRANSITION_STYLES[transitionIdx];
 
+  const statsContent = (
+    <>
+      <div className={styles.stat}>
+        <span className={styles.statNum}>3</span>
+        <span className={styles.statLabel}>Connected Businesses</span>
+      </div>
+      <div className={styles.statDivider} />
+      <div className={styles.stat}>
+        <span className={styles.statNum}>2</span>
+        <span className={styles.statLabel}>Cities Live Today</span>
+      </div>
+      <div className={styles.statDivider} />
+      <div className={styles.stat}>
+        <span className={styles.statNum}>100<span className={styles.statUnit}>%</span></span>
+        <span className={styles.statLabel}>Electric Fleet</span>
+      </div>
+    </>
+  );
+
   return (
-    <section
-      ref={ref}
-      className={styles.hero}
-      onTouchStart={onTouchStart}
-      onTouchEnd={onTouchEnd}
-    >
-      {/* ── 3D Carousel Background ── */}
-      <motion.div
-        className={styles.carouselBg}
-        style={{ y: slideY, scale: slideScale }}
-        onPointerDown={onPointerDown}
-        onPointerUp={onPointerUp}
-        onPointerLeave={onPointerUp}
+    <div className={styles.heroWrapper}>
+      <section
+        ref={ref}
+        className={styles.hero}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
       >
-        {SLIDES.map((slide, i) => {
-          const isActive = i === active;
-          const isPrev = i === prev;
-          return (
-            <motion.div
-              key={slide.src}
-              className={styles.carouselSlide}
-              initial={false}
-              animate={
-                isActive
-                  ? ts.getActive()
-                  : isPrev
-                  ? ts.getExit(direction)
-                  : ts.getEnter(direction)
-              }
-              transition={{
-                duration: ts.duration,
-                ease: ts.ease as Transition['ease'],
-              }}
-              style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
-            >
-              <Image
-                src={slide.src}
-                alt={slide.label}
-                fill
-                priority={i === 0}
-                sizes="100vw"
-                className={styles.carouselImg}
-              />
-            </motion.div>
-          );
-        })}
-
-        {/* Cinematic multi-layer overlay */}
-        <div className={styles.carouselOverlay} />
-      </motion.div>
-
-      {/* Slide label badge */}
-      <AnimatePresence mode="wait">
+        {/* ── 3D Carousel Background ── */}
         <motion.div
-          key={active}
-          className={styles.slideBadge}
-          initial={{ opacity: 0, x: -24, y: 12 }}
-          animate={{ opacity: [0, 1, 0], x: 0, y: 0 }}
-          exit={{ opacity: 0, x: 24, y: -8 }}
-          transition={{
-            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-            x: { duration: 0.8, ease: 'easeOut' },
-            y: { duration: 0.8, ease: 'easeOut' },
-          }}
+          className={styles.carouselBg}
+          style={{ y: slideY, scale: slideScale }}
+          onPointerDown={onPointerDown}
+          onPointerUp={onPointerUp}
+          onPointerLeave={onPointerUp}
         >
-          <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
-          <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
+          {SLIDES.map((slide, i) => {
+            const isActive = i === active;
+            const isPrev = i === prev;
+            return (
+              <motion.div
+                key={slide.src}
+                className={styles.carouselSlide}
+                initial={false}
+                animate={
+                  isActive
+                    ? ts.getActive()
+                    : isPrev
+                    ? ts.getExit(direction)
+                    : ts.getEnter(direction)
+                }
+                transition={{
+                  duration: ts.duration,
+                  ease: ts.ease as Transition['ease'],
+                }}
+                style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
+              >
+                <Image
+                  src={slide.src}
+                  alt={slide.label}
+                  fill
+                  priority={i === 0}
+                  sizes="100vw"
+                  className={styles.carouselImg}
+                />
+              </motion.div>
+            );
+          })}
+
+          {/* Cinematic multi-layer overlay */}
+          <div className={styles.carouselOverlay} />
         </motion.div>
-      </AnimatePresence>
 
+        {/* Slide label badge — crisp, stable display without looping fade in/out */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={active}
+            className={styles.slideBadge}
+            initial={{ opacity: 0, x: -16, y: 8 }}
+            animate={{ opacity: 1, x: 0, y: 0 }}
+            exit={{ opacity: 0, x: 16, y: -8 }}
+            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
+            <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
+          </motion.div>
+        </AnimatePresence>
 
-      {/* ── Subtle grid overlay ── */}
-      <motion.div className={styles.bgGrid} style={{ y: bgY }} />
+        {/* ── Subtle grid overlay ── */}
+        <motion.div className={styles.bgGrid} style={{ y: bgY }} />
 
-      {/* ── Content ── */}
-      <motion.div className={styles.content} style={{ y: textY, opacity }}>
-        <motion.p
-          className={styles.eyebrow}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: [0, 1, 0], y: 0 }}
-          transition={{
-            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
-            y: { duration: 0.8, delay: 0.3 },
-          }}
+        {/* ── Content ── */}
+        <motion.div className={styles.content} style={{ y: textY, opacity }}>
+          <motion.p
+            className={styles.eyebrow}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: [0, 1, 0], y: 0 }}
+            transition={{
+              opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+              y: { duration: 0.8, delay: 0.3 },
+            }}
+          >
+            <span className={styles.eyebrowLine} />
+            SHUGA EMPIRE HOLDCO
+            <span className={styles.eyebrowLine} />
+          </motion.p>
+
+          <motion.h1
+            className={styles.heading}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            More Than
+            <br />
+            <span className={styles.headingAccent}>A Ride.</span>
+            <br />
+            We&apos;re Building
+            <br />
+            The Future.
+          </motion.h1>
+        </motion.div>
+
+        {/* ── Carousel controls ── */}
+        <motion.div
+          className={styles.carouselControls}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.4 }}
         >
-          <span className={styles.eyebrowLine} />
-          SHUGA EMPIRE HOLDCO
-          <span className={styles.eyebrowLine} />
-        </motion.p>
+          {/* Prev */}
+          <button
+            className={styles.arrowBtn}
+            onClick={() => { go(-1); resetTimer(); }}
+            aria-label="Previous slide"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+            </svg>
+          </button>
 
-        <motion.h1
-          className={styles.heading}
-          initial={{ opacity: 0, y: 50 }}
+          {/* Dots with progress ring */}
+          <div className={styles.dots}>
+            {SLIDES.map((_, i) => (
+              <button
+                key={i}
+                className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
+                onClick={() => { goTo(i, active); resetTimer(); }}
+                aria-label={`Go to slide ${i + 1}`}
+              >
+                {i === active && (
+                  <svg className={styles.dotRing} viewBox="0 0 32 32">
+                    <circle
+                      cx="16" cy="16" r="13"
+                      stroke="white" strokeWidth="1.5"
+                      fill="none"
+                      strokeDasharray={`${2 * Math.PI * 13}`}
+                      strokeDashoffset="0"
+                      className={styles.dotRingProgress}
+                      style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                    />
+                  </svg>
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* Next */}
+          <button
+            className={styles.arrowBtn}
+            onClick={() => { go(1); resetTimer(); }}
+            aria-label="Next slide"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+            </svg>
+          </button>
+        </motion.div>
+
+        {/* ── Desktop Stats strip (inside hero on desktop) ── */}
+        <motion.div
+          className={styles.statsBarDesktop}
+          initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          transition={{ duration: 0.9, delay: 1.4 }}
         >
-          More Than
-          <br />
-          <span className={styles.headingAccent}>A Ride.</span>
-          <br />
-          We&apos;re Building
-          <br />
-          The Future.
-        </motion.h1>
-      </motion.div>
+          {statsContent}
+        </motion.div>
 
-      {/* ── Carousel controls ── */}
-      <motion.div
-        className={styles.carouselControls}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.4 }}
-      >
-        {/* Prev */}
-        <button
-          className={styles.arrowBtn}
-          onClick={() => { go(-1); resetTimer(); }}
-          aria-label="Previous slide"
+        {/* ── Scroll indicator ── */}
+        <motion.div
+          className={styles.scrollIndicator}
+          animate={{ y: [0, 10, 0] }}
+          transition={{ repeat: Infinity, duration: 2 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
         >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-          </svg>
-        </button>
+          <div className={styles.scrollLine} />
+          <span>Scroll</span>
+        </motion.div>
+      </section>
 
-        {/* Dots with progress ring */}
-        <div className={styles.dots}>
-          {SLIDES.map((_, i) => (
-            <button
-              key={i}
-              className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
-              onClick={() => { goTo(i, active); resetTimer(); }}
-              aria-label={`Go to slide ${i + 1}`}
-            >
-              {i === active && (
-                <svg className={styles.dotRing} viewBox="0 0 32 32">
-                  <circle
-                    cx="16" cy="16" r="13"
-                    stroke="white" strokeWidth="1.5"
-                    fill="none"
-                    strokeDasharray={`${2 * Math.PI * 13}`}
-                    strokeDashoffset="0"
-                    className={styles.dotRingProgress}
-                    style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
-                  />
-                </svg>
-              )}
-            </button>
-          ))}
-        </div>
-
-        {/* Next */}
-        <button
-          className={styles.arrowBtn}
-          onClick={() => { go(1); resetTimer(); }}
-          aria-label="Next slide"
-        >
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-          </svg>
-        </button>
-      </motion.div>
-
-      {/* ── Stats strip ── */}
+      {/* ── Mobile Stats strip (placed cleanly below the hero page) ── */}
       <motion.div
-        className={styles.statsBar}
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.9, delay: 1.4 }}
+        className={styles.statsBarMobile}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.7 }}
       >
-        <div className={styles.stat}>
-          <span className={styles.statNum}>3</span>
-          <span className={styles.statLabel}>Connected Businesses</span>
-        </div>
-        <div className={styles.statDivider} />
-        <div className={styles.stat}>
-          <span className={styles.statNum}>2</span>
-          <span className={styles.statLabel}>Cities Live Today</span>
-        </div>
-        <div className={styles.statDivider} />
-        <div className={styles.stat}>
-          <span className={styles.statNum}>100<span className={styles.statUnit}>%</span></span>
-          <span className={styles.statLabel}>Electric Fleet</span>
-        </div>
+        {statsContent}
       </motion.div>
-
-      {/* ── Scroll indicator ── */}
-      <motion.div
-        className={styles.scrollIndicator}
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-      >
-        <div className={styles.scrollLine} />
-        <span>Scroll</span>
-      </motion.div>
-    </section>
+    </div>
   );
 }
