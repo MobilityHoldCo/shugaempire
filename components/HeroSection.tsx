@@ -156,7 +156,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <span className={styles.eyebrowLine} />
-          MOBILITY HOLD CO.
+          SUGAR EMPIRE HOLDCO
           <span className={styles.eyebrowLine} />
         </motion.p>
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shuga Empire | Admin Waitlist Command Center</title>
+  <title>Sugar Empire HoldCo | Admin Waitlist Command Center</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;700;800&family=Space+Mono:wght@400;700&family=Syne:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1382,7 +1382,7 @@
 
       const replyEmail = document.getElementById('inquiry-reply-email');
       if (replyEmail) {
-        replyEmail.href = lead.email ? `mailto:${lead.email}?subject=Re: Shuga Empire Inquiry` : '#';
+        replyEmail.href = lead.email ? `mailto:${lead.email}?subject=Re: Sugar Empire HoldCo Inquiry` : '#';
       }
 
       const replyWa = document.getElementById('inquiry-reply-wa');
@@ -1390,7 +1390,7 @@
         let cleanPhone = (lead.phone || '').replace(/[^0-9]/g, '');
         if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
         else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
-        const msg = encodeURIComponent(`Hello ${lead.fullName || ''}, this is Shuga Empire leadership following up on your enquiry.`);
+        const msg = encodeURIComponent(`Hello ${lead.fullName || ''}, this is Sugar Empire HoldCo leadership following up on your enquiry.`);
         replyWa.href = cleanPhone ? `https://wa.me/${cleanPhone}?text=${msg}` : '#';
       }
 
@@ -1523,7 +1523,7 @@
           if (cleanPhone.startsWith('0')) cleanPhone = '234' + cleanPhone.substring(1);
           else if (!cleanPhone.startsWith('234') && cleanPhone.length === 10) cleanPhone = '234' + cleanPhone;
 
-          const waMsg = encodeURIComponent(`Hello ${l.fullName || 'there'}, this is the Shuga Empire operations team regarding your enquiry.`);
+          const waMsg = encodeURIComponent(`Hello ${l.fullName || 'there'}, this is the Sugar Empire HoldCo operations team regarding your enquiry.`);
           const waLink = cleanPhone ? `https://wa.me/${cleanPhone}?text=${waMsg}` : '#';
 
           const safeId = escapeHtml(String(l.id || ''));
@@ -1577,7 +1577,7 @@
                     </a>
                   ` : ''}
                   ${l.email ? `
-                    <a href="mailto:${l.email}?subject=Shuga Empire Enquiry" class="act-btn" title="Send Email">
+                    <a href="mailto:${l.email}?subject=Sugar Empire HoldCo Enquiry" class="act-btn" title="Send Email">
                       <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
                         <polyline points="22,6 12,13 2,6" />

@@ -37,14 +37,14 @@ export default function Footer() {
           <div className={styles.brandLogo}>
             <Image
               src="/text logo with icon.jpeg"
-              alt="Shuga Empire — Mobility Hold Co."
+              alt="Sugar Empire HoldCo"
               width={180}
               height={54}
               style={{ objectFit: 'contain', height: '40px', width: 'auto' }}
             />
           </div>
           <div>
-            <div className={styles.brandName}>MOBILITY HOLD CO.</div>
+            <div className={styles.brandName}>SUGAR EMPIRE HOLDCO</div>
             <p className={styles.brandTagline}>
               Building Nigeria&apos;s most connected mobility ecosystem. One vehicle. One ride. One charge at a time.
             </p>
@@ -69,7 +69,7 @@ export default function Footer() {
 
       <div className={styles.bottom}>
         <div className={styles.bottomInner}>
-          <span className={styles.copyright}>© 2026 Mobility Hold Co. All rights reserved.</span>
+          <span className={styles.copyright}>© 2026 Sugar Empire HoldCo. All rights reserved.</span>
           <span className={styles.location}>Lagos & Abuja, Nigeria</span>
         </div>
       </div>

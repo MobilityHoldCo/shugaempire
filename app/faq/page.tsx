@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'FAQ',
-  description: 'Frequently asked questions about Mobility Hold Co., SHUGA FLEET, Shuga Ride, and Shuga Energy.',
+  description: 'Frequently asked questions about Sugar Empire HoldCo, SHUGA FLEET, Shuga Ride, and Shuga Energy.',
 };
 
 const faqs = [
@@ -14,7 +14,7 @@ const faqs = [
       { q: 'What is SHUGA FLEET?', a: 'SHUGA FLEET is our vehicle hire-purchase programme. Qualified drivers can access an electric vehicle by paying an agreed deposit and making fixed daily payments, working toward full ownership over the agreed term.' },
       { q: 'How do I apply for a Shuga Car?', a: 'You can apply by contacting our team through the contact page. We\'ll guide you through the qualification and onboarding process.' },
       { q: 'How long does it take to own the car?', a: 'The ownership period depends on the agreement terms set at the start of the programme. Our team will outline the full terms when you apply.' },
-      { q: 'Can investors own vehicles and have them operated?', a: 'Yes. Investors can acquire vehicles and have them operated by professional drivers through our programme, with Mobility Hold Co. coordinating the operational side.' },
+      { q: 'Can investors own vehicles and have them operated?', a: 'Yes. Investors can acquire vehicles and have them operated by professional drivers through our programme, with Sugar Empire HoldCo coordinating the operational side.' },
     ],
   },
   {
@@ -43,7 +43,7 @@ export default function FaqPage() {
           <p className="eyebrow"><span className="eyebrow-line" />FAQ</p>
           <RevealText as="h1" className="heading-xl">Got Questions?</RevealText>
           <p className="lead" style={{ marginTop: '1.5rem' }}>
-            Everything you need to know about Mobility Hold Co., SHUGA FLEET, Shuga Ride, and Shuga Energy.
+            Everything you need to know about Sugar Empire HoldCo, SHUGA FLEET, Shuga Ride, and Shuga Energy.
           </p>
         </div>
       </section>

@@ -152,7 +152,7 @@ foreach ($contactJsonCandidates as $cJson) {
 
 // 7. Send Email Alert (non-blocking)
 $to = 'contact@shugaempire.com';
-$subject = "📩 New Shuga Empire Contact Inquiry: $fullName ($interestFormatted)";
+$subject = "📩 New Sugar Empire HoldCo Contact Inquiry: $fullName ($interestFormatted)";
 $body = "New Contact Enquiry Submitted:\n\n"
       . "Name: $fullName\n"
       . "Email: $email\n"
@@ -160,7 +160,7 @@ $body = "New Contact Enquiry Submitted:\n\n"
       . "Interest: $interestFormatted\n"
       . "Timestamp: $timestamp\n\n"
       . "Message:\n$message\n\n"
-      . "--\nShuga Empire Admin Notification System";
+      . "--\nSugar Empire HoldCo Admin Notification System";
 
 $headers = "From: noreply@shugaempire.com\r\n"
          . "Reply-To: $email\r\n"

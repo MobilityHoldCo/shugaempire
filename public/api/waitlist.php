@@ -97,8 +97,8 @@ if (file_exists($csvFile)) {
 
 // 4. Send Email Notification (Optional, non-blocking)
 $to = 'contact@shugaempire.com';
-$subject = "⚡ New Shuga Empire Waitlist Signup: $fullName ($role)";
-$message = "A new pioneer has joined the Shuga Empire Waitlist:\n\n"
+$subject = "⚡ New Sugar Empire HoldCo Waitlist Signup: $fullName ($role)";
+$message = "A new pioneer has joined the Sugar Empire HoldCo Waitlist:\n\n"
          . "Name: $fullName\n"
          . "Email: $email\n"
          . "Phone: $phone\n"
@@ -116,7 +116,7 @@ $headers = "From: noreply@shugaempire.com\r\n"
 // 5. Return success JSON
 echo json_encode([
     'success'  => true,
-    'message'  => "Welcome aboard, $fullName! You are officially on the Shuga Empire waitlist.",
+    'message'  => "Welcome aboard, $fullName! You are officially on the Sugar Empire HoldCo waitlist.",
     'position' => $queueCount,
     'role'     => $role,
 ]);

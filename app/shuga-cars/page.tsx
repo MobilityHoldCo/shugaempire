@@ -124,7 +124,7 @@ export default function ShugaCarsPage() {
             </div>
             <div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
-                <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>Investors can acquire vehicles and have them operated by professional drivers while Mobility Hold Co. helps coordinate and manage the operational side — from vehicle deployment to driver management and performance oversight.</p>
+                <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>Investors can acquire vehicles and have them operated by professional drivers while Sugar Empire HoldCo helps coordinate and manage the operational side — from vehicle deployment to driver management and performance oversight.</p>
                 <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.8)' }}>Driver Allocation · Vehicle Deployment · Operational Monitoring · Maintenance Coordination</p>
                 <Link href="/investors" className="btn btn--outline" style={{ alignSelf: 'flex-start', marginTop: '1rem' }} data-cursor>Learn About Investing</Link>
               </div>

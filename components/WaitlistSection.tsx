@@ -82,7 +82,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
   };
 
   const shareText = encodeURIComponent(
-    `Join the early-access waitlist for Shuga Empire — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
+    `Join the early-access waitlist for Sugar Empire HoldCo — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
   );
 
   return (

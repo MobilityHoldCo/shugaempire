@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Mobility Hold Co. was built around a simple observation: Nigeria doesn\'t just need more vehicles. Nigeria needs better mobility systems.',
+  description: 'Sugar Empire HoldCo was built around a simple observation: Nigeria doesn\'t just need more vehicles. Nigeria needs better mobility systems.',
 };
 
 const values = [
@@ -14,7 +14,7 @@ const values = [
   { num: '03', title: 'Opportunity', desc: 'We want our ecosystem to create opportunities rather than simply provide services.' },
   { num: '04', title: 'Innovation', desc: 'Nigeria\'s mobility challenges require Nigerian solutions supported by modern technology.' },
   { num: '05', title: 'Responsibility', desc: 'Growth should happen responsibly — with our drivers, passengers, investors, communities and environment in mind.' },
-  { num: '06', title: 'Excellence', desc: 'We want every interaction with Mobility Hold Co. to feel intentional, professional and dependable.' },
+  { num: '06', title: 'Excellence', desc: 'We want every interaction with Sugar Empire HoldCo to feel intentional, professional and dependable.' },
 ];
 
 export default function AboutPage() {
@@ -28,7 +28,7 @@ export default function AboutPage() {
             We Believe Mobility Should Create More Than Movement.
           </RevealText>
           <p className="lead" style={{ marginTop: '2rem' }}>
-            Mobility Hold Co. was built around a simple observation: Nigeria doesn&apos;t just need more vehicles. Nigeria needs better mobility systems.
+            Sugar Empire HoldCo was built around a simple observation: Nigeria doesn&apos;t just need more vehicles. Nigeria needs better mobility systems.
           </p>
         </div>
       </section>
@@ -39,7 +39,7 @@ export default function AboutPage() {
           <div className="grid-2">
             <div>
               <p className="eyebrow"><span className="eyebrow-line" />Our Story</p>
-              <RevealText as="h2" className="heading-lg">That&apos;s Mobility Hold Co.</RevealText>
+              <RevealText as="h2" className="heading-lg">That&apos;s Sugar Empire HoldCo.</RevealText>
             </div>
             <div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginTop: '1rem' }}>
