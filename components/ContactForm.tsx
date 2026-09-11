@@ -2,13 +2,6 @@
 import { useState } from 'react';
 import styles from './ContactForm.module.css';
 
-const ENDPOINTS = [
-  '/api/contact.php',
-  'https://shugaempire.com/api/contact.php',
-  '/api/admin_waitlist.php?action=contact_submit',
-  'https://shugaempire.com/api/admin_waitlist.php?action=contact_submit',
-];
-
 export default function ContactForm() {
   const [formData, setFormData] = useState({
     name: '',
@@ -45,48 +38,31 @@ export default function ContactForm() {
     setLoading(true);
     setError(null);
 
-    let succeeded = false;
-    let errorMsg = 'Failed to submit enquiry. Please try again.';
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          fullName: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          interest: formData.interest,
+          message: formData.message.trim(),
+        }),
+      });
 
-    const payload = {
-      fullName: formData.name.trim(),
-      name: formData.name.trim(),
-      email: formData.email.trim(),
-      phone: formData.phone.trim(),
-      interest: formData.interest,
-      role: `Contact - ${formData.interest.charAt(0).toUpperCase() + formData.interest.slice(1)}`,
-      message: formData.message.trim(),
-      notes: formData.message.trim(),
-      city: 'Nigeria',
-      source: 'contact_page',
-    };
+      const data = await res.json();
 
-    for (const url of ENDPOINTS) {
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-
-        if (res.ok) {
-          const json = await res.json().catch(() => null);
-          if (!json || json.success !== false) {
-            succeeded = true;
-            break;
-          }
-        }
-      } catch (err) {
-        // Continue to fallback endpoint
+      if (res.ok && data.success) {
+        setSubmitted(true);
+      } else {
+        setError(data.error || 'Failed to submit enquiry. Please try again.');
       }
-    }
-
-    setLoading(false);
-
-    if (succeeded) {
-      setSubmitted(true);
-    } else {
-      setError(errorMsg);
+    } catch {
+      setError('Network error. Please check your connection and try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -173,7 +149,7 @@ export default function ContactForm() {
           onChange={handleChange}
           className={styles.select}
         >
-          <option value="driver">Driver — I want a Shuga Car (Hire-Purchase)</option>
+          <option value="driver">Driver — I want a Shuga Car (Drive to Own)</option>
           <option value="investor">Investor — I want to acquire a vehicle & participate</option>
           <option value="passenger">Passenger — Ride-Hailing enquiry</option>
           <option value="partner">Corporate / Energy Partner</option>

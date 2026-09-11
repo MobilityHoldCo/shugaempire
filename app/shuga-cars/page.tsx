@@ -7,7 +7,7 @@ import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'SHUGA FLEET',
-  description: 'Don\'t just drive a car — own one. SHUGA FLEET gives qualified drivers access to electric vehicles through hire-purchase arrangements.',
+  description: 'Don\'t just drive a car — own one. SHUGA FLEET gives qualified drivers access to electric vehicles through drive-to-own arrangements.',
 };
 
 const steps = [
@@ -78,7 +78,7 @@ export default function ShugaCarsPage() {
         <div className="container">
           <div className="section-head">
             <p className="eyebrow"><span className="eyebrow-line" />How the Programme Works</p>
-            <RevealText as="h2" className="heading-lg">Hire today. Own tomorrow.</RevealText>
+            <RevealText as="h2" className="heading-lg">Drive today. Own tomorrow.</RevealText>
           </div>
           <div className={`${styles.driverStepsGrid} skew-on-scroll`}>
             {steps.map(s => (

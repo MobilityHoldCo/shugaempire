@@ -18,7 +18,8 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
 
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const [queuePosition, setQueuePosition] = useState(1420);
+  const [queuePosition, setQueuePosition] = useState<number | null>(null);
+  const [isDuplicate, setIsDuplicate] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,49 +28,36 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
       setErrorMessage('Full name and email are required.');
       return;
     }
+    if (!email.includes('@')) {
+      setStatus('error');
+      setErrorMessage('Please enter a valid email address.');
+      return;
+    }
 
     setStatus('loading');
     setErrorMessage('');
-
-    const payload = {
-      fullName,
-      email,
-      phone,
-      city,
-      role,
-      notes,
-    };
+    setIsDuplicate(false);
 
     try {
-      const res = await fetch('/api/waitlist.php', {
+      const res = await fetch('/api/waitlist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({ fullName, email, phone, city, role, notes }),
       });
 
-      if (res.ok) {
-        const data = await res.json();
-        setQueuePosition(data.position || 1428);
-        saveLocalSubmission(payload);
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        setQueuePosition(data.position ?? null);
+        setIsDuplicate(data.duplicate === true);
         setStatus('success');
       } else {
-        saveLocalSubmission(payload);
-        setStatus('success');
+        setStatus('error');
+        setErrorMessage(data.error || 'Something went wrong. Please try again.');
       }
     } catch {
-      saveLocalSubmission(payload);
-      setStatus('success');
-    }
-  };
-
-  const saveLocalSubmission = (data: Record<string, string>) => {
-    try {
-      const existing = JSON.parse(localStorage.getItem('shuga_waitlist') || '[]');
-      existing.push({ ...data, date: new Date().toISOString() });
-      localStorage.setItem('shuga_waitlist', JSON.stringify(existing));
-      setQueuePosition(1420 + existing.length);
-    } catch {
-      // ignore
+      setStatus('error');
+      setErrorMessage('Network error. Please check your connection and try again.');
     }
   };
 
@@ -79,6 +67,8 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
     setPhone('');
     setNotes('');
     setStatus('idle');
+    setIsDuplicate(false);
+    setQueuePosition(null);
   };
 
   const shareText = encodeURIComponent(
@@ -102,7 +92,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
           </h2>
 
           <p className={styles.subtitle}>
-            Reserve priority access to our 100% electric fleet, driver hire-purchase programs,
+            Reserve priority access to our 100% electric fleet, driver drive-to-own programs,
             and solar charging corridors across Lagos and Abuja.
           </p>
         </div>
@@ -117,9 +107,14 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                     <polyline points="20 6 9 17 4 12" />
                   </svg>
                 </div>
-                <h3 className={styles.successTitle}>Confirmed</h3>
+                <h3 className={styles.successTitle}>
+                  {isDuplicate ? 'Already Registered!' : 'Confirmed'}
+                </h3>
                 <p className={styles.successMsg}>
-                  Welcome, <strong>{fullName}</strong>. You are registered as pioneer <strong>#{queuePosition}</strong> for <strong>{role}</strong> access in <strong>{city}</strong>.
+                  {isDuplicate
+                    ? <>Welcome back, <strong>{fullName}</strong>. You are already on our waitlist{queuePosition ? <> as pioneer <strong>#{queuePosition}</strong></> : ''}. We will reach out soon.</>
+                    : <>Welcome, <strong>{fullName}</strong>. You are registered as pioneer{' '}<strong>#{queuePosition ?? '—'}</strong> for <strong>{role}</strong> access in <strong>{city}</strong>.</>
+                  }
                 </p>
 
                 <div className={styles.shareBox}>
@@ -159,7 +154,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                       </svg>
                     </div>
                     <span className={styles.roleLabel}>Driver</span>
-                    <span className={styles.roleSub}>Hire-Purchase</span>
+                    <span className={styles.roleSub}>Drive to Own</span>
                   </button>
 
                   <button

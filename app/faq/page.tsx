@@ -11,7 +11,7 @@ const faqs = [
   {
     category: 'SHUGA FLEET',
     items: [
-      { q: 'What is SHUGA FLEET?', a: 'SHUGA FLEET is our vehicle hire-purchase programme. Qualified drivers can access an electric vehicle by paying an agreed deposit and making fixed daily payments, working toward full ownership over the agreed term.' },
+      { q: 'What is SHUGA FLEET?', a: 'SHUGA FLEET is our vehicle drive-to-own programme. Qualified drivers can access an electric vehicle by paying an agreed deposit and making fixed daily payments, working toward full ownership over the agreed term.' },
       { q: 'How do I apply for a Shuga Car?', a: 'You can apply by contacting our team through the contact page. We\'ll guide you through the qualification and onboarding process.' },
       { q: 'How long does it take to own the car?', a: 'The ownership period depends on the agreement terms set at the start of the programme. Our team will outline the full terms when you apply.' },
       { q: 'Can investors own vehicles and have them operated?', a: 'Yes. Investors can acquire vehicles and have them operated by professional drivers through our programme, with SHUGA Empire HoldCo coordinating the operational side.' },

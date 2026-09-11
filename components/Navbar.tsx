@@ -4,7 +4,14 @@ import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Navbar.module.css';
 
-const links = [
+const desktopLinks = [
+  { href: '/about', label: 'About', num: '01' },
+  { href: '/waitlist', label: 'Waitlist', num: '06' },
+  { href: '/faq', label: 'FAQ', num: '07' },
+  { href: '/contact', label: 'Contact', num: '08' },
+];
+
+const allLinks = [
   { href: '/about', label: 'About', num: '01' },
   { href: '/shuga-cars', label: 'SHUGA FLEET', num: '02' },
   { href: '/shuga-ride', label: 'Shuga Ride', num: '03' },
@@ -66,7 +73,7 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className={styles.navDesktop}>
-            {links.map(l => (
+            {desktopLinks.map(l => (
               <Link key={l.href} href={l.href} className={styles.navLink}>
                 {l.label}
               </Link>
@@ -126,7 +133,7 @@ export default function Navbar() {
         </div>
 
         <nav className={styles.drawerNav}>
-          {links.map(l => (
+          {allLinks.map(l => (
             <Link
               key={l.href}
               href={l.href}
@@ -156,7 +163,7 @@ export default function Navbar() {
             className={styles.drawerCarBtn}
             onClick={() => setOpen(false)}
           >
-            Apply For Vehicle (Hire-Purchase)
+            Apply For Vehicle (Drive to Own)
           </Link>
           <div className={styles.drawerContactInfo}>
             <span>Lagos & Abuja, Nigeria</span>

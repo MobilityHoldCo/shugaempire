@@ -45,7 +45,13 @@ export default function HomePage() {
       <HeroSection />
 
       {/* ══════════════════════════════════════════
-          02 — SPLIT: EV HOME-CHARGE IMAGE + TEXT
+          02 — THREE.JS: INFINITE 3D HIGHWAY
+          Autonomous Telemetry / Electrified corridor
+      ══════════════════════════════════════════ */}
+      <RoadScene />
+
+      {/* ══════════════════════════════════════════
+          03 — SPLIT: EV HOME-CHARGE IMAGE + TEXT
           "A Different Way to Move"
       ══════════════════════════════════════════ */}
       <SplitImageSection
@@ -63,7 +69,7 @@ export default function HomePage() {
               For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              SHUGA Empire HoldCo connects the pieces — providing vehicles through structured hire-purchase arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
+              SHUGA Empire HoldCo connects the pieces — providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
             </p>
             <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)', marginTop: '0.5rem' }}>
               One ecosystem. Multiple opportunities. One bigger purpose.
@@ -73,12 +79,12 @@ export default function HomePage() {
       />
 
       {/* ══════════════════════════════════════════
-          03 — IMAGE SHOWCASE: 3 cards with images
+          04 — IMAGE SHOWCASE: 3 cards with images
       ══════════════════════════════════════════ */}
       <ImageShowcase />
 
       {/* ══════════════════════════════════════════
-          04 — ECOSYSTEM FLOW
+          05 — ECOSYSTEM FLOW
       ══════════════════════════════════════════ */}
       <section className="section section--mid">
         <div className="container">
@@ -96,19 +102,13 @@ export default function HomePage() {
       </section>
 
       {/* ══════════════════════════════════════════
-          05 — FULL-BLEED PARALLAX: CHARGING HUB
+          06 — FULL-BLEED PARALLAX: CHARGING HUB
           "Why Electric?"
       ══════════════════════════════════════════ */}
       <ElectricBanner />
 
       {/* ══════════════════════════════════════════
-          05B — THREE.JS: INFINITE 3D HIGHWAY
-          Electrified autonomous driving corridor
-      ══════════════════════════════════════════ */}
-      <RoadScene />
-
-      {/* ══════════════════════════════════════════
-          06 — FOR DRIVERS (steps grid)
+          07 — FOR DRIVERS (steps grid)
       ══════════════════════════════════════════ */}
       <section className="section section--dark">
         <div className="container">
