@@ -23,7 +23,7 @@ const BAYS_DATA: BayTelemetry[] = [
     vehicle: 'Shuga EV Crossover #108 (Adebayo O.)',
     soc: 84,
     kwPower: '120 kW DC Fast Charge',
-    voltage: '420 V // 285 A',
+    voltage: '480 V // 285 A',
     timeLeft: '6 mins to 90%',
     kwhDelivered: '38.2 kWh',
     source: '100% Direct Rooftop Solar PV',

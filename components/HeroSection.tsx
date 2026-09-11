@@ -10,7 +10,7 @@ const SLIDES = [
   { src: '/c3.jpeg', label: 'SHUGA ENERGY', sub: 'Power your world, sustainably.' },
 ];
 
-const AUTOPLAY_MS = 5500;
+const AUTOPLAY_MS = 6000;
 
 // ── 7 DISTINCT TRANSITION STYLES ─────────────────────────────────────────────
 type TransitionStyle = {
@@ -283,9 +283,13 @@ export default function HeroSection() {
           key={active}
           className={styles.slideBadge}
           initial={{ opacity: 0, x: -24, y: 12 }}
-          animate={{ opacity: 1, x: 0, y: 0 }}
+          animate={{ opacity: [0, 1, 0], x: 0, y: 0 }}
           exit={{ opacity: 0, x: 24, y: -8 }}
-          transition={{ duration: 0.55, ease: 'easeOut' }}
+          transition={{
+            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+            x: { duration: 0.8, ease: 'easeOut' },
+            y: { duration: 0.8, ease: 'easeOut' },
+          }}
         >
           <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
           <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
@@ -301,8 +305,11 @@ export default function HeroSection() {
         <motion.p
           className={styles.eyebrow}
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
+          animate={{ opacity: [0, 1, 0], y: 0 }}
+          transition={{
+            opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+            y: { duration: 0.8, delay: 0.3 },
+          }}
         >
           <span className={styles.eyebrowLine} />
           SHUGA EMPIRE HOLDCO

@@ -63,6 +63,16 @@
   color: #fff;
   border-radius: 2px;
   backdrop-filter: blur(8px);
+  animation: hudBadgeFade 6s ease-in-out infinite;
+}
+
+@keyframes hudBadgeFade {
+  0%, 100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
 }
 
 .pulseDot {
