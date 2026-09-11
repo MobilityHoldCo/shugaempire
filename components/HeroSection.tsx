@@ -12,6 +12,52 @@ const SLIDES = [
 
 const AUTOPLAY_MS = 6000;
 
+// ── 5 DISTINCT HEADLINE TRANSITIONS (Mobile View) ────────────────────────────
+type HeadlineTransition = {
+  initial: TargetAndTransition;
+  animate: TargetAndTransition;
+  exit: TargetAndTransition;
+  transition: Transition;
+};
+
+const HEADLINE_TRANSITIONS: HeadlineTransition[] = [
+  // 1: Cinematic Zoom & Depth Blur
+  {
+    initial: { opacity: 0, scale: 0.8, filter: 'blur(12px)', y: 25 },
+    animate: { opacity: 1, scale: 1, filter: 'blur(0px)', y: 0 },
+    exit: { opacity: 0, scale: 1.15, filter: 'blur(10px)', y: -20 },
+    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] },
+  },
+  // 2: Kinetic Cyber Slide & Skew
+  {
+    initial: { opacity: 0, x: -70, skewX: -12, filter: 'blur(8px)' },
+    animate: { opacity: 1, x: 0, skewX: 0, filter: 'blur(0px)' },
+    exit: { opacity: 0, x: 70, skewX: 12, filter: 'blur(8px)' },
+    transition: { duration: 0.8, ease: [0.25, 1, 0.5, 1] },
+  },
+  // 3: 3D Perspective Pitch Flip
+  {
+    initial: { opacity: 0, rotateX: 65, y: 35, transformPerspective: 800 },
+    animate: { opacity: 1, rotateX: 0, y: 0, transformPerspective: 800 },
+    exit: { opacity: 0, rotateX: -65, y: -35, transformPerspective: 800 },
+    transition: { duration: 0.9, ease: [0.2, 0.8, 0.2, 1] },
+  },
+  // 4: Dramatic Vertical Shutter Drop & Flash
+  {
+    initial: { opacity: 0, y: -50, scaleY: 1.25, filter: 'brightness(1.9)' },
+    animate: { opacity: 1, y: 0, scaleY: 1, filter: 'brightness(1)' },
+    exit: { opacity: 0, y: 50, scaleY: 0.8, filter: 'brightness(1.5)' },
+    transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] },
+  },
+  // 5: Vortex Twist & Elastic Reveal
+  {
+    initial: { opacity: 0, scale: 0.6, rotate: -8, filter: 'blur(12px)' },
+    animate: { opacity: 1, scale: 1, rotate: 0, filter: 'blur(0px)' },
+    exit: { opacity: 0, scale: 0.7, rotate: 8, filter: 'blur(10px)' },
+    transition: { duration: 0.85, ease: [0.34, 1.56, 0.64, 1] },
+  },
+];
+
 // ── 7 DISTINCT TRANSITION STYLES ─────────────────────────────────────────────
 type TransitionStyle = {
   name: string;
@@ -223,6 +269,24 @@ export default function HeroSection() {
     if (Math.abs(dx) > 40) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [headlineIdx, setHeadlineIdx] = useState(0);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) return;
+    const interval = setInterval(() => {
+      setHeadlineIdx((prev) => (prev + 1) % HEADLINE_TRANSITIONS.length);
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [isMobile]);
+
   const ts = TRANSITION_STYLES[transitionIdx];
 
   const statsContent = (
@@ -320,9 +384,9 @@ export default function HeroSection() {
           <motion.p
             className={styles.eyebrow}
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: [0, 1, 0], y: 0 }}
+            animate={{ opacity: [0.15, 1, 0.15], y: 0 }}
             transition={{
-              opacity: { duration: 6, repeat: Infinity, ease: 'easeInOut' },
+              opacity: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' },
               y: { duration: 0.8, delay: 0.3 },
             }}
           >
@@ -331,20 +395,43 @@ export default function HeroSection() {
             <span className={styles.eyebrowLine} />
           </motion.p>
 
-          <motion.h1
-            className={styles.heading}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          >
-            More Than
-            <br />
-            <span className={styles.headingAccent}>A Ride.</span>
-            <br />
-            We&apos;re Building
-            <br />
-            The Future.
-          </motion.h1>
+          {isMobile ? (
+            <div className={styles.mobileHeadingWrap}>
+              <AnimatePresence mode="wait">
+                <motion.h1
+                  key={headlineIdx}
+                  className={styles.heading}
+                  initial={HEADLINE_TRANSITIONS[headlineIdx].initial}
+                  animate={HEADLINE_TRANSITIONS[headlineIdx].animate}
+                  exit={HEADLINE_TRANSITIONS[headlineIdx].exit}
+                  transition={HEADLINE_TRANSITIONS[headlineIdx].transition}
+                >
+                  More Than
+                  <br />
+                  <span className={styles.headingAccent}>A Ride.</span>
+                  <br />
+                  We&apos;re Building
+                  <br />
+                  The Future.
+                </motion.h1>
+              </AnimatePresence>
+            </div>
+          ) : (
+            <motion.h1
+              className={styles.heading}
+              initial={{ opacity: 0, y: 50 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            >
+              More Than
+              <br />
+              <span className={styles.headingAccent}>A Ride.</span>
+              <br />
+              We&apos;re Building
+              <br />
+              The Future.
+            </motion.h1>
+          )}
         </motion.div>
 
         {/* ── Carousel controls ── */}

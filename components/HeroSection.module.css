@@ -410,38 +410,76 @@
   }
 }
 
+.mobileHeadingWrap {
+  display: contents;
+}
+
 @media (max-width: 768px) {
-  /* Hero on mobile: start near top under navbar, spacious & uncluttered */
+  /* Hero on mobile: full viewport height with content centered */
   .hero {
     min-height: 100svh;
     height: 100svh;
-    justify-content: flex-start;
-    padding-top: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
   }
 
   .content {
-    padding: 1.25rem 1.25rem 0.5rem;
-    margin-top: 0.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     width: 100%;
-    max-width: 100%;
+    height: 100%;
+    padding: 0 1.25rem;
+    margin: 0;
+    position: relative;
   }
 
-  /* Move SHUGA EMPIRE HOLDCO eyebrow up cleanly */
+  /* Keep SHUGA EMPIRE HOLDCO locked at the top under navbar */
   .eyebrow {
-    margin-bottom: 1.25rem;
+    position: absolute;
+    top: 5.5rem;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
     font-size: 0.68rem;
     letter-spacing: 0.22em;
     gap: 0.75rem;
+    z-index: 15;
+    pointer-events: none;
   }
 
   .eyebrowLine {
     width: 26px;
   }
 
+  /* Bring MORE THAN A RIDE, WE'RE BUILDING THE FUTURE to the dead center */
+  .mobileHeadingWrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: auto 0;
+    text-align: center;
+    position: relative;
+    z-index: 10;
+  }
+
   .heading {
-    font-size: clamp(2.1rem, 9.2vw, 3.4rem);
-    line-height: 1.05;
+    font-size: clamp(2.2rem, 9.5vw, 3.4rem);
+    line-height: 1.08;
     letter-spacing: -0.02em;
+    text-align: center;
+    margin: 0 auto;
+    will-change: transform, opacity, filter;
   }
 
   /* REMOVE sliding arrows & circular dots on mobile */
