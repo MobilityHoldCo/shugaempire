@@ -3,7 +3,7 @@ import WaitlistSection from '@/components/WaitlistSection';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Join the Early Access Waitlist | Sugar Empire HoldCo',
+  title: 'Join the Early Access Waitlist | SHUGA Empire HoldCo',
   description:
     'Reserve your spot in Nigeria\'s most anticipated electric mobility ecosystem. Priority EV vehicle allocation for drivers, exclusive ride discounts, and fleet investment opportunities.',
 };

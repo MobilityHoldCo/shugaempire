@@ -13,7 +13,7 @@ import Image from 'next/image';
 import styles from './page.module.css';
 
 export const metadata: Metadata = {
-  title: 'Sugar Empire HoldCo | Building the Future of Mobility in Nigeria',
+  title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
   description:
     "Nigeria's most connected mobility ecosystem. Vehicle ownership, ride-hailing and solar-powered EV charging — all in one place.",
 };
@@ -63,7 +63,7 @@ export default function HomePage() {
               For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              Sugar Empire HoldCo connects the pieces — providing vehicles through structured hire-purchase arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
+              SHUGA Empire HoldCo connects the pieces — providing vehicles through structured hire-purchase arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
             </p>
             <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)', marginTop: '0.5rem' }}>
               One ecosystem. Multiple opportunities. One bigger purpose.
@@ -173,7 +173,7 @@ export default function HomePage() {
         body={
           <>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              You don&apos;t have to be the driver to participate. Investors can acquire vehicles and have them operated by professional drivers while Sugar Empire HoldCo coordinates and manages the operational side.
+              You don&apos;t have to be the driver to participate. Investors can acquire vehicles and have them operated by professional drivers while SHUGA Empire HoldCo coordinates and manages the operational side.
             </p>
             <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)' }}>
               You own the asset. We help put it to work.

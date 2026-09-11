@@ -11,11 +11,11 @@ const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shugaempire.com';
 export const metadata: Metadata = {
   metadataBase: new URL(BASE_URL),
   title: {
-    template: '%s | Sugar Empire HoldCo',
-    default: 'Sugar Empire HoldCo | Building the Future of Mobility in Nigeria',
+    template: '%s | SHUGA Empire HoldCo',
+    default: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
   },
   description:
-    'Sugar Empire HoldCo connects vehicle ownership (SHUGA FLEET), ride-hailing (Shuga Ride) and solar-powered EV charging (Shuga Energy) into one Nigerian mobility ecosystem.',
+    'SHUGA Empire HoldCo connects vehicle ownership (SHUGA FLEET), ride-hailing (Shuga Ride) and solar-powered EV charging (Shuga Energy) into one Nigerian mobility ecosystem.',
   keywords: [
     'mobility Nigeria',
     'electric vehicles Nigeria',
@@ -24,8 +24,8 @@ export const metadata: Metadata = {
     'SHUGA FLEET',
     'Shuga Ride',
     'Shuga Energy',
-    'Sugar Empire HoldCo',
-    'Sugar Empire',
+    'SHUGA Empire HoldCo',
+    'SHUGA Empire',
     'Shuga Empire',
     'ShugaEmpire',
     'solar EV charging',
@@ -33,9 +33,9 @@ export const metadata: Metadata = {
     'buy car Nigeria',
     'EV subscription Nigeria',
   ],
-  authors: [{ name: 'Sugar Empire HoldCo', url: BASE_URL }],
-  creator: 'Sugar Empire HoldCo',
-  publisher: 'Sugar Empire HoldCo',
+  authors: [{ name: 'SHUGA Empire HoldCo', url: BASE_URL }],
+  creator: 'SHUGA Empire HoldCo',
+  publisher: 'SHUGA Empire HoldCo',
   category: 'Technology',
   classification: 'Mobility / Transportation / Electric Vehicles',
   robots: {
@@ -57,11 +57,11 @@ export const metadata: Metadata = {
     apple: '/favicon.png',
   },
   openGraph: {
-    title: 'Sugar Empire HoldCo | Building the Future of Mobility in Nigeria',
+    title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
     description:
       'Vehicle ownership, ride-hailing and solar-powered EV charging — one connected mobility ecosystem built for Nigeria.',
     url: BASE_URL,
-    siteName: 'Sugar Empire HoldCo',
+    siteName: 'SHUGA Empire HoldCo',
     type: 'website',
     locale: 'en_NG',
     images: [
@@ -69,13 +69,13 @@ export const metadata: Metadata = {
         url: '/text logo with icon.jpeg',
         width: 1200,
         height: 630,
-        alt: 'Sugar Empire HoldCo — Future of Mobility in Nigeria',
+        alt: 'SHUGA Empire HoldCo — Future of Mobility in Nigeria',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Sugar Empire HoldCo | Building the Future of Mobility in Nigeria',
+    title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
     description:
       'Vehicle ownership, ride-hailing and solar-powered EV charging — one connected mobility ecosystem built for Nigeria.',
     images: ['/text logo with icon.jpeg'],

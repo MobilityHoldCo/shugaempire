@@ -53,10 +53,10 @@ export default function Navbar() {
     <>
       <header className={`${styles.header} ${scrolled ? styles.scrolled : ''}`}>
         <div className={styles.inner}>
-          <Link href="/" className={styles.brand} aria-label="Sugar Empire HoldCo home" onClick={() => setOpen(false)}>
+          <Link href="/" className={styles.brand} aria-label="SHUGA Empire HoldCo home" onClick={() => setOpen(false)}>
             <Image
               src="/text logo with icon.jpeg"
-              alt="Sugar Empire HoldCo"
+              alt="SHUGA Empire HoldCo"
               width={160}
               height={48}
               className={styles.logo}
@@ -110,7 +110,7 @@ export default function Navbar() {
       <div className={`${styles.drawer} ${open ? styles.drawerOpen : ''}`} aria-hidden={!open}>
         <div className={styles.drawerHeader}>
           <div className={styles.drawerBrand}>
-            <span className={styles.drawerLogoText}>SUGAR EMPIRE HOLDCO</span>
+            <span className={styles.drawerLogoText}>SHUGA EMPIRE HOLDCO</span>
             <span className={styles.drawerStatusBadge}>
               <span className={styles.drawerStatusDot} />
               ONLINE

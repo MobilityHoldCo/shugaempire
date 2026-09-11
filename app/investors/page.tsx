@@ -11,7 +11,7 @@ const steps = [
   { num: '01', title: 'Acquire', desc: 'Invest in an eligible vehicle through our vehicle ownership programme.' },
   { num: '02', title: 'Deploy', desc: 'The vehicle is assigned for commercial operation.' },
   { num: '03', title: 'Operate', desc: 'A qualified driver operates the vehicle.' },
-  { num: '04', title: 'Manage', desc: 'Sugar Empire HoldCo supports the operational ecosystem.' },
+  { num: '04', title: 'Manage', desc: 'SHUGA Empire HoldCo supports the operational ecosystem.' },
   { num: '05', title: 'Earn', desc: 'Receive payouts according to the agreed investment and management structure.' },
   { num: '06', title: 'Monitor', desc: 'Stay informed about vehicle and operational performance.' },
 ];

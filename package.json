@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "package": "powershell -ExecutionPolicy Bypass -File .\\package_deploy.ps1",
     "lint": "eslint"
   },
   "dependencies": {

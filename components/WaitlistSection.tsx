@@ -15,7 +15,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
   const [phone, setPhone] = useState('');
   const [city, setCity] = useState('Lagos');
   const [notes, setNotes] = useState('');
-  
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [queuePosition, setQueuePosition] = useState(1420);
@@ -82,7 +82,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
   };
 
   const shareText = encodeURIComponent(
-    `Join the early-access waitlist for Sugar Empire HoldCo — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
+    `Join the early-access waitlist for SHUGA Empire HoldCo — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
   );
 
   return (
@@ -249,16 +249,16 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                   <div className={`${styles.inputGroup} ${styles.inputGroupFull}`}>
                     <label className={styles.label} htmlFor="wl-notes">
                       {role === 'Driver' ? 'Driving experience / currently drive on rideshare?' :
-                       role === 'Investor' ? 'Target fleet size or investment capacity' :
-                       'Preferred commute routes or travel preferences'}
+                        role === 'Investor' ? 'Target fleet size or investment capacity' :
+                          'Preferred commute routes or travel preferences'}
                     </label>
                     <input
                       id="wl-notes"
                       type="text"
                       placeholder={
                         role === 'Driver' ? 'e.g. 4 years driving on Uber/Bolt in Lagos' :
-                        role === 'Investor' ? 'e.g. Interested in syndicating 2-5 vehicles' :
-                        'e.g. Daily commute between Lekki and Victoria Island'
+                          role === 'Investor' ? 'e.g. Interested in syndicating 2-5 vehicles' :
+                            'e.g. Daily commute between Lekki and Victoria Island'
                       }
                       className={styles.input}
                       value={notes}

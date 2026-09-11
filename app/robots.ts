@@ -5,7 +5,7 @@ export const dynamic = 'force-static';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shugaempire.com';
 
 /**
- * Generates a robots.txt for Sugar Empire HoldCo.
+ * Generates a robots.txt for SHUGA Empire HoldCo.
  * Next.js serves this at /robots.txt automatically.
  *
  * Rules:

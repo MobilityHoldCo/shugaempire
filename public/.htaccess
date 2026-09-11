@@ -19,8 +19,10 @@ RewriteRule ^(.*)$ https://shugaempire.com/$1 [L,R=301]
   </IfModule>
 </FilesMatch>
 
-# 3. Route /api/waitlist to /api/waitlist.php
+# 3. Route /api endpoints to php scripts
 RewriteRule ^api/waitlist/?$ api/waitlist.php [L]
+RewriteRule ^api/contact/?$ api/contact.php [L]
+RewriteRule ^api/admin_waitlist/?$ api/admin_waitlist.php [L]
 
 # 4. If requested file exists, serve it directly
 RewriteCond %{REQUEST_FILENAME} -f

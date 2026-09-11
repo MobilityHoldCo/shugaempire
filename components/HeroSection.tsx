@@ -23,11 +23,11 @@ export default function HeroSection() {
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
-  const textY   = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
+  const textY = useTransform(scrollYProgress, [0, 1], ['0%', '22%']);
   const opacity = useTransform(scrollYProgress, [0, 0.65], [1, 0]);
-  const bgY     = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '40%']);
   // Parallax for each slide layer
-  const slideY  = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
+  const slideY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
   const slideScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
 
   const go = useCallback((dir: 1 | -1) => {
@@ -94,7 +94,7 @@ export default function HeroSection() {
         {/* Slides */}
         {SLIDES.map((slide, i) => {
           const isActive = i === active;
-          const isPrev   = i === prev;
+          const isPrev = i === prev;
           return (
             <motion.div
               key={slide.src}
@@ -102,10 +102,10 @@ export default function HeroSection() {
               initial={false}
               animate={{
                 opacity: isActive ? 1 : isPrev ? 0 : 0,
-                scale:   isActive ? 1 : isPrev ? 1.06 : 0.96,
+                scale: isActive ? 1 : isPrev ? 1.06 : 0.96,
                 rotateY: isActive ? 0 : isPrev ? direction * -8 : direction * 8,
-                z:       isActive ? 0 : -120,
-                filter:  isActive ? 'brightness(1)' : 'brightness(0.4)',
+                z: isActive ? 0 : -120,
+                filter: isActive ? 'brightness(1)' : 'brightness(0.4)',
               }}
               transition={{
                 duration: 1.1,
@@ -156,7 +156,7 @@ export default function HeroSection() {
           transition={{ duration: 0.8, delay: 0.3 }}
         >
           <span className={styles.eyebrowLine} />
-          SUGAR EMPIRE HOLDCO
+          SHUGA EMPIRE HOLDCO
           <span className={styles.eyebrowLine} />
         </motion.p>
 

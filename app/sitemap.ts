@@ -5,7 +5,7 @@ export const dynamic = 'force-static';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://shugaempire.com';
 
 /**
- * Generates a dynamic XML sitemap for Sugar Empire HoldCo.
+ * Generates a dynamic XML sitemap for SHUGA Empire HoldCo.
  * Next.js serves this at /sitemap.xml automatically.
  *
  * Priority Guide:
