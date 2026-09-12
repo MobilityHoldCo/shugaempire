@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useScroll, useTransform, AnimatePresence, type TargetAndTransition, type Transition } from 'framer-motion';
 import styles from './HeroSection.module.css';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const SLIDES = [
   { src: '/c1.jpeg', label: 'SHUGA RIDE', sub: 'Electric mobility, redefined.' },
@@ -694,6 +695,18 @@ export default function HeroSection() {
             <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
           </motion.div>
         </AnimatePresence>
+
+        {/* Mobile View — Apply for a Car button (bottom right) */}
+        <Link
+          href="/shuga-cars"
+          className={styles.mobileHeroApplyBtn}
+          data-cursor
+        >
+          <span>Apply for a Car</span>
+          <svg viewBox="0 0 20 20" fill="currentColor" className={styles.mobileHeroApplyIcon}>
+            <path fillRule="evenodd" d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z" clipRule="evenodd" />
+          </svg>
+        </Link>
 
         {/* ── Subtle grid overlay ── */}
         <motion.div className={styles.bgGrid} style={{ y: bgY }} />

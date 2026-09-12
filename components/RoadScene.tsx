@@ -227,10 +227,12 @@ export default function RoadScene() {
         </div>
 
         <div className={styles.hudCenter}>
-          <p className={styles.eyebrow}>INFINITE INFRASTRUCTURE</p>
-          <h2 className={styles.hudTitle}>
-            DRIVING NIGERIA&apos;S <span className={styles.glowText}>ELECTRIFIED</span> FUTURE
-          </h2>
+          <div className={styles.hudTitleGroup}>
+            <p className={styles.eyebrow}>INFINITE INFRASTRUCTURE</p>
+            <h2 className={styles.hudTitle}>
+              DRIVING NIGERIA&apos;S <span className={styles.glowText}>ELECTRIFIED</span> FUTURE
+            </h2>
+          </div>
           <p className={styles.hudSubtitle}>
             A continuous connected grid spanning metropolitan Lagos, the federal capital Abuja, and cross-state corridors.
           </p>
