@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import styles from './Navbar.module.css';
@@ -47,10 +47,42 @@ export default function Navbar() {
     };
   }, [open]);
 
+  const [subsidiariesOpen, setSubsidiariesOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleDropdownEnter = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setSubsidiariesOpen(true);
+  };
+
+  const handleDropdownLeave = () => {
+    closeTimerRef.current = setTimeout(() => {
+      setSubsidiariesOpen(false);
+    }, 180);
+  };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleDocumentClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setSubsidiariesOpen(false);
+      }
+    };
+    document.addEventListener('click', handleDocumentClick);
+    return () => document.removeEventListener('click', handleDocumentClick);
+  }, []);
+
   // Handle escape key
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') {
+        setOpen(false);
+        setSubsidiariesOpen(false);
+      }
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
@@ -73,11 +105,85 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className={styles.navDesktop}>
-            {desktopLinks.map(l => (
-              <Link key={l.href} href={l.href} className={styles.navLink}>
-                {l.label}
-              </Link>
-            ))}
+            <Link href="/about" className={styles.navLink}>
+              About
+            </Link>
+
+            {/* Our Subsidiaries Dropdown (Desktop Screen Only) */}
+            <div
+              ref={dropdownRef}
+              className={styles.dropdownContainer}
+              onMouseEnter={handleDropdownEnter}
+              onMouseLeave={handleDropdownLeave}
+            >
+              <button
+                type="button"
+                className={`${styles.dropdownTrigger} ${subsidiariesOpen ? styles.dropdownTriggerActive : ''}`}
+                onClick={() => setSubsidiariesOpen(prev => !prev)}
+                aria-expanded={subsidiariesOpen}
+                aria-haspopup="true"
+              >
+                <span>Our Subsidiaries</span>
+                <svg
+                  className={`${styles.dropdownChevron} ${subsidiariesOpen ? styles.dropdownChevronOpen : ''}`}
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  width="13"
+                  height="13"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+
+              {subsidiariesOpen && (
+                <div className={styles.dropdownMenu} role="menu" aria-label="Our Subsidiaries">
+                  <Link
+                    href="/shuga-cars"
+                    role="menuitem"
+                    className={styles.dropdownItem}
+                    onClick={() => setSubsidiariesOpen(false)}
+                  >
+                    <span>Sugar Fleet</span>
+                    <span className={styles.dropdownItemArrow}>&rarr;</span>
+                  </Link>
+
+                  <Link
+                    href="/shuga-ride"
+                    role="menuitem"
+                    className={styles.dropdownItem}
+                    onClick={() => setSubsidiariesOpen(false)}
+                  >
+                    <span>Sugar Ride</span>
+                    <span className={styles.dropdownItemArrow}>&rarr;</span>
+                  </Link>
+
+                  <Link
+                    href="/shuga-energy"
+                    role="menuitem"
+                    className={styles.dropdownItem}
+                    onClick={() => setSubsidiariesOpen(false)}
+                  >
+                    <span>Sugar Energy</span>
+                    <span className={styles.dropdownItemArrow}>&rarr;</span>
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            <Link href="/waitlist" className={styles.navLink}>
+              Waitlist
+            </Link>
+            <Link href="/faq" className={styles.navLink}>
+              FAQ
+            </Link>
+            <Link href="/contact" className={styles.navLink}>
+              Contact
+            </Link>
           </nav>
 
 

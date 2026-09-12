@@ -192,6 +192,325 @@ const TRANSITION_STYLES: TransitionStyle[] = [
 
 let _styleIdx = 0; // tracks which style was last used so we never repeat consecutively
 
+// ── DESKTOP HEADLINE TYPING & TRANSITIONS (Desktop Screen Alone) ────────────
+const DESKTOP_LINES = [
+  { text: 'More Than', isAccent: false, accentType: '' },
+  { text: 'A Ride.', isAccent: true, accentType: 'ride' },
+  { text: "We're Building", isAccent: false, accentType: '' },
+  { text: 'The Future.', isAccent: true, accentType: 'future' },
+];
+
+const CYBER_GLYPHS = ['0', '1', '⚡', 'Δ', '§', 'X', '9', '7', '◊', 'λ', 'Ψ'];
+
+const TYPING_MODES = [
+  { id: 'typewriter', label: 'Typewriter', shortName: '01 Typewriter' },
+  { id: 'decoder', label: 'Matrix Decode', shortName: '02 Matrix Decode' },
+  { id: 'kinetic', label: 'Kinetic Burst', shortName: '03 Kinetic Burst' },
+  { id: 'wave', label: 'Luminous Wave', shortName: '04 Luminous Wave' },
+];
+
+function getLineSlice(lineIndex: number, currentChars: number) {
+  const offsets = [0, 9, 16, 30, 41];
+  const start = offsets[lineIndex];
+  const end = offsets[lineIndex + 1];
+  const fullText = DESKTOP_LINES[lineIndex].text;
+
+  if (currentChars <= start) {
+    return { text: '', isCurrent: false, isComplete: false };
+  }
+  if (currentChars >= end) {
+    return { text: fullText, isCurrent: false, isComplete: true };
+  }
+  return {
+    text: fullText.slice(0, currentChars - start),
+    isCurrent: true,
+    isComplete: false,
+  };
+}
+
+function DesktopTypingHeading() {
+  const [mounted, setMounted] = useState(false);
+  const [mode, setMode] = useState(0);
+  const [phase, setPhase] = useState<'typing' | 'holding' | 'erasing' | 'glitchOut' | 'curtainOut'>('typing');
+  const [charCount, setCharCount] = useState(0);
+  const [glitchSuffix, setGlitchSuffix] = useState('');
+  const [kineticStep, setKineticStep] = useState(0);
+
+  const timeoutsRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearAllTimeouts = useCallback(() => {
+    timeoutsRef.current.forEach(clearTimeout);
+    timeoutsRef.current = [];
+  }, []);
+
+  const addTimeout = useCallback((fn: () => void, ms: number) => {
+    const id = setTimeout(fn, ms);
+    timeoutsRef.current.push(id);
+    return id;
+  }, []);
+
+  const startCycle = useCallback((targetMode: number) => {
+    clearAllTimeouts();
+    setMode(targetMode);
+    setPhase('typing');
+
+    if (targetMode === 0) {
+      // 01 ── Cyber Terminal Typewriter
+      setCharCount(0);
+      setGlitchSuffix('');
+      let current = 0;
+
+      const step = () => {
+        current += 1;
+        setCharCount(current);
+        if (current < 41) {
+          const isBreak = current === 9 || current === 16 || current === 30;
+          addTimeout(step, isBreak ? 140 : 42);
+        } else {
+          setPhase('holding');
+          addTimeout(() => {
+            setPhase('erasing');
+            let eraseCur = 41;
+            const eraseStep = () => {
+              eraseCur -= 1;
+              setCharCount(eraseCur);
+              if (eraseCur > 0) {
+                addTimeout(eraseStep, 16);
+              } else {
+                addTimeout(() => {
+                  startCycle((targetMode + 1) % 4);
+                }, 350);
+              }
+            };
+            addTimeout(eraseStep, 16);
+          }, 4200);
+        }
+      };
+      addTimeout(step, 120);
+    } else if (targetMode === 1) {
+      // 02 ── Matrix / Cyber Glyph Decoder
+      setCharCount(0);
+      let current = 0;
+
+      const stepDecode = () => {
+        const r1 = CYBER_GLYPHS[Math.floor(Math.random() * CYBER_GLYPHS.length)];
+        setGlitchSuffix(r1);
+
+        addTimeout(() => {
+          const r2 = CYBER_GLYPHS[Math.floor(Math.random() * CYBER_GLYPHS.length)];
+          setGlitchSuffix(r2);
+
+          addTimeout(() => {
+            current += 1;
+            setCharCount(current);
+            setGlitchSuffix('');
+            if (current < 41) {
+              const isBreak = current === 9 || current === 16 || current === 30;
+              addTimeout(stepDecode, isBreak ? 130 : 36);
+            } else {
+              setPhase('holding');
+              addTimeout(() => {
+                setPhase('glitchOut');
+                addTimeout(() => {
+                  startCycle((targetMode + 1) % 4);
+                }, 450);
+              }, 4200);
+            }
+          }, 24);
+        }, 24);
+      };
+      addTimeout(stepDecode, 120);
+    } else if (targetMode === 2) {
+      // 03 ── Kinetic Staccato Burst
+      setKineticStep(0);
+      setCharCount(41);
+      setGlitchSuffix('');
+
+      addTimeout(() => setKineticStep(1), 100);
+      addTimeout(() => setKineticStep(2), 460);
+      addTimeout(() => setKineticStep(3), 820);
+      addTimeout(() => {
+        setKineticStep(4);
+        setPhase('holding');
+        addTimeout(() => {
+          setPhase('curtainOut');
+          addTimeout(() => {
+            startCycle((targetMode + 1) % 4);
+          }, 450);
+        }, 4200);
+      }, 1180);
+    } else {
+      // 04 ── Luminous Wave Stream
+      setCharCount(0);
+      setGlitchSuffix('');
+      let current = 0;
+
+      const stepWave = () => {
+        current += 1;
+        setCharCount(current);
+        if (current < 41) {
+          addTimeout(stepWave, 26);
+        } else {
+          setPhase('holding');
+          addTimeout(() => {
+            setPhase('erasing');
+            let eraseCur = 41;
+            const eraseStep = () => {
+              eraseCur -= 1;
+              setCharCount(eraseCur);
+              if (eraseCur > 0) {
+                addTimeout(eraseStep, 14);
+              } else {
+                addTimeout(() => {
+                  startCycle(0);
+                }, 300);
+              }
+            };
+            addTimeout(eraseStep, 14);
+          }, 4200);
+        }
+      };
+      addTimeout(stepWave, 120);
+    }
+  }, [addTimeout, clearAllTimeouts]);
+
+  useEffect(() => {
+    setMounted(true);
+    startCycle(0);
+    return () => clearAllTimeouts();
+  }, [startCycle, clearAllTimeouts]);
+
+  if (!mounted) {
+    return (
+      <div className={styles.desktopHeadingWrap}>
+        <h1 className={styles.headingDesktop}>
+          <span className={styles.headingLine}>More Than</span>
+          <span className={styles.headingLine}>
+            <span className={styles.accentRideDesktop}>A Ride.</span>
+          </span>
+          <span className={styles.headingLine}>We&apos;re Building</span>
+          <span className={styles.headingLine}>
+            <span className={styles.accentFutureDesktop}>The Future.</span>
+          </span>
+        </h1>
+      </div>
+    );
+  }
+
+  const isKinetic = mode === 2;
+  const isPhaseGlitch = phase === 'glitchOut';
+  const isPhaseCurtain = phase === 'curtainOut';
+
+  const s0 = getLineSlice(0, charCount);
+  const s1 = getLineSlice(1, charCount);
+  const s2 = getLineSlice(2, charCount);
+  const s3 = getLineSlice(3, charCount);
+
+  return (
+    <div
+      className={`${styles.desktopHeadingWrap} ${isPhaseGlitch ? styles.phaseGlitchOut : ''} ${
+        isPhaseCurtain ? styles.phaseCurtainOut : ''
+      }`}
+    >
+      <h1 className={styles.headingDesktop} aria-label="More Than A Ride. We're Building The Future.">
+        {/* Line 1: More Than */}
+        <span className={styles.headingLine}>
+          {isKinetic ? (
+            kineticStep >= 1 && (
+              <motion.span
+                initial={{ opacity: 0, y: 15, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 420, damping: 25 }}
+              >
+                More Than
+              </motion.span>
+            )
+          ) : (
+            <>
+              {s0.text}
+              {s0.isCurrent && glitchSuffix}
+              {s0.isCurrent && <span className={styles.desktopCursor} />}
+            </>
+          )}
+        </span>
+
+        {/* Line 2: A Ride. (Emphasis on A Ride) */}
+        <span className={styles.headingLine}>
+          {isKinetic ? (
+            kineticStep >= 2 && (
+              <motion.span
+                className={styles.accentRideDesktop}
+                initial={{ opacity: 0, scale: 0.82, y: 18 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+              >
+                A Ride.
+              </motion.span>
+            )
+          ) : (
+            <>
+              {(s1.text.length > 0 || s1.isCurrent) && (
+                <span className={styles.accentRideDesktop}>
+                  {s1.text}
+                  {s1.isCurrent && glitchSuffix}
+                </span>
+              )}
+              {s1.isCurrent && <span className={styles.desktopCursor} />}
+            </>
+          )}
+        </span>
+
+        {/* Line 3: We're Building */}
+        <span className={styles.headingLine}>
+          {isKinetic ? (
+            kineticStep >= 3 && (
+              <motion.span
+                initial={{ opacity: 0, y: 15, scale: 0.92 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ type: 'spring', stiffness: 420, damping: 25 }}
+              >
+                We&apos;re Building
+              </motion.span>
+            )
+          ) : (
+            <>
+              {s2.text}
+              {s2.isCurrent && glitchSuffix}
+              {s2.isCurrent && <span className={styles.desktopCursor} />}
+            </>
+          )}
+        </span>
+
+        {/* Line 4: The Future. (Emphasis on The Future) */}
+        <span className={styles.headingLine}>
+          {isKinetic ? (
+            kineticStep >= 4 && (
+              <motion.span
+                className={styles.accentFutureDesktop}
+                initial={{ opacity: 0, scale: 0.82, y: 18 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 360, damping: 20 }}
+              >
+                The Future.
+              </motion.span>
+            )
+          ) : (
+            <>
+              {(s3.text.length > 0 || s3.isCurrent) && (
+                <span className={styles.accentFutureDesktop}>
+                  {s3.text}
+                  {s3.isCurrent && glitchSuffix}
+                </span>
+              )}
+              {(s3.isCurrent || phase === 'holding') && <span className={styles.desktopCursor} />}
+            </>
+          )}
+        </span>
+      </h1>
+    </div>
+  );
+}
+
 function pickNextStyle(currentIdx: number): number {
   // Pick a random index that is different from the current one
   const pool = TRANSITION_STYLES.length;
@@ -417,20 +736,7 @@ export default function HeroSection() {
               </AnimatePresence>
             </div>
           ) : (
-            <motion.h1
-              className={styles.heading}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1.1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-            >
-              More Than
-              <br />
-              <span className={styles.headingAccent}>A Ride.</span>
-              <br />
-              We&apos;re Building
-              <br />
-              The Future.
-            </motion.h1>
+            <DesktopTypingHeading />
           )}
         </motion.div>
 

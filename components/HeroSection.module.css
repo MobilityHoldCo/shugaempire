@@ -154,6 +154,128 @@
   display: inline-block;
 }
 
+/* ─── Desktop Typing Headline Container ─── */
+.desktopHeadingWrap {
+  min-height: 290px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+  width: 100%;
+}
+
+.headingDesktop {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.8vw, 4.1rem);
+  font-weight: 800;
+  line-height: 1.14;
+  letter-spacing: 0.04em;
+  color: #ffffff;
+  margin: 0;
+  text-transform: uppercase;
+  text-align: center;
+  user-select: none;
+  width: 100%;
+}
+
+.headingLine {
+  display: block;
+  min-height: 1.18em;
+  position: relative;
+  white-space: nowrap;
+}
+
+/* ─── Emphasis on A Ride. (Desktop Screen Alone - Black & White Style) ─── */
+.accentRideDesktop {
+  display: inline-block;
+  position: relative;
+  -webkit-text-stroke: 1.5px rgba(255, 255, 255, 0.95);
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.06em;
+  padding: 0 0.1em;
+  transition: all 0.3s ease;
+}
+
+.accentRideDesktop::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 5%;
+  width: 90%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85) 30%, rgba(255, 255, 255, 0.85) 70%, transparent);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  border-radius: 999px;
+  opacity: 0.85;
+}
+
+/* ─── Emphasis on The Future. (Desktop Screen Alone - Black & White Style) ─── */
+.accentFutureDesktop {
+  display: inline-block;
+  position: relative;
+  color: #ffffff;
+  -webkit-text-fill-color: #ffffff;
+  letter-spacing: 0.05em;
+  font-weight: 800;
+  padding: 0 0.1em;
+  text-shadow:
+    0 0 20px rgba(255, 255, 255, 0.7),
+    0 0 45px rgba(255, 255, 255, 0.35);
+}
+
+.accentFutureDesktop::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2.5px;
+  background: linear-gradient(90deg, transparent, #ffffff 25%, #ffffff 75%, transparent);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.9);
+  border-radius: 999px;
+}
+
+/* Pure white terminal typing cursor */
+.desktopCursor {
+  display: inline-block;
+  width: 3.5px;
+  height: 0.82em;
+  background: #ffffff;
+  margin-left: 6px;
+  vertical-align: baseline;
+  box-shadow: 0 0 8px #ffffff, 0 0 16px rgba(255, 255, 255, 0.8);
+  border-radius: 1px;
+  animation: cursorBlink 0.75s ease-in-out infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; transform: scaleY(1); }
+  50% { opacity: 0; transform: scaleY(0.65); }
+}
+
+/* Exit transition animations */
+.phaseGlitchOut {
+  animation: glitchFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes glitchFade {
+  0% { opacity: 1; filter: blur(0px) skewX(0); }
+  40% { opacity: 0.7; filter: blur(4px) skewX(-6deg) brightness(2); }
+  100% { opacity: 0; filter: blur(12px) skewX(10deg); }
+}
+
+.phaseCurtainOut {
+  animation: curtainFade 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes curtainFade {
+  0% { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  100% { opacity: 0; transform: scale(0.94) translateY(-14px); filter: blur(8px); }
+}
+
 .subtext {
   font-family: var(--font-body);
   font-size: clamp(0.95rem, 1.4vw, 1.15rem);
@@ -438,6 +560,12 @@
     padding: 0 1.25rem;
     margin: 0;
     position: relative;
+  }
+
+  /* Ensure desktop typing elements NEVER appear on mobile view */
+  .desktopHeadingWrap,
+  .desktopTypingBar {
+    display: none !important;
   }
 
   /* Keep SHUGA EMPIRE HOLDCO locked at the top under navbar */
