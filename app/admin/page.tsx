@@ -116,7 +116,7 @@ export default function AdminPage() {
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast('✓ Record Deleted', `"${confirmName}" was permanently removed from Supabase.`);
+        showToast('Record Deleted', `"${confirmName}" was permanently removed from Supabase.`);
       } else {
         showToast('Warning', 'Server responded: ' + (data.error || 'Failed to delete'));
       }
@@ -223,7 +223,9 @@ export default function AdminPage() {
             margin: '0 auto 1.5rem',
             fontSize: '1.4rem'
           }}>
-            ⚡
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+            </svg>
           </div>
           <h1 style={{
             fontFamily: 'var(--font-display)',
@@ -813,7 +815,10 @@ export default function AdminPage() {
                             }}
                             title="Email"
                           >
-                            ✉
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: 'inline-block', verticalAlign: '-1px' }}>
+                              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                              <polyline points="22,6 12,13 2,6" />
+                            </svg>
                           </a>
                         )}
 

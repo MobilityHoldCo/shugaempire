@@ -177,7 +177,7 @@ export default function VehicleShowcase3D() {
             }}
             className={`${styles.hudBtn} ${autoRotate ? styles.hudBtnActive : ''}`}
           >
-            <span>{autoRotate ? '⏸ PAUSE ROTATE' : '▶ AUTO-ROTATE'}</span>
+            <span>{autoRotate ? 'PAUSE ROTATE' : 'AUTO-ROTATE'}</span>
           </button>
           <button
             type="button"
@@ -187,7 +187,7 @@ export default function VehicleShowcase3D() {
             }}
             className={`${styles.hudBtn} ${headlightsOn ? styles.hudBtnActive : ''}`}
           >
-            <span>{headlightsOn ? '💡 LED LIGHTS ON' : '🌑 LIGHTS OFF'}</span>
+            <span>{headlightsOn ? 'LED LIGHTS ON' : 'LIGHTS OFF'}</span>
           </button>
         </div>
       </div>
@@ -266,7 +266,11 @@ export default function VehicleShowcase3D() {
             <h4 className={styles.modalTitle}>{activeHotspot.title}</h4>
             <p className={styles.modalDesc}>{activeHotspot.desc}</p>
             <div className={styles.modalStat}>
-              <span className={styles.statIcon}>⚡</span>
+              <span className={styles.statIcon}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ display: 'inline-block', verticalAlign: '-1px' }}>
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                </svg>
+              </span>
               <span>{activeHotspot.stat}</span>
             </div>
           </div>

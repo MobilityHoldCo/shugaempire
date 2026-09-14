@@ -609,7 +609,7 @@ export default function EnergyHubScene3D() {
             className={`${styles.modeToggleBtn} ${isDayMode ? styles.modeToggleActive : ''}`}
             title="Toggle Day Solar Harvest vs Night BESS Discharge"
           >
-            {isDayMode ? '☀️ PEAK SOLAR INFLUX' : '🌙 BESS DISCHARGE MODE'}
+            {isDayMode ? 'PEAK SOLAR INFLUX' : 'BESS DISCHARGE MODE'}
           </button>
           <button
             type="button"
@@ -617,7 +617,7 @@ export default function EnergyHubScene3D() {
             className={`${styles.ctrlBtn} ${autoRotate ? styles.ctrlBtnActive : ''}`}
             title="Toggle camera auto-orbit"
           >
-            {autoRotate ? '⏸ PAUSE' : '▶ ORBIT'}
+            {autoRotate ? 'PAUSE' : 'ORBIT'}
           </button>
           <button
             type="button"

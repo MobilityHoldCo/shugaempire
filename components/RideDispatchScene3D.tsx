@@ -83,7 +83,7 @@ const SAMPLE_TELEMETRIES: VehicleTelemetry[] = [
   {
     id: 'SR-108',
     name: 'Shuga EV Crossover #108',
-    driver: 'Adebayo Oladipo (5.0 ★)',
+    driver: 'Adebayo Oladipo (Rating 5.0)',
     rating: 'Top Tier Driver',
     origin: 'Lekki Phase 1 Corridor',
     destination: 'Victoria Island Financial Core',
@@ -95,7 +95,7 @@ const SAMPLE_TELEMETRIES: VehicleTelemetry[] = [
   {
     id: 'SR-242',
     name: 'Shuga EV Crossover #242',
-    driver: 'Chinedu Eze (4.9 ★)',
+    driver: 'Chinedu Eze (Rating 4.9)',
     rating: 'Electric Fleet Pioneer',
     origin: 'Marina Waterfront Marina',
     destination: 'Victoria Island Core',
@@ -107,7 +107,7 @@ const SAMPLE_TELEMETRIES: VehicleTelemetry[] = [
   {
     id: 'SR-319',
     name: 'Shuga EV Crossover #319',
-    driver: 'Fatima Bello (5.0 ★)',
+    driver: 'Fatima Bello (Rating 5.0)',
     rating: 'Executive Shield',
     origin: 'Maitama District',
     destination: 'Three Arms Zone',

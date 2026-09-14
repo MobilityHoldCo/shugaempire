@@ -213,7 +213,7 @@ export default function RoadScene() {
   }, []);
 
   return (
-    <div className={styles.sectionWrap} data-cursor-text="⚡ STEER">
+    <div className={styles.sectionWrap} data-cursor-text="STEER">
       <canvas ref={canvasRef} className={styles.canvas} />
 
       {/* Cyber Overlay HUD / Title */}

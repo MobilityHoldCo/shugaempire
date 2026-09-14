@@ -14,7 +14,7 @@ export default function ElectricBanner() {
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0]);
 
   return (
-    <section ref={ref} className={styles.banner} data-cursor-text="⚡ ENERGY HUB">
+    <section ref={ref} className={styles.banner} data-cursor-text="ENERGY HUB">
       {/* Parallax image layer */}
       <div className={styles.imgContainer}>
         <motion.div className={styles.imgWrapper} style={{ y: imgY }}>

@@ -630,7 +630,13 @@ export default function GlobeScene() {
           onClick={() => zoomToCity(null)}
           className={`${styles.pillBtn} ${!selectedCity ? styles.pillBtnActive : ''}`}
         >
-          <span className={styles.pillIcon}>🗺️</span>
+          <span className={styles.pillIcon}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: 'inline-block', verticalAlign: '-1px' }}>
+              <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6" />
+              <line x1="8" y1="2" x2="8" y2="18" />
+              <line x1="16" y1="6" x2="16" y2="22" />
+            </svg>
+          </span>
           <span>Nigeria Map (Full Overview)</span>
         </button>
         <button
@@ -652,7 +658,7 @@ export default function GlobeScene() {
       </div>
 
       {/* ── Three.js WebGL Canvas ── */}
-      <canvas ref={canvasRef} className={styles.canvas} data-cursor-text="🗺️ TILT / ZOOM" />
+      <canvas ref={canvasRef} className={styles.canvas} data-cursor-text="TILT / ZOOM" />
 
       {/* ── Interactive City Telemetry & Vector Map Card (Zoomed View) ── */}
       {selectedCity && (
@@ -774,7 +780,11 @@ export default function GlobeScene() {
               <ul>
                 {selectedCity.corridors.map((c, i) => (
                   <li key={i}>
-                    <span className={styles.corridorIcon}>⚡</span>
+                    <span className={styles.corridorIcon}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor" style={{ display: 'inline-block', verticalAlign: '-1px' }}>
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
+                      </svg>
+                    </span>
                     <span>{c}</span>
                   </li>
                 ))}

@@ -99,7 +99,11 @@ export default function ContactForm() {
   if (submitted) {
     return (
       <div className={styles.successCard}>
-        <div className={styles.successIcon}>✓</div>
+        <div className={styles.successIcon}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="20 6 9 17 4 12" />
+          </svg>
+        </div>
         <h3 className={styles.successTitle}>Enquiry Transmitted</h3>
         <p className={styles.successDesc}>
           Thank you, <strong>{formData.name}</strong>. Your message has been logged directly into the Shuga Admin Command Center. A team director will review your enquiry and connect with you shortly.

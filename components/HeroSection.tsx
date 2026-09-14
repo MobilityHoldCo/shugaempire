@@ -201,7 +201,7 @@ const DESKTOP_LINES = [
   { text: 'The Future.', isAccent: true, accentType: 'future' },
 ];
 
-const CYBER_GLYPHS = ['0', '1', '⚡', 'Δ', '§', 'X', '9', '7', '◊', 'λ', 'Ψ'];
+const CYBER_GLYPHS = ['0', '1', 'Ξ', 'Δ', '§', 'X', '9', '7', '◊', 'λ', 'Ψ'];
 
 const TYPING_MODES = [
   { id: 'typewriter', label: 'Typewriter', shortName: '01 Typewriter' },
