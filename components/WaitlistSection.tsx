@@ -130,7 +130,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
   };
 
   const shareText = encodeURIComponent(
-    `Join the early-access waitlist for SHUGA Empire HoldCo — Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
+    `Join the early-access waitlist for SHUGA Empire HoldCo: Nigeria's electric mobility ecosystem: https://shugaempire.com/waitlist`
   );
 
   return (
@@ -171,7 +171,7 @@ export default function WaitlistSection({ id = 'waitlist', defaultRole = 'Driver
                 <p className={styles.successMsg}>
                   {isDuplicate
                     ? <>Welcome back, <strong>{fullName}</strong>. You are already on our waitlist{queuePosition ? <> as pioneer <strong>#{queuePosition}</strong></> : ''}. We will reach out soon.</>
-                    : <>Welcome, <strong>{fullName}</strong>. You are registered as pioneer{' '}<strong>#{queuePosition ?? '—'}</strong> for <strong>{role}</strong> access in <strong>{city}</strong>.</>
+                    : <>Welcome, <strong>{fullName}</strong>. You are registered as pioneer{' '}<strong>#{queuePosition ?? 'Confirmed'}</strong> for <strong>{role}</strong> access in <strong>{city}</strong>.</>
                   }
                 </p>
 

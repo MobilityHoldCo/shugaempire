@@ -29,7 +29,7 @@ const faqs = [
     category: 'Shuga Energy',
     items: [
       { q: 'What is Shuga Energy?', a: 'Shuga Energy is our solar-powered EV charging infrastructure. We operate charging hubs for Shuga drivers and for the wider public with any EV.' },
-      { q: 'Can non-Shuga drivers use the charging hubs?', a: 'Yes. Our charging network is open to the public — any EV, any operator can access our hubs.' },
+      { q: 'Can non-Shuga drivers use the charging hubs?', a: 'Yes. Our charging network is open to the public: any EV, any operator can access our hubs.' },
       { q: 'Are the hubs solar-powered?', a: 'Yes. Our hubs are designed to leverage solar energy to provide more sustainable, reliable charging infrastructure.' },
     ],
   },

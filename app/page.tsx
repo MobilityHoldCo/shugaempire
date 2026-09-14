@@ -15,7 +15,7 @@ import styles from './page.module.css';
 export const metadata: Metadata = {
   title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
   description:
-    "Nigeria's most connected mobility ecosystem. Vehicle ownership, ride-hailing and solar-powered EV charging — all in one place.",
+    "Nigeria's most connected mobility ecosystem. Vehicle ownership, ride-hailing and solar-powered EV charging, all in one place.",
 };
 
 const steps = [
@@ -56,7 +56,7 @@ export default function HomePage() {
       ══════════════════════════════════════════ */}
       <SplitImageSection
         imageSrc="/ev-home-charge.png"
-        imageAlt="Sleek white electric vehicle charging outside a modern building — SHUGA FLEET"
+        imageAlt="Sleek white electric vehicle charging outside a modern building, SHUGA FLEET"
         eyebrow="A Different Way to Move"
         heading={
           <RevealText as="h2" className="heading-lg">
@@ -69,7 +69,7 @@ export default function HomePage() {
               For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              SHUGA Empire HoldCo connects the pieces — providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
+              SHUGA Empire HoldCo connects the pieces, providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
             </p>
             <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)', marginTop: '0.5rem' }}>
               One ecosystem. Multiple opportunities. One bigger purpose.
@@ -116,7 +116,7 @@ export default function HomePage() {
             <p className="eyebrow"><span className="eyebrow-line" />For Drivers</p>
             <RevealText as="h2" className="heading-lg">Your car. Your work. Your future.</RevealText>
             <p className="lead" style={{ marginTop: '1rem' }}>
-              We understand what driving means to you — the early mornings, the traffic, the hours in service of passengers. SHUGA FLEET is designed to turn that work into ownership.
+              We understand what driving means to you: the early mornings, the traffic, the hours in service of passengers. SHUGA FLEET is designed to turn that work into ownership.
             </p>
           </div>
           <div className={`${styles.driverStepsGrid} skew-on-scroll`}>
@@ -162,7 +162,7 @@ export default function HomePage() {
       ══════════════════════════════════════════ */}
       <SplitImageSection
         imageSrc="/ev-fleet-charging.png"
-        imageAlt="Fleet of electric vehicles at charging stations — SHUGA FLEET investor programme"
+        imageAlt="Fleet of electric vehicles at charging stations, SHUGA FLEET investor programme"
         eyebrow="For Investors"
         reverse
         heading={
@@ -260,11 +260,11 @@ export default function HomePage() {
           <p className="eyebrow" style={{ justifyContent: 'center' }}>
             <span className="eyebrow-line" />Nigeria Is Moving<span className="eyebrow-line" />
           </p>
-          <RevealText as="h2" className={`heading-xl ${styles.ctaHeading}`}>
+          <RevealText as="h2" className={`heading-md ${styles.ctaHeading}`}>
             The question isn&apos;t whether mobility will change. It will. The question is who will build what comes next.
           </RevealText>
           <p className="lead" style={{ margin: '2rem auto', textAlign: 'center' }}>
-            Move. Earn. Own. Power. — this is mobility with a purpose.
+            Move. Earn. Own. Power. This is mobility with a purpose.
           </p>
           <Link href="/contact" className="btn btn--white" data-cursor>Get Started</Link>
         </div>

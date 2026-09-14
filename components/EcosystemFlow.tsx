@@ -4,10 +4,10 @@ import { useRef } from 'react';
 import styles from './EcosystemFlow.module.css';
 
 const nodes = [
-  { id: '01', name: 'SHUGA FLEET', sub: 'Vehicle Ownership', desc: 'Creates the entry point — drivers access EVs and work toward ownership.' },
+  { id: '01', name: 'SHUGA FLEET', sub: 'Vehicle Ownership', desc: 'Creates the entry point: drivers access EVs and work toward ownership.' },
   { id: '02', name: 'SHUGA RIDE', sub: 'Ride-Hailing', desc: 'Puts vehicles to work. Connects drivers with passengers across Lagos & Abuja.' },
   { id: '03', name: 'SHUGA ENERGY', sub: 'EV Charging', desc: 'Solar-powered charging keeps the fleet moving. Open to all EV operators.' },
-  { id: '→', name: 'SHUGA EMPIRE HOLDCO', sub: 'The Ecosystem', desc: 'Access. Ownership. Opportunity. Sustainability — all connected.' },
+  { id: '→', name: 'SHUGA EMPIRE HOLDCO', sub: 'The Ecosystem', desc: 'Access. Ownership. Opportunity. Sustainability, all connected.' },
 ];
 
 export default function EcosystemFlow() {

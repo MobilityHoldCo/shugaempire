@@ -750,7 +750,7 @@ export default function AdminPage() {
                         }}
                         title={lead.notes || 'No message'}
                       >
-                        {lead.notes || '—'}
+                        {lead.notes || 'None'}
                       </div>
                     </td>
                     <td style={{ padding: '1rem' }}>
@@ -894,11 +894,11 @@ export default function AdminPage() {
             </div>
 
             <div style={{ fontSize: '0.85rem', lineHeight: 1.8, color: 'rgba(255,255,255,0.8)' }}>
-              <div><strong>Email:</strong> {selectedLead.email || '—'}</div>
-              <div><strong>Phone:</strong> {selectedLead.phone || '—'}</div>
-              <div><strong>City:</strong> {selectedLead.city || '—'}</div>
+              <div><strong>Email:</strong> {selectedLead.email || 'None'}</div>
+              <div><strong>Phone:</strong> {selectedLead.phone || 'None'}</div>
+              <div><strong>City:</strong> {selectedLead.city || 'None'}</div>
               <div><strong>Source Table:</strong> {selectedLead.table} in Supabase</div>
-              <div><strong>Received:</strong> {selectedLead.timestamp || '—'}</div>
+              <div><strong>Received:</strong> {selectedLead.timestamp || 'None'}</div>
               <div style={{ marginTop: '1rem', padding: '1rem', background: 'rgba(255,255,255,0.04)', borderRadius: '6px', border: '1px solid rgba(255,255,255,0.1)' }}>
                 <strong>Message / Notes:</strong>
                 <p style={{ marginTop: '0.5rem', whiteSpace: 'pre-wrap' }}>

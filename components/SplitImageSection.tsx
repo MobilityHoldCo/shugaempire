@@ -62,7 +62,6 @@ export default function SplitImageSection({ imageSrc, imageAlt, eyebrow, heading
         transition={{ duration: 0.9, delay: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
       >
         <p className={styles.eyebrow}>
-          <span className={styles.eyebrowLine} />
           {eyebrow}
         </p>
         <div className={styles.headingWrap}>{heading}</div>

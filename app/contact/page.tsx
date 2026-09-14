@@ -5,7 +5,7 @@ import ContactForm from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with SHUGA Empire HoldCo. Whether you\'re a driver, investor, or passenger — we\'d love to hear from you.',
+  description: 'Get in touch with SHUGA Empire HoldCo. Whether you\'re a driver, investor, or passenger, we\'d love to hear from you.',
 };
 
 export default function ContactPage() {
@@ -16,7 +16,7 @@ export default function ContactPage() {
           <p className="eyebrow"><span className="eyebrow-line" />Contact</p>
           <RevealText as="h1" className="heading-xl">Let&apos;s Talk Mobility.</RevealText>
           <p className="lead" style={{ marginTop: '1.5rem' }}>
-            Whether you&apos;re a driver looking for your first car, an investor ready to deploy capital, or a passenger who wants to ride — we&apos;re here for you.
+            Whether you&apos;re a driver looking for your first car, an investor ready to deploy capital, or a passenger who wants to ride, we&apos;re here for you.
           </p>
         </div>
       </section>

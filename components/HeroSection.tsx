@@ -722,9 +722,7 @@ export default function HeroSection() {
               y: { duration: 0.8, delay: 0.3 },
             }}
           >
-            <span className={styles.eyebrowLine} />
             SHUGA EMPIRE HOLDCO
-            <span className={styles.eyebrowLine} />
           </motion.p>
 
           {isMobile ? (

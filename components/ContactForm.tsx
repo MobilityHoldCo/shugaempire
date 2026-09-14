@@ -179,9 +179,9 @@ export default function ContactForm() {
           onChange={handleChange}
           className={styles.select}
         >
-          <option value="driver">Driver — I want a Shuga Car (Drive to Own)</option>
-          <option value="investor">Investor — I want to acquire a vehicle & participate</option>
-          <option value="passenger">Passenger — Ride-Hailing enquiry</option>
+          <option value="driver">Driver: I want a Shuga Car (Drive to Own)</option>
+          <option value="investor">Investor: I want to acquire a vehicle & participate</option>
+          <option value="passenger">Passenger: Ride-Hailing enquiry</option>
           <option value="partner">Corporate / Energy Partner</option>
           <option value="other">General Enquiry</option>
         </select>

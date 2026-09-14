@@ -13,7 +13,7 @@ const values = [
   { num: '02', title: 'Trust', desc: 'Transportation involves people\'s money, time, safety and livelihoods. Trust isn\'t optional.' },
   { num: '03', title: 'Opportunity', desc: 'We want our ecosystem to create opportunities rather than simply provide services.' },
   { num: '04', title: 'Innovation', desc: 'Nigeria\'s mobility challenges require Nigerian solutions supported by modern technology.' },
-  { num: '05', title: 'Responsibility', desc: 'Growth should happen responsibly — with our drivers, passengers, investors, communities and environment in mind.' },
+  { num: '05', title: 'Responsibility', desc: 'Growth should happen responsibly, with our drivers, passengers, investors, communities and environment in mind.' },
   { num: '06', title: 'Excellence', desc: 'We want every interaction with SHUGA Empire HoldCo to feel intentional, professional and dependable.' },
 ];
 
@@ -59,7 +59,7 @@ export default function AboutPage() {
             <div style={{ padding: '3rem', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '4px' }}>
               <p className="eyebrow"><span className="eyebrow-line" />Our Vision</p>
               <h2 className="heading-md" style={{ marginTop: '1rem' }}>To Build Africa&apos;s Most Connected Mobility Ecosystem.</h2>
-              <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginTop: '1.25rem' }}>We envision a Nigeria where access to transportation creates access to opportunity. Where drivers can work toward vehicle ownership. Where investors participate in productive mobility assets. Our long-term ambition extends beyond Nigeria — Africa is where we see the opportunity.</p>
+              <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75, marginTop: '1.25rem' }}>We envision a Nigeria where access to transportation creates access to opportunity. Where drivers can work toward vehicle ownership. Where investors participate in productive mobility assets. Our long-term ambition extends beyond Nigeria. Africa is where we see the opportunity.</p>
             </div>
             <div style={{ padding: '3rem', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '4px' }}>
               <p className="eyebrow"><span className="eyebrow-line" />Our Mission</p>

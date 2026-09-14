@@ -306,11 +306,11 @@ export default function VehicleShowcase3D() {
           </div>
           <div className={styles.specBox}>
             <span className={styles.specValue}>35 <small>MIN</small></span>
-            <span className={styles.specLabel}>20–80% FAST CHARGE</span>
+            <span className={styles.specLabel}>20 TO 80% FAST CHARGE</span>
           </div>
           <div className={styles.specBox}>
             <span className={styles.specValue}>6.5 <small>S</small></span>
-            <span className={styles.specLabel}>0–100 KM/H</span>
+            <span className={styles.specLabel}>0 TO 100 KM/H</span>
           </div>
         </div>
 

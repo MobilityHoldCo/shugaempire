@@ -59,7 +59,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
     description:
-      'Vehicle ownership, ride-hailing and solar-powered EV charging — one connected mobility ecosystem built for Nigeria.',
+      'Vehicle ownership, ride-hailing and solar-powered EV charging: one connected mobility ecosystem built for Nigeria.',
     url: BASE_URL,
     siteName: 'SHUGA Empire HoldCo',
     type: 'website',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
         url: '/text logo with icon.jpeg',
         width: 1200,
         height: 630,
-        alt: 'SHUGA Empire HoldCo — Future of Mobility in Nigeria',
+        alt: 'SHUGA Empire HoldCo: Future of Mobility in Nigeria',
       },
     ],
   },
@@ -77,7 +77,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'SHUGA Empire HoldCo | Building the Future of Mobility in Nigeria',
     description:
-      'Vehicle ownership, ride-hailing and solar-powered EV charging — one connected mobility ecosystem built for Nigeria.',
+      'Vehicle ownership, ride-hailing and solar-powered EV charging: one connected mobility ecosystem built for Nigeria.',
     images: ['/text logo with icon.jpeg'],
     creator: '@shugaempire',
     site: '@shugaempire',

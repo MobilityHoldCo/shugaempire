@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Shuga Ride',
-  description: 'Move with confidence. A ride-hailing experience built for Nigeria — safety, reliability, accessibility and convenience.',
+  description: 'Move with confidence. A ride-hailing experience built for Nigeria: safety, reliability, accessibility and convenience.',
 };
 
 const features = [

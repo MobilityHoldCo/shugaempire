@@ -14,7 +14,7 @@ export default function ShugaEnergyPage() {
     <div className="page-fade">
       {/* Hero image — charging hub row */}
       <div style={{ position: 'relative', width: '100%', height: '60vh', overflow: 'hidden', marginTop: '5rem' }}>
-        <Image src="/charging-hub-row.png" alt="Row of solar-powered EV charging stations — Shuga Energy" fill priority style={{ objectFit: 'cover', objectPosition: 'center 20%', filter: 'grayscale(10%) contrast(1.05)' }} />
+        <Image src="/charging-hub-row.png" alt="Row of solar-powered EV charging stations, Shuga Energy" fill priority style={{ objectFit: 'cover', objectPosition: 'center 20%', filter: 'grayscale(10%) contrast(1.05)' }} />
         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.92) 100%)' }} />
         <div style={{ position: 'absolute', bottom: '2.5rem', right: '2.5rem', fontFamily: 'var(--font-techno)', fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.4)', border: '1px solid rgba(255,255,255,0.12)', padding: '0.5rem 1rem', backdropFilter: 'blur(8px)' }}>Solar-Powered</div>
       </div>
@@ -83,7 +83,7 @@ export default function ShugaEnergyPage() {
             <div style={{ padding: '3rem', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '4px', display: 'flex', flexDirection: 'column', gap: '1.5rem', background: 'rgba(255,255,255,0.02)' }}>
               <p className="eyebrow"><span className="eyebrow-line" />Infrastructure</p>
               <h2 className="heading-md">Built on Solar. Ready for Tomorrow.</h2>
-              <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>Our charging hubs leverage solar-powered energy infrastructure to support a more sustainable mobility ecosystem — reducing dependence on the grid and building resilience into our operations.</p>
+              <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.45)', lineHeight: 1.75 }}>Our charging hubs leverage solar-powered energy infrastructure to support a more sustainable mobility ecosystem, reducing dependence on the grid and building resilience into our operations.</p>
             </div>
           </div>
         </div>

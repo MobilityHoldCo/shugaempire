@@ -20,7 +20,7 @@ export default function ElectricBanner() {
         <motion.div className={styles.imgWrapper} style={{ y: imgY }}>
           <Image
             src="/charging-hub-row.png"
-            alt="Row of solar-powered EV charging stations at golden hour — Shuga Energy"
+            alt="Row of solar-powered EV charging stations at golden hour, Shuga Energy"
             fill
             sizes="100vw"
             className={styles.img}
@@ -36,7 +36,6 @@ export default function ElectricBanner() {
       {/* Text content */}
       <motion.div className={styles.content} style={{ y: textY, opacity }}>
         <p className={styles.eyebrow}>
-          <span className={styles.eyebrowLine} />
           Why Electric?
         </p>
         <h2 className={styles.heading}>
