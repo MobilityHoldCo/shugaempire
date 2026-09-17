@@ -777,3 +777,195 @@
     letter-spacing: 0.06em;
   }
 }
+
+/* ══════════════════════════════════════════════════
+   LIVE 3D ROAD HUD OVERLAY (SHUGA FLEET SLIDE)
+══════════════════════════════════════════════════ */
+.roadHudOverlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(1.75rem, 4vw, 4rem);
+  padding-top: clamp(5.5rem, 8vw, 7.5rem);
+  padding-bottom: clamp(2.5rem, 4.5vw, 4rem);
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.roadHudTop {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.roadHudBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 6px 14px;
+  font-family: var(--font-techno);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border-radius: 2px;
+  backdrop-filter: blur(8px);
+}
+
+.roadPulseDot {
+  width: 7px;
+  height: 7px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #fff;
+  animation: pulse 1.6s ease-in-out infinite;
+  flex-shrink: 0;
+}
+
+.roadHudSpeed {
+  font-family: var(--font-techno);
+  font-size: 0.72rem;
+  letter-spacing: 0.16em;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.roadHudCenter {
+  max-width: 720px;
+  margin-top: auto;
+  margin-bottom: 2.2rem;
+}
+
+.roadEyebrow {
+  font-family: var(--font-techno);
+  font-size: 0.74rem;
+  letter-spacing: 0.22em;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+}
+
+.roadHudTitle {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 4.2vw, 3.8rem);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+}
+
+.roadGlowText {
+  text-shadow: 0 0 28px rgba(255, 255, 255, 0.65);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+  padding-bottom: 2px;
+}
+
+.roadHudSubtitle {
+  font-family: var(--font-body, inherit);
+  font-size: 0.92rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 520px;
+  margin: 0;
+}
+
+.roadHudBottom {
+  display: flex;
+  gap: clamp(1.5rem, 3vw, 3.5rem);
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: 1.25rem;
+  flex-wrap: wrap;
+  align-items: center;
+  max-width: calc(100% - 220px);
+}
+
+.roadTelemetryItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.roadTelLabel {
+  font-family: var(--font-techno);
+  font-size: 0.6rem;
+  letter-spacing: 0.18em;
+  color: rgba(255, 255, 255, 0.45);
+  text-transform: uppercase;
+}
+
+.roadTelVal {
+  font-family: var(--font-techno);
+  font-size: 0.88rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  .roadHudOverlay {
+    padding: 1.25rem;
+    padding-top: 5.5rem;
+    padding-bottom: 5rem;
+    justify-content: space-between;
+  }
+
+  .roadHudTop {
+    padding-top: 0.25rem;
+  }
+
+  .roadHudBadge {
+    font-size: 0.65rem;
+    padding: 5px 10px;
+    letter-spacing: 0.15em;
+  }
+
+  .roadHudSpeed {
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+  }
+
+  .roadHudCenter {
+    margin-top: 1.5rem;
+    margin-bottom: auto;
+    max-width: 100%;
+  }
+
+  .roadEyebrow {
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    margin-bottom: 0.4rem;
+  }
+
+  .roadHudTitle {
+    font-size: clamp(1.5rem, 6.2vw, 2.2rem);
+    line-height: 1.1;
+    margin-bottom: 0.6rem;
+  }
+
+  .roadHudSubtitle {
+    font-size: 0.82rem;
+    line-height: 1.45;
+    max-width: 95%;
+  }
+
+  .roadHudBottom {
+    gap: 1.25rem;
+    padding-top: 0.75rem;
+    max-width: 100%;
+  }
+
+  .roadTelLabel {
+    font-size: 0.52rem;
+  }
+
+  .roadTelVal {
+    font-size: 0.75rem;
+  }
+}
+

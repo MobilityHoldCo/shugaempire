@@ -40,54 +40,16 @@ export default function HomePage() {
     <div className="page-fade">
 
       {/* ══════════════════════════════════════════
-          01 — THREE.JS: INFINITE 3D HIGHWAY (HERO)
-          Autonomous Telemetry / Electrified corridor
+          01 — CINEMATIC HERO CAROUSEL
+          (SHUGA FLEET slide = live 3D road)
       ══════════════════════════════════════════ */}
-      <RoadScene isHero />
+      <HeroSection />
 
       {/* ══════════════════════════════════════════
-          02 — CINEMATIC HERO (video background) — HIDDEN
+          02 — DRIVE TO OWN SPLIT SECTION (HIDDEN)
+          "Every trip can bring you one step closer"
       ══════════════════════════════════════════ */}
-      <div style={{ display: 'none' }}>
-        <HeroSection />
-      </div>
-
-      {/* ══════════════════════════════════════════
-          03 — SPLIT: EV HOME-CHARGE IMAGE + TEXT
-          "A Different Way to Move"
-      ══════════════════════════════════════════ */}
-      <SplitImageSection
-        imageSrc="/ev-home-charge.png"
-        imageAlt="Sleek white electric vehicle charging outside a modern building, SHUGA FLEET"
-        eyebrow="A Different Way to Move"
-        heading={
-          <RevealText as="h2" className="heading-lg">
-            What if getting around could also help you get ahead?
-          </RevealText>
-        }
-        body={
-          <>
-            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
-            </p>
-            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              SHUGA Empire HoldCo connects the pieces, providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
-            </p>
-            <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)', marginTop: '0.5rem' }}>
-              One ecosystem. Multiple opportunities. One bigger purpose.
-            </p>
-          </>
-        }
-      />
-
-      {/* ══════════════════════════════════════════
-          04 — IMAGE SHOWCASE: 3 cards with images
-      ══════════════════════════════════════════ */}
-      <ImageShowcase />
-
-      {/* ══════════════════════════════════════════
-          04B — DRIVE TO OWN SPLIT SECTION
-      ══════════════════════════════════════════ */}
+      {/*
       <section className={styles.driveToOwnSection}>
         <div className={styles.driveToOwnContent}>
           <p className="eyebrow" style={{ color: 'rgba(255,255,255,0.5)' }}>
@@ -134,6 +96,46 @@ export default function HomePage() {
           <div className={styles.driveToOwnImgOverlay} />
         </div>
       </section>
+      */}
+
+      {/* ══════════════════════════════════════════
+          03 — IMAGE SHOWCASE: 3 cards (HIDDEN)
+      ══════════════════════════════════════════ */}
+      {/* <ImageShowcase /> */}
+
+      {/* ══════════════════════════════════════════
+          04 — THREE.JS: INFINITE 3D HIGHWAY (HIDDEN)
+          Electrified corridor
+      ══════════════════════════════════════════ */}
+      {/* <RoadScene /> */}
+
+      {/* ══════════════════════════════════════════
+          05 — SPLIT: EV HOME-CHARGE IMAGE + TEXT
+          "A Different Way to Move"
+      ══════════════════════════════════════════ */}
+      <SplitImageSection
+        imageSrc="/ev-home-charge.png"
+        imageAlt="Sleek white electric vehicle charging outside a modern building, SHUGA FLEET"
+        eyebrow="A Different Way to Move"
+        heading={
+          <RevealText as="h2" className="heading-lg">
+            What if getting around could also help you get ahead?
+          </RevealText>
+        }
+        body={
+          <>
+            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
+              For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
+            </p>
+            <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
+              SHUGA Empire HoldCo connects the pieces, providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
+            </p>
+            <p style={{ fontFamily: 'var(--font-techno)', fontSize: '1rem', letterSpacing: '0.05em', color: 'rgba(255,255,255,0.85)', marginTop: '0.5rem' }}>
+              One ecosystem. Multiple opportunities. One bigger purpose.
+            </p>
+          </>
+        }
+      />
 
       {/* ══════════════════════════════════════════
           05 — ECOSYSTEM FLOW

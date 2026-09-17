@@ -4,10 +4,154 @@ import { motion, useScroll, useTransform, AnimatePresence, type TargetAndTransit
 import styles from './HeroSection.module.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import type * as THREE_TYPES from 'three';
 
-const SLIDES = [
+// ── Inline 3D Road Canvas for SHUGA FLEET slide ──────────────────────────────
+function RoadCanvas() {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const animRef = useRef<number>(0);
+  const mouseRef = useRef({ x: 0, targetX: 0 });
+
+  useEffect(() => {
+    async function init() {
+      const THREE = await import('three');
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setClearColor(0x000000, 1);
+
+      const camera = new THREE.PerspectiveCamera(65, 1, 0.1, 100);
+      camera.position.set(0, 1.4, 4.5);
+      camera.rotation.x = -0.12;
+
+      const updateSize = () => {
+        if (!canvas.parentElement) return;
+        const W = canvas.parentElement.clientWidth;
+        const H = canvas.parentElement.clientHeight;
+        renderer.setSize(W, H);
+        camera.aspect = W / H;
+        camera.updateProjectionMatrix();
+      };
+
+      const scene = new THREE.Scene();
+      scene.fog = new THREE.FogExp2(0x000000, 0.035);
+      updateSize();
+
+      const ROAD_WIDTH = 5.5, ROAD_LENGTH = 80, SEGMENTS = 80;
+
+      const grid = new THREE.GridHelper(ROAD_LENGTH, SEGMENTS, 0x444444, 0x181818);
+      grid.position.y = -0.01; grid.position.z = -ROAD_LENGTH / 4;
+      scene.add(grid);
+
+      const leftPos: number[] = [], rightPos: number[] = [];
+      for (let i = 0; i <= SEGMENTS; i++) {
+        const z = -(i / SEGMENTS) * ROAD_LENGTH;
+        leftPos.push(-ROAD_WIDTH / 2, 0.05, z);
+        rightPos.push(ROAD_WIDTH / 2, 0.05, z);
+      }
+      const railMat = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.85 });
+      const lg = new THREE.BufferGeometry();
+      lg.setAttribute('position', new THREE.Float32BufferAttribute(leftPos, 3));
+      scene.add(new THREE.Line(lg, railMat));
+      const rg = new THREE.BufferGeometry();
+      rg.setAttribute('position', new THREE.Float32BufferAttribute(rightPos, 3));
+      scene.add(new THREE.Line(rg, railMat));
+
+      const DASH_COUNT = 30;
+      const dashes: THREE_TYPES.Mesh[] = [];
+      const dashGeo = new THREE.PlaneGeometry(0.12, 1.6);
+      dashGeo.rotateX(-Math.PI / 2);
+      const dashMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.95 });
+      for (let i = 0; i < DASH_COUNT; i++) {
+        const m = new THREE.Mesh(dashGeo, dashMat);
+        m.position.y = 0.02; m.position.z = -(i / DASH_COUNT) * ROAD_LENGTH;
+        scene.add(m); dashes.push(m);
+      }
+
+      const STREAK_COUNT = 70;
+      const streakGeo = new THREE.BufferGeometry();
+      const streakPos = new Float32Array(STREAK_COUNT * 6);
+      const speeds: number[] = [];
+      const offsets: { x: number; y: number; z: number; len: number }[] = [];
+      for (let i = 0; i < STREAK_COUNT; i++) {
+        const side = Math.random() > 0.5 ? 1 : -1;
+        offsets.push({ x: side * (ROAD_WIDTH / 2 + 0.4 + Math.random() * 4), y: 0.1 + Math.random() * 2.8, z: -Math.random() * ROAD_LENGTH, len: 1.2 + Math.random() * 3.5 });
+        speeds.push(0.4 + Math.random() * 0.7);
+      }
+      const streakMat = new THREE.LineBasicMaterial({ color: 0xaaaaaa, transparent: true, opacity: 0.5 });
+      scene.add(new THREE.LineSegments(streakGeo, streakMat));
+
+      const horizonMesh = new THREE.Mesh(new THREE.RingGeometry(0.1, 4, 32), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.06, side: THREE.DoubleSide }));
+      horizonMesh.position.set(0, 1, -ROAD_LENGTH * 0.7);
+      scene.add(horizonMesh);
+
+      const onMouseMove = (e: MouseEvent) => {
+        const rect = canvas.getBoundingClientRect();
+        mouseRef.current.targetX = (((e.clientX - rect.left) / rect.width) * 2 - 1) * 0.6;
+      };
+      const onResize = () => updateSize();
+      window.addEventListener('resize', onResize);
+      window.addEventListener('mousemove', onMouseMove);
+
+      const SPEED = 0.42;
+      let gridOffset = 0;
+
+      const animate = () => {
+        animRef.current = requestAnimationFrame(animate);
+        mouseRef.current.x += (mouseRef.current.targetX - mouseRef.current.x) * 0.05;
+        camera.position.x = mouseRef.current.x * 0.8;
+        camera.rotation.y = -mouseRef.current.x * 0.15;
+        camera.rotation.z = -mouseRef.current.x * 0.06;
+        for (let i = 0; i < DASH_COUNT; i++) {
+          dashes[i].position.z += SPEED;
+          if (dashes[i].position.z > 5) dashes[i].position.z = -ROAD_LENGTH + 5;
+        }
+        gridOffset = (gridOffset + SPEED) % (ROAD_LENGTH / SEGMENTS);
+        grid.position.z = -ROAD_LENGTH / 4 + gridOffset;
+        let ptr = 0;
+        for (let i = 0; i < STREAK_COUNT; i++) {
+          const s = offsets[i];
+          s.z += SPEED * (1 + speeds[i]);
+          if (s.z > 6) s.z = -ROAD_LENGTH - Math.random() * 10;
+          streakPos[ptr++] = s.x; streakPos[ptr++] = s.y; streakPos[ptr++] = s.z;
+          streakPos[ptr++] = s.x; streakPos[ptr++] = s.y; streakPos[ptr++] = s.z - s.len;
+        }
+        streakGeo.setAttribute('position', new THREE.BufferAttribute(streakPos, 3));
+        streakGeo.attributes.position.needsUpdate = true;
+        renderer.render(scene, camera);
+      };
+
+      const obs = new IntersectionObserver(([e]) => {
+        if (e.isIntersecting) { cancelAnimationFrame(animRef.current); animate(); }
+        else cancelAnimationFrame(animRef.current);
+      }, { threshold: 0.05 });
+      obs.observe(canvas);
+
+      return () => {
+        obs.disconnect();
+        cancelAnimationFrame(animRef.current);
+        window.removeEventListener('resize', onResize);
+        window.removeEventListener('mousemove', onMouseMove);
+        renderer.dispose();
+      };
+    }
+    const cleanup = init();
+    return () => { cleanup.then(fn => fn && fn()); };
+  }, []);
+
+  return <canvas ref={canvasRef} style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', display: 'block' }} />;
+}
+
+// ── Slide definitions ─────────────────────────────────────────────────────────
+type SlideImage = { type?: undefined; src: string; label: string; sub: string };
+type SlideRoad  = { type: 'road'; src: string; label: string; sub: string };
+type SlideType  = SlideImage | SlideRoad;
+
+const SLIDES: SlideType[] = [
+  { type: 'road', src: 'road', label: 'SHUGA FLEET', sub: 'Drive to Own. Electrified.' },
   { src: '/c1.jpeg', label: 'SHUGA RIDE', sub: 'Electric mobility, redefined.' },
-  { src: '/c2.jpeg', label: 'SHUGA CARS', sub: 'Own the road. Own the future.' },
   { src: '/c3.jpeg', label: 'SHUGA ENERGY', sub: 'Power your world, sustainably.' },
 ];
 
@@ -609,6 +753,10 @@ export default function HeroSection() {
 
   const ts = TRANSITION_STYLES[transitionIdx];
 
+  // When the road (SHUGA FLEET) slide is active, suppress the text overlay —
+  // the HUD inside the slide already carries all its own content.
+  const isRoadActive = SLIDES[active].type === 'road';
+
   const statsContent = (
     <>
       <div className={styles.stat}>
@@ -665,36 +813,101 @@ export default function HeroSection() {
                 }}
                 style={{ zIndex: isActive ? 2 : isPrev ? 1 : 0 }}
               >
-                <Image
-                  src={slide.src}
-                  alt={slide.label}
-                  fill
-                  priority={i === 0}
-                  sizes="100vw"
-                  className={styles.carouselImg}
-                />
+                {slide.type === 'road' ? (
+                  /* ── Live 3D Road slide (SHUGA FLEET) ── */
+                  <>
+                    <RoadCanvas />
+                    {/* Scanline + vignette — matches standalone RoadScene */}
+                    <div style={{
+                      position: 'absolute', inset: 0, pointerEvents: 'none',
+                      background: 'radial-gradient(circle at center, transparent 40%, rgba(0,0,0,0.75) 100%), linear-gradient(rgba(255,255,255,0.015) 50%, rgba(0,0,0,0.2) 50%)',
+                      backgroundSize: '100% 100%, 100% 4px',
+                    }} />
+                  </>
+                ) : (
+                  <Image
+                    src={slide.src}
+                    alt={slide.label}
+                    fill
+                    priority={i === 0}
+                    sizes="100vw"
+                    className={styles.carouselImg}
+                  />
+                )}
               </motion.div>
             );
           })}
 
-          {/* Cinematic multi-layer overlay */}
-          <div className={styles.carouselOverlay} />
+          {/* Cinematic multi-layer overlay — hidden on road slide (self-lit) */}
+          {!isRoadActive && <div className={styles.carouselOverlay} />}
         </motion.div>
 
-        {/* Slide label badge — crisp, stable display without looping fade in/out */}
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={active}
-            className={styles.slideBadge}
-            initial={{ opacity: 0, x: -16, y: 8 }}
-            animate={{ opacity: 1, x: 0, y: 0 }}
-            exit={{ opacity: 0, x: 16, y: -8 }}
-            transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
-            <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
-          </motion.div>
+        {/* ── Live 3D Road HUD (SHUGA FLEET) ── */}
+        <AnimatePresence>
+          {isRoadActive && (
+            <motion.div
+              key="road-hud"
+              className={styles.roadHudOverlay}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            >
+              {/* Row 1: Badge + Speed */}
+              <div className={styles.roadHudTop}>
+                <div className={styles.roadHudBadge}>
+                  <span className={styles.roadPulseDot} />
+                  <span>SHUGA FLEET</span>
+                </div>
+                <span className={styles.roadHudSpeed}>SYS: ACTIVE // 120 KM/H</span>
+              </div>
+
+              {/* Center: Eyebrow + Title + Subtitle */}
+              <div className={styles.roadHudCenter}>
+                <p className={styles.roadEyebrow}>INFINITE INFRASTRUCTURE</p>
+                <h2 className={styles.roadHudTitle}>
+                  DRIVING NIGERIA&apos;S{' '}
+                  <span className={styles.roadGlowText}>ELECTRIFIED</span>
+                  {' '}FUTURE
+                </h2>
+                <p className={styles.roadHudSubtitle}>
+                  A continuous connected grid spanning metropolitan Lagos, the federal capital Abuja, and cross-state corridors.
+                </p>
+              </div>
+
+              {/* Bottom: Telemetry */}
+              <div className={styles.roadHudBottom}>
+                {[
+                  ['TRANSMISSION', 'DIRECT DRIVE'],
+                  ['EMISSION', '0.00 G/KM'],
+                  ['LATENCY', '< 4.2 MS'],
+                ].map(([label, val]) => (
+                  <div key={label} className={styles.roadTelemetryItem}>
+                    <span className={styles.roadTelLabel}>{label}</span>
+                    <span className={styles.roadTelVal}>{val}</span>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
+
+        {/* Slide label badge — hidden on road slide (HUD has its own badge) */}
+        {!isRoadActive && (
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              className={styles.slideBadge}
+              initial={{ opacity: 0, x: -16, y: 8 }}
+              animate={{ opacity: 1, x: 0, y: 0 }}
+              exit={{ opacity: 0, x: 16, y: -8 }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <span className={styles.slideBadgeLabel}>{SLIDES[active].label}</span>
+              <span className={styles.slideBadgeSub}>{SLIDES[active].sub}</span>
+            </motion.div>
+          </AnimatePresence>
+        )}
 
         {/* Mobile View — Apply for a Car button (bottom right) */}
         <Link
@@ -708,11 +921,12 @@ export default function HeroSection() {
           </svg>
         </Link>
 
-        {/* ── Subtle grid overlay ── */}
-        <motion.div className={styles.bgGrid} style={{ y: bgY }} />
+        {/* ── Subtle grid overlay — hidden on road slide ── */}
+        {!isRoadActive && <motion.div className={styles.bgGrid} style={{ y: bgY }} />}
 
-        {/* ── Content ── */}
-        <motion.div className={styles.content} style={{ y: textY, opacity }}>
+        {/* ── Content (eyebrow + heading) — hidden on road slide ── */}
+        {!isRoadActive && (
+          <motion.div className={styles.content} style={{ y: textY, opacity }}>
           <motion.p
             className={styles.eyebrow}
             initial={{ opacity: 0, y: 20 }}
@@ -750,6 +964,7 @@ export default function HeroSection() {
             <DesktopTypingHeading />
           )}
         </motion.div>
+        )}
 
         {/* ── Carousel controls ── */}
         <motion.div
@@ -807,39 +1022,45 @@ export default function HeroSection() {
           </button>
         </motion.div>
 
-        {/* ── Desktop Stats strip (inside hero on desktop) ── */}
+        {/* ── Desktop Stats strip — hidden on road slide (HUD has its own content) ── */}
+        {!isRoadActive && (
+          <motion.div
+            className={styles.statsBarDesktop}
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 1.4 }}
+          >
+            {statsContent}
+          </motion.div>
+        )}
+
+        {/* ── Scroll indicator — hidden on road slide ── */}
+        {!isRoadActive && (
+          <motion.div
+            className={styles.scrollIndicator}
+            animate={{ y: [0, 10, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+          >
+            <div className={styles.scrollLine} />
+            <span>Scroll</span>
+          </motion.div>
+        )}
+      </section>
+
+      {/* ── Mobile Stats strip — hidden on road slide ── */}
+      {!isRoadActive && (
         <motion.div
-          className={styles.statsBarDesktop}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 1.4 }}
+          className={styles.statsBarMobile}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
         >
           {statsContent}
         </motion.div>
-
-        {/* ── Scroll indicator ── */}
-        <motion.div
-          className={styles.scrollIndicator}
-          animate={{ y: [0, 10, 0] }}
-          transition={{ repeat: Infinity, duration: 2 }}
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-        >
-          <div className={styles.scrollLine} />
-          <span>Scroll</span>
-        </motion.div>
-      </section>
-
-      {/* ── Mobile Stats strip (placed cleanly below the hero page) ── */}
-      <motion.div
-        className={styles.statsBarMobile}
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-      >
-        {statsContent}
-      </motion.div>
+      )}
     </div>
   );
 }

@@ -219,10 +219,6 @@ export default function RoadScene({ isHero = false }: { isHero?: boolean }) {
       {/* Cyber Overlay HUD / Title */}
       <div className={styles.hudOverlay}>
         <div className={styles.hudTop}>
-          <div className={styles.hudBadge}>
-            <span className={styles.pulseDot} />
-            <span>AUTONOMOUS CORRIDOR // REAL-TIME TELEMETRY</span>
-          </div>
           <span className={styles.hudSpeed}>SYS: ACTIVE // 120 KM/H</span>
         </div>
 
