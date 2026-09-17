@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import type * as THREE from 'three';
 import styles from './RoadScene.module.css';
 
-export default function RoadScene() {
+export default function RoadScene({ isHero = false }: { isHero?: boolean }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animRef = useRef<number>(0);
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
@@ -213,7 +213,7 @@ export default function RoadScene() {
   }, []);
 
   return (
-    <div className={styles.sectionWrap} data-cursor-text="STEER">
+    <div className={`${styles.sectionWrap} ${isHero ? styles.heroWrap : ''}`} data-cursor-text="STEER">
       <canvas ref={canvasRef} className={styles.canvas} />
 
       {/* Cyber Overlay HUD / Title */}

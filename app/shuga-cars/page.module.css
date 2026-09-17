@@ -37,6 +37,51 @@
   user-select: none;
 }
 
+/* ── Hero Copy Block ── */
+.heroCopyBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+  margin-top: 2rem;
+  max-width: 680px;
+  border-left: 2px solid rgba(255,255,255,0.1);
+  padding-left: 1.5rem;
+}
+
+.heroCopyLead {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.2vw, 1.15rem);
+  color: rgba(255,255,255,0.85);
+  line-height: 1.75;
+}
+
+.heroCopyLead strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.heroCopyBody {
+  font-family: var(--font-body);
+  font-size: clamp(0.9rem, 1.05vw, 1rem);
+  color: rgba(255,255,255,0.55);
+  line-height: 1.75;
+}
+
+.heroCopyBody strong {
+  color: rgba(255,255,255,0.9);
+  font-weight: 600;
+}
+
+.heroCopyTagline {
+  font-family: var(--font-techno);
+  font-size: 0.82rem;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  margin-top: 0.25rem;
+}
+
+
 /* ── Driver Steps Grid & Reward Banner for Shuga Cars ── */
 .driverStepsGrid {
   display: grid;
@@ -163,5 +208,134 @@
   }
   .driverRewardContent {
     padding: 2rem 1.5rem;
+  }
+}
+
+/* ── Drive to Own Section ── */
+.driveToOwnSection {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 580px;
+  background: #050505;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  overflow: hidden;
+}
+
+.driveToOwnContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1.25rem;
+  padding: 5rem 4rem 5rem 6%;
+}
+
+.driveToOwnHeading {
+  margin-top: 0.25rem !important;
+}
+
+.driveToOwnLead {
+  font-family: var(--font-body);
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  color: rgba(255,255,255,0.75);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.driveToOwnLead strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.driveToOwnSub {
+  font-family: var(--font-techno);
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+
+.driveToOwnStats {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.5rem 0 0.5rem;
+}
+
+.statPill {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.statLabel {
+  font-family: var(--font-techno);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+}
+
+.statDivider {
+  width: 1px;
+  height: 3rem;
+  background: rgba(255,255,255,0.12);
+  flex-shrink: 0;
+}
+
+.driveToOwnImageWrap {
+  position: relative;
+  overflow: hidden;
+}
+
+.driveToOwnImg {
+  object-fit: cover;
+  object-position: center top;
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.driveToOwnSection:hover .driveToOwnImg {
+  transform: scale(1.04);
+}
+
+.driveToOwnImgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(5,5,5,0.55) 0%,
+    rgba(5,5,5,0.1) 40%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+
+@media (max-width: 900px) {
+  .driveToOwnSection {
+    grid-template-columns: 1fr;
+    min-height: auto;
+  }
+  .driveToOwnContent {
+    padding: 4rem 1.5rem 3rem;
+  }
+  .driveToOwnImageWrap {
+    min-height: 380px;
+  }
+  .driveToOwnImgOverlay {
+    background: linear-gradient(
+      to bottom,
+      rgba(5,5,5,0.55) 0%,
+      rgba(5,5,5,0.05) 50%,
+      transparent 100%
+    );
   }
 }

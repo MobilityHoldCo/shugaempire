@@ -33,13 +33,35 @@ export default function ShugaCarsPage() {
 
       <section className="section section--dark" style={{ paddingTop: '4rem' }}>
         <div className="container">
-          <p className="eyebrow"><span className="eyebrow-line" />SHUGA FLEET</p>
-          <RevealText as="h1" className="heading-xl">
-            A Vehicle Can Change Your Life.
-          </RevealText>
-          <p className="lead" style={{ marginTop: '2rem' }}>
-            For a driver, owning a vehicle can mean independence. Greater control over your income. An asset that belongs to you. SHUGA FLEET is designed to create that pathway.
+          <p className="eyebrow"><span className="eyebrow-line" />Drive to Own
           </p>
+          <RevealText as="h1" className="heading-xl">
+            Become an EV Car Owner.
+          </RevealText>
+
+          <div className={styles.heroCopyBlock}>
+            <p className={styles.heroCopyLead}>
+              With just <strong>₦35,000 daily</strong>, you can work toward becoming an{' '}
+              <strong>EV car owner within 19 months</strong>.
+            </p>
+
+            <p className={styles.heroCopyBody}>
+              Drivers can choose the payment schedule that works best for them, either{' '}
+              <strong>Daily Pay or Weekly Pay</strong>, with the{' '}
+              <strong>same total payout under either option</strong>.
+            </p>
+
+            <p className={styles.heroCopyBody}>
+              To support efficient fleet operations and reliable vehicle performance, all
+              participating drivers are <strong>required to charge their vehicles exclusively
+              at designated SHUGA Energy charging stations</strong>.
+            </p>
+
+            <p className={styles.heroCopyTagline}>
+              Start your journey today. Drive, earn, and work toward owning your EV.
+            </p>
+          </div>
+
           <div style={{ marginTop: '2.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
             <Link href="/contact" className="btn btn--white" data-cursor>Start Your Application</Link>
             <Link href="/shuga-ride" className="btn btn--outline" data-cursor>Also Drive with Shuga Ride</Link>
@@ -53,6 +75,7 @@ export default function ShugaCarsPage() {
           Deposit &nbsp;→&nbsp; Drive &nbsp;→&nbsp; Pay &nbsp;→&nbsp; Own
         </p>
       </div>
+
 
       {/* ── 3D ELECTRIC VEHICLE SHOWROOM ── */}
       <section className="section section--dark" style={{ padding: '0', overflow: 'hidden' }}>

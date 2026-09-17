@@ -40,15 +40,17 @@ export default function HomePage() {
     <div className="page-fade">
 
       {/* ══════════════════════════════════════════
-          01 — CINEMATIC HERO (video background)
-      ══════════════════════════════════════════ */}
-      <HeroSection />
-
-      {/* ══════════════════════════════════════════
-          02 — THREE.JS: INFINITE 3D HIGHWAY
+          01 — THREE.JS: INFINITE 3D HIGHWAY (HERO)
           Autonomous Telemetry / Electrified corridor
       ══════════════════════════════════════════ */}
-      <RoadScene />
+      <RoadScene isHero />
+
+      {/* ══════════════════════════════════════════
+          02 — CINEMATIC HERO (video background) — HIDDEN
+      ══════════════════════════════════════════ */}
+      <div style={{ display: 'none' }}>
+        <HeroSection />
+      </div>
 
       {/* ══════════════════════════════════════════
           03 — SPLIT: EV HOME-CHARGE IMAGE + TEXT
@@ -82,6 +84,56 @@ export default function HomePage() {
           04 — IMAGE SHOWCASE: 3 cards with images
       ══════════════════════════════════════════ */}
       <ImageShowcase />
+
+      {/* ══════════════════════════════════════════
+          04B — DRIVE TO OWN SPLIT SECTION
+      ══════════════════════════════════════════ */}
+      <section className={styles.driveToOwnSection}>
+        <div className={styles.driveToOwnContent}>
+          <p className="eyebrow" style={{ color: 'rgba(255,255,255,0.5)' }}>
+            <span className="eyebrow-line" />Your Journey to EV Ownership
+          </p>
+          <RevealText as="h2" className={`heading-lg ${styles.driveToOwnHeading}`}>
+            Every trip can bring you one step closer.
+          </RevealText>
+          <p className={styles.driveToOwnLead}>
+            With <strong>₦35,000 daily</strong>, you can work toward becoming an{' '}
+            <strong>EV owner within 19 months</strong>.
+          </p>
+          <p className={styles.driveToOwnSub}>
+            Drive. Earn. Own.
+          </p>
+          <div className={styles.driveToOwnStats}>
+            <div className={styles.statPill}>
+              <span className={styles.statValue}>₦35K</span>
+              <span className={styles.statLabel}>Daily Payment</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statPill}>
+              <span className={styles.statValue}>19</span>
+              <span className={styles.statLabel}>Months to Own</span>
+            </div>
+            <div className={styles.statDivider} />
+            <div className={styles.statPill}>
+              <span className={styles.statValue}>100%</span>
+              <span className={styles.statLabel}>Yours</span>
+            </div>
+          </div>
+          <Link href="/shuga-cars" className="btn btn--white" style={{ marginTop: '0.5rem' }} data-cursor>
+            Start Your Journey →
+          </Link>
+        </div>
+        <div className={styles.driveToOwnImageWrap}>
+          <Image
+            src="/drive-to-own-man.jpg"
+            alt="Man leaning on his electric vehicle — an EV car owner"
+            fill
+            sizes="(max-width: 900px) 100vw, 50vw"
+            className={styles.driveToOwnImg}
+          />
+          <div className={styles.driveToOwnImgOverlay} />
+        </div>
+      </section>
 
       {/* ══════════════════════════════════════════
           05 — ECOSYSTEM FLOW
