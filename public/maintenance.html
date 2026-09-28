@@ -3,123 +3,164 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Under Maintenance - Shuga Empire</title>
-  <meta name="description" content="Shuga Empire is currently undergoing scheduled maintenance. We'll be back shortly with something even better." />
-  <meta name="robots" content="noindex, nofollow" />
-  <link rel="icon" href="/favicon.png" type="image/png" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <title>MAINTENANCE MODE | SHUGA EMPIRE</title>
+  <meta name="description" content="Shuga Empire is currently under maintenance." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <style>
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    :root{--g:#00e67a;--t:#00c4cc;--dark:#020d1a;--card:rgba(6,21,37,.72);--muted:#7ca4c0;--light:#f0f8ff}
-    body{font-family:'Inter',sans-serif;background:var(--dark);color:var(--light);min-height:100vh;overflow-x:hidden}
-    #cv{position:fixed;inset:0;pointer-events:none;z-index:0}
-    .bg{position:fixed;inset:0;background:linear-gradient(to bottom,rgba(2,13,26,.55),rgba(2,13,26,.85) 65%,var(--dark) 100%),url('/maintenance-hero.jpg') center/cover no-repeat;z-index:0}
-    .wrap{position:relative;z-index:1;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6rem 1.5rem 3rem}
-    nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1rem 2.5rem;background:rgba(2,13,26,.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(0,230,122,.08)}
-    .logo{display:flex;align-items:center;gap:.6rem;text-decoration:none}
-    .logo img{height:34px;border-radius:6px}
-    .logo span{font-family:'Space Grotesk',sans-serif;font-size:1.1rem;font-weight:700;background:linear-gradient(90deg,var(--g),var(--t));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .pill{display:flex;align-items:center;gap:.45rem;font-size:.75rem;font-weight:600;color:var(--g);background:rgba(0,230,122,.08);border:1px solid rgba(0,230,122,.2);border-radius:999px;padding:.3rem .85rem}
-    .dot{width:7px;height:7px;border-radius:50%;background:var(--g);animation:blink 1.8s ease-in-out infinite}
-    @keyframes blink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(.65)}}
-    .content{max-width:800px;width:100%;text-align:center}
-    .badge{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--t);background:rgba(0,196,204,.08);border:1px solid rgba(0,196,204,.22);border-radius:999px;padding:.38rem .95rem;margin-bottom:1.5rem;animation:up .7s ease both}
-    h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;margin-bottom:1.1rem;animation:up .7s .1s ease both}
-    .grad{background:linear-gradient(120deg,var(--g),var(--t));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .sub{font-size:clamp(.95rem,2vw,1.15rem);color:var(--muted);line-height:1.7;max-width:560px;margin:0 auto 2.5rem;animation:up .7s .2s ease both}
-    .cd{display:flex;justify-content:center;gap:.9rem;margin-bottom:2.8rem;animation:up .7s .3s ease both}
-    .cu{display:flex;flex-direction:column;align-items:center;gap:.28rem}
-    .cb{min-width:78px;padding:.95rem 1rem;background:var(--card);border:1px solid rgba(0,230,122,.14);border-radius:14px;font-family:'Space Grotesk',sans-serif;font-size:clamp(1.7rem,4vw,2.4rem);font-weight:700;backdrop-filter:blur(10px);box-shadow:0 4px 28px rgba(0,0,0,.4);position:relative;overflow:hidden}
-    .cb::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--g),var(--t))}
-    .cl{font-size:.65rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-    .prog{margin-bottom:2.8rem;animation:up .7s .4s ease both}
-    .ph{display:flex;justify-content:space-between;margin-bottom:.5rem}
-    .pl{font-size:.78rem;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
-    .pp{font-size:.78rem;font-weight:700;color:var(--g)}
-    .pt{height:6px;background:rgba(255,255,255,.06);border-radius:999px;overflow:hidden}
-    .pf{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--g),var(--t));box-shadow:0 0 12px rgba(0,230,122,.5);width:0;transition:width 1.8s cubic-bezier(.22,1,.36,1)}
-    .card{background:var(--card);border:1px solid rgba(0,230,122,.12);border-radius:18px;padding:1.8rem 2rem;backdrop-filter:blur(16px);box-shadow:0 8px 40px rgba(0,0,0,.45);margin-bottom:2.2rem;animation:up .7s .5s ease both}
-    .ct{font-family:'Space Grotesk',sans-serif;font-size:1rem;font-weight:600;margin-bottom:.35rem}
-    .cs{font-size:.85rem;color:var(--muted);margin-bottom:1.1rem}
-    .cf{display:flex;gap:.55rem;flex-wrap:wrap}
-    .ci{flex:1;min-width:210px;padding:.7rem 1rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:10px;font-family:'Inter',sans-serif;font-size:.9rem;color:var(--light);outline:none;transition:border-color .25s,box-shadow .25s}
-    .ci::placeholder{color:var(--muted)}
-    .ci:focus{border-color:rgba(0,230,122,.45);box-shadow:0 0 0 3px rgba(0,230,122,.1)}
-    .cbtn{padding:.7rem 1.5rem;background:linear-gradient(135deg,var(--g),var(--t));border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:.9rem;font-weight:700;color:#020d1a;cursor:pointer;white-space:nowrap;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 18px rgba(0,230,122,.3)}
-    .cbtn:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(0,230,122,.45)}
-    .ok{display:none;align-items:center;gap:.45rem;color:var(--g);font-size:.87rem;font-weight:500;margin-top:.7rem}
-    .ok.on{display:flex;animation:up .4s ease}
-    .chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.55rem;margin-bottom:1.8rem;animation:up .7s .6s ease both}
-    .chip{display:flex;align-items:center;gap:.38rem;padding:.4rem .85rem;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:999px;font-size:.75rem;font-weight:500;color:var(--muted)}
-    .soc{display:flex;justify-content:center;gap:.65rem;animation:up .7s .7s ease both}
-    .sl{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);color:var(--muted);text-decoration:none;transition:all .2s}
-    .sl:hover{background:rgba(0,230,122,.1);border-color:rgba(0,230,122,.3);color:var(--g);transform:translateY(-3px)}
-    .sl svg{width:16px;height:16px}
-    footer{position:relative;z-index:1;padding:1.1rem 2rem;text-align:center;font-size:.75rem;color:var(--muted);border-top:1px solid rgba(255,255,255,.05)}
-    footer a{color:var(--muted);text-decoration:none}
-    @keyframes up{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
-    @media(max-width:580px){nav{padding:.9rem 1.2rem}.cb{min-width:58px;padding:.7rem .6rem}.cd{gap:.5rem}.card{padding:1.4rem 1.1rem}.cf{flex-direction:column}.cbtn{width:100%}}
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      background-color: #000000;
+      color: #ffffff;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Background Image with Black & White treatment */
+    .bg-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .bg-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      filter: grayscale(100%) contrast(125%) brightness(0.4);
+      transform: scale(1.03);
+      animation: subtleZoom 20s ease-in-out infinite alternate;
+    }
+
+    @keyframes subtleZoom {
+      0% { transform: scale(1.0); }
+      100% { transform: scale(1.06); }
+    }
+
+    /* Dark vignette and overlays */
+    .bg-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.88) 75%, #000000 100%);
+    }
+
+    /* Content Area */
+    .container {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      padding: 2rem;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 0.5rem;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
+      animation: pulse 2.5s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.3; transform: scale(0.85); }
+    }
+
+    h1.title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: clamp(2.8rem, 8vw, 6.5rem);
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      line-height: 1.05;
+      text-transform: uppercase;
+      color: #ffffff;
+      text-shadow: 0 10px 40px rgba(0, 0, 0, 0.9), 0 0 80px rgba(255, 255, 255, 0.15);
+      border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+      padding-bottom: 1.5rem;
+      width: 100%;
+    }
+
+    .status-badge {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.5);
+      margin-top: 0.5rem;
+    }
+
+    @media (max-width: 768px) {
+      h1.title {
+        letter-spacing: 0.04em;
+        font-size: clamp(2.2rem, 9vw, 3.8rem);
+      }
+      .brand {
+        letter-spacing: 0.2em;
+        font-size: 0.85rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <canvas id="cv"></canvas>
-  <div class="bg"></div>
-  <nav>
-    <a href="/" class="logo"><img src="/favicon.png" alt="Shuga Empire"/><span>Shuga Empire</span></a>
-    <div class="pill"><span class="dot"></span>Maintenance in Progress</div>
-  </nav>
-  <main class="wrap">
-    <div class="content">
-      <div class="badge">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-        Scheduled Maintenance
-      </div>
-      <h1>We're upgrading<br/><span class="grad">for a better ride.</span></h1>
-      <p class="sub">Shuga Empire is undergoing scheduled maintenance to improve performance and ship new features. We'll be back shortly, fully charged and ready to go.</p>
-      <div class="cd" role="timer" aria-label="Estimated time remaining">
-        <div class="cu"><div class="cb" id="ch">00</div><span class="cl">Hours</span></div>
-        <div class="cu"><div class="cb" id="cm">00</div><span class="cl">Mins</span></div>
-        <div class="cu"><div class="cb" id="cs">00</div><span class="cl">Secs</span></div>
-      </div>
-      <div class="prog">
-        <div class="ph"><span class="pl">Upgrade Progress</span><span class="pp">78%</span></div>
-        <div class="pt" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"><div class="pf" id="pf"></div></div>
-      </div>
-      <div class="card">
-        <div class="ct">Get notified when we're back!</div>
-        <div class="cs">Drop your email and we'll ping you the moment we go live.</div>
-        <form class="cf" id="nf" novalidate>
-          <input type="email" id="ne" class="ci" placeholder="you@example.com" autocomplete="email" required aria-label="Email address"/>
-          <button type="submit" class="cbtn">Notify Me</button>
-        </form>
-        <div class="ok" id="nok" role="alert">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-          You're on the list! We'll be in touch.
-        </div>
-      </div>
-      <div class="chips">
-        <div class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Faster Performance</div>
-        <div class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>New Fleet Features</div>
-        <div class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Enhanced Security</div>
-        <div class="chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00e67a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>Live EV Tracking</div>
-      </div>
-      <div class="soc">
-        <a href="https://twitter.com/shugaempire" target="_blank" rel="noopener" class="sl" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.747l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
-        <a href="https://instagram.com/shugaempire" target="_blank" rel="noopener" class="sl" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
-        <a href="https://linkedin.com/company/shugaempire" target="_blank" rel="noopener" class="sl" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-        <a href="mailto:hello@shugaempire.com" class="sl" aria-label="Email"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></a>
-      </div>
+
+  <!-- Background in Black & White -->
+  <div class="bg-wrap">
+    <img src="/maintenance-hero.jpg" alt="Maintenance" class="bg-img" />
+    <div class="bg-overlay"></div>
+  </div>
+
+  <!-- Big Minimal Maintenance Mode Content -->
+  <main class="container">
+    <div class="brand">
+      <span class="brand-dot"></span>
+      <span>SHUGA EMPIRE</span>
+    </div>
+
+    <h1 class="title">MAINTENANCE MODE</h1>
+
+    <div class="status-badge">
+      SYSTEM OFFLINE &bull; WE WILL BE BACK SHORTLY
     </div>
   </main>
-  <footer><span id="yr"></span> Shuga Empire &mdash; All rights reserved &nbsp;|&nbsp; <a href="mailto:hello@shugaempire.com">hello@shugaempire.com</a></footer>
-  <script>
-    document.getElementById('yr').textContent=String(new Date().getFullYear());
-    (function(){var c=document.getElementById('cv'),x=c.getContext('2d'),p=[],N=55;function r(){c.width=innerWidth;c.height=innerHeight}r();addEventListener('resize',r);for(var i=0;i<N;i++)p.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*1.5+.4,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,a:Math.random()*.4+.1,g:Math.random()>.5});function d(){x.clearRect(0,0,c.width,c.height);p.forEach(function(q){x.beginPath();x.arc(q.x,q.y,q.r,0,Math.PI*2);x.fillStyle=q.g?'rgba(0,230,122,'+q.a+')':'rgba(0,196,204,'+q.a+')';x.fill();q.x+=q.vx;q.y+=q.vy;if(q.x<-5)q.x=c.width+5;if(q.x>c.width+5)q.x=-5;if(q.y<-5)q.y=c.height+5;if(q.y>c.height+5)q.y=-5});requestAnimationFrame(d)}d()})();
-    (function(){var K='shuga_maint_end',t=+localStorage.getItem(K)||0;if(!t||t<Date.now()){t=Date.now()+6*36e5;localStorage.setItem(K,t)}var h=document.getElementById('ch'),m=document.getElementById('cm'),s=document.getElementById('cs');function p(n){return String(n).padStart(2,'0')}function tick(){var d=Math.max(0,t-Date.now());h.textContent=p(Math.floor(d/36e5));m.textContent=p(Math.floor((d%36e5)/6e4));s.textContent=p(Math.floor((d%6e4)/1e3));if(d>0)requestAnimationFrame(tick)}tick()})();
-    setTimeout(function(){document.getElementById('pf').style.width='78%'},300);
-    document.getElementById('nf').addEventListener('submit',function(e){e.preventDefault();var i=document.getElementById('ne'),k=document.getElementById('nok');if(!i.value||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value)){i.style.borderColor='rgba(255,80,80,.6)';setTimeout(function(){i.style.borderColor=''},2e3);return}k.classList.add('on');i.value='';i.disabled=true;this.querySelector('button').disabled=true});
-  </script>
+
 </body>
 </html>
