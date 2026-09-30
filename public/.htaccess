@@ -3,16 +3,7 @@ DirectoryIndex index.html index.php
 
 RewriteEngine On
 
-# ─────────────────────────────────────────────────────────────────
-# MAINTENANCE MODE  (remove this block to restore the live site)
-# ─────────────────────────────────────────────────────────────────
-# Allow: maintenance page itself, its assets, favicon, and API
-RewriteCond %{REQUEST_URI} !^/maintenance\.html$ [NC]
-RewriteCond %{REQUEST_URI} !^/maintenance-hero\.jpg$ [NC]
-RewriteCond %{REQUEST_URI} !^/favicon\.png$ [NC]
-RewriteCond %{REQUEST_URI} !^/api/ [NC]
-RewriteRule ^ /maintenance.html [R=302,L]
-# ─────────────────────────────────────────────────────────────────
+
 
 # 1. Force HTTPS and normalize www to non-www
 RewriteCond %{HTTPS} off [OR]
