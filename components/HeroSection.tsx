@@ -151,8 +151,6 @@ type SlideType  = SlideImage | SlideRoad;
 
 const SLIDES: SlideType[] = [
   { type: 'road', src: 'road', label: 'SHUGA FLEET', sub: 'Drive to Own. Electrified.' },
-  { src: '/c1.jpeg', label: 'SHUGA RIDE', sub: 'Electric mobility, redefined.' },
-  { src: '/c3.jpeg', label: 'SHUGA ENERGY', sub: 'Power your world, sustainably.' },
 ];
 
 const AUTOPLAY_MS = 6000;
@@ -682,6 +680,7 @@ export default function HeroSection() {
   const slideScale = useTransform(scrollYProgress, [0, 1], [1, 1.12]);
 
   const go = useCallback((dir: 1 | -1) => {
+    if (SLIDES.length <= 1) return;
     setDirection(dir);
     setTransitionIdx(prev => {
       const next = pickNextStyle(prev);
@@ -696,6 +695,7 @@ export default function HeroSection() {
   }, []);
 
   const goTo = useCallback((idx: number, currentActive: number) => {
+    if (SLIDES.length <= 1) return;
     const dir: 1 | -1 = idx > currentActive ? 1 : -1;
     setDirection(dir);
     setTransitionIdx(prev => {
@@ -709,6 +709,7 @@ export default function HeroSection() {
 
   const resetTimer = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
+    if (SLIDES.length <= 1) return;
     timerRef.current = setInterval(() => go(1), AUTOPLAY_MS);
   }, [go]);
 
@@ -718,17 +719,22 @@ export default function HeroSection() {
   }, [resetTimer]);
 
   const onPointerDown = (e: React.PointerEvent) => {
+    if (SLIDES.length <= 1) return;
     dragging.current = true;
     dragStartX.current = e.clientX;
   };
   const onPointerUp = (e: React.PointerEvent) => {
-    if (!dragging.current) return;
+    if (!dragging.current || SLIDES.length <= 1) return;
     dragging.current = false;
     const dx = e.clientX - dragStartX.current;
     if (Math.abs(dx) > 50) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
-  const onTouchStart = (e: React.TouchEvent) => { dragStartX.current = e.touches[0].clientX; };
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (SLIDES.length <= 1) return;
+    dragStartX.current = e.touches[0].clientX;
+  };
   const onTouchEnd = (e: React.TouchEvent) => {
+    if (SLIDES.length <= 1) return;
     const dx = e.changedTouches[0].clientX - dragStartX.current;
     if (Math.abs(dx) > 40) { go(dx < 0 ? 1 : -1); resetTimer(); }
   };
@@ -853,12 +859,8 @@ export default function HeroSection() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Row 1: Badge + Speed */}
+              {/* Row 1: Speed status */}
               <div className={styles.roadHudTop}>
-                <div className={styles.roadHudBadge}>
-                  <span className={styles.roadPulseDot} />
-                  <span>SHUGA FLEET</span>
-                </div>
                 <span className={styles.roadHudSpeed}>SYS: ACTIVE // 120 KM/H</span>
               </div>
 
@@ -966,61 +968,63 @@ export default function HeroSection() {
         </motion.div>
         )}
 
-        {/* ── Carousel controls ── */}
-        <motion.div
-          className={styles.carouselControls}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4 }}
-        >
-          {/* Prev */}
-          <button
-            className={styles.arrowBtn}
-            onClick={() => { go(-1); resetTimer(); }}
-            aria-label="Previous slide"
+        {/* ── Carousel controls (only if multiple slides) ── */}
+        {SLIDES.length > 1 && (
+          <motion.div
+            className={styles.carouselControls}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.4 }}
           >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
-            </svg>
-          </button>
+            {/* Prev */}
+            <button
+              className={styles.arrowBtn}
+              onClick={() => { go(-1); resetTimer(); }}
+              aria-label="Previous slide"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+              </svg>
+            </button>
 
-          {/* Dots with progress ring */}
-          <div className={styles.dots}>
-            {SLIDES.map((_, i) => (
-              <button
-                key={i}
-                className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
-                onClick={() => { goTo(i, active); resetTimer(); }}
-                aria-label={`Go to slide ${i + 1}`}
-              >
-                {i === active && (
-                  <svg className={styles.dotRing} viewBox="0 0 32 32">
-                    <circle
-                      cx="16" cy="16" r="13"
-                      stroke="white" strokeWidth="1.5"
-                      fill="none"
-                      strokeDasharray={`${2 * Math.PI * 13}`}
-                      strokeDashoffset="0"
-                      className={styles.dotRingProgress}
-                      style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
-                    />
-                  </svg>
-                )}
-              </button>
-            ))}
-          </div>
+            {/* Dots with progress ring */}
+            <div className={styles.dots}>
+              {SLIDES.map((_, i) => (
+                <button
+                  key={i}
+                  className={`${styles.dot} ${i === active ? styles.dotActive : ''}`}
+                  onClick={() => { goTo(i, active); resetTimer(); }}
+                  aria-label={`Go to slide ${i + 1}`}
+                >
+                  {i === active && (
+                    <svg className={styles.dotRing} viewBox="0 0 32 32">
+                      <circle
+                        cx="16" cy="16" r="13"
+                        stroke="white" strokeWidth="1.5"
+                        fill="none"
+                        strokeDasharray={`${2 * Math.PI * 13}`}
+                        strokeDashoffset="0"
+                        className={styles.dotRingProgress}
+                        style={{ animationDuration: `${AUTOPLAY_MS}ms` }}
+                      />
+                    </svg>
+                  )}
+                </button>
+              ))}
+            </div>
 
-          {/* Next */}
-          <button
-            className={styles.arrowBtn}
-            onClick={() => { go(1); resetTimer(); }}
-            aria-label="Next slide"
-          >
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
-            </svg>
-          </button>
-        </motion.div>
+            {/* Next */}
+            <button
+              className={styles.arrowBtn}
+              onClick={() => { go(1); resetTimer(); }}
+              aria-label="Next slide"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+              </svg>
+            </button>
+          </motion.div>
+        )}
 
         {/* ── Desktop Stats strip — hidden on road slide (HUD has its own content) ── */}
         {!isRoadActive && (

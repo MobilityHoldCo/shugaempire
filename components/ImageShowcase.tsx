@@ -7,7 +7,7 @@ import styles from './ImageShowcase.module.css';
 const PANELS = [
   {
     src: '/ev-home-charge.png',
-    alt: 'Sleek white electric vehicle charging at a modern home, SHUGA FLEET',
+    alt: 'Sleek white electric vehicle charging at a modern home — SHUGA FLEET',
     num: '01',
     title: 'SHUGA FLEET',
     sub: 'Vehicle Ownership',
@@ -16,18 +16,18 @@ const PANELS = [
   },
   {
     src: '/ev-fleet-charging.png',
-    alt: 'Three electric vehicles at charging stations, Shuga Fleet',
+    alt: 'Three electric vehicles at charging stations — SHUGA RIDE',
     num: '02',
-    title: 'Shuga Ride',
+    title: 'SHUGA RIDE',
     sub: 'Ride-Hailing',
     caption: 'Lagos & Abuja. Then everywhere.',
     href: '/shuga-ride',
   },
   {
     src: '/charging-hub-row.png',
-    alt: 'Row of solar-powered EV charging stations at sunset, Shuga Energy',
+    alt: 'Row of solar-powered EV charging stations at sunset — SHUGA ENERGY',
     num: '03',
-    title: 'Shuga Energy',
+    title: 'SHUGA ENERGY',
     sub: 'EV Charging',
     caption: 'Solar-powered. Always on.',
     href: '/shuga-energy',

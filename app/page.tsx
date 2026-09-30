@@ -99,9 +99,10 @@ export default function HomePage() {
       */}
 
       {/* ══════════════════════════════════════════
-          03 — IMAGE SHOWCASE: 3 cards (HIDDEN)
+          03 — IMAGE SHOWCASE: 3 cards
+          (SHUGA FLEET, SHUGA RIDE, SHUGA ENERGY)
       ══════════════════════════════════════════ */}
-      {/* <ImageShowcase /> */}
+      <ImageShowcase />
 
       {/* ══════════════════════════════════════════
           04 — THREE.JS: INFINITE 3D HIGHWAY (HIDDEN)
