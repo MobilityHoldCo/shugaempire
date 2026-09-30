@@ -853,8 +853,12 @@ export default function HeroSection() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Row 1: Speed status */}
+              {/* Row 1: Badge + Speed */}
               <div className={styles.roadHudTop}>
+                <div className={styles.roadHudBadge}>
+                  <span className={styles.roadPulseDot} />
+                  <span>SHUGA FLEET</span>
+                </div>
                 <span className={styles.roadHudSpeed}>SYS: ACTIVE // 120 KM/H</span>
               </div>
 
