@@ -120,13 +120,13 @@ export default function HomePage() {
         eyebrow="A Different Way to Move"
         heading={
           <RevealText as="h2" className="heading-lg">
-            What if getting around could also help you get ahead?
+            With just N35,000 daily you can own an EV car
           </RevealText>
         }
         body={
           <>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
-              For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns.
+              For millions of Nigerians, a vehicle is more than transportation. It can be a source of income. A business. An investment. The first major asset someone owns. Drive and own an EV car within 19 months with 35,000 daily.
             </p>
             <p style={{ fontFamily: 'var(--font-body)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.75 }}>
               SHUGA Empire HoldCo connects the pieces, providing vehicles through structured drive-to-own arrangements, opening investment opportunities, operating a ride-hailing platform, and developing solar-powered charging infrastructure.
